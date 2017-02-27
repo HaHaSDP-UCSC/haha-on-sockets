@@ -1,50 +1,48 @@
-# Makefile for CMPE156 Lab 3 by Kevin Lee. 
-# Modified: 2/25/2017
+# Makefile by Kevin Lee. 
+# Modified: 2/27/2017
 
-# Binary files have already been provided so you don't have to compile it.
 # To compile, 
-# run "make myclient", "make myserver", and "make test"
+# run "make client", "make server", and "make test"
 # The executables can then be run with 
-# "./bin/myserver", "./bin/myclient", "./bin/test_main"
-# Use "make clean" to delete object files, executables, clientversion- files
-# and stdout.txt if you chose to output to that.
+# "./bin/server", "./bin/client", "./bin/test"
+# Use "make clean" to delete object files, executables files
 
 MKFILE		= Makefile
 
 SUPPRESS 	= #-Wno-incompatible-pointer-types
 GCC     	= gcc -g -O0 -Wall ${SUPPRESS}#Suppressed
 
-CSOURCE   	= src/myserver.c src/myclient.c src/functions.c src/functions.h
+CSOURCE   	= src/server.c src/client.c src/functions.c src/functions.h
 EXECBIN   	= ${EXECBINSERV} ${EXECBINCLIENT} ${EXECBINTEST}
-EXECBINSER  = bin/myserver
-EXECBINCLI 	= bin/myclient
-EXECBINTEST = bin/mytest
+EXECBINSER  	= bin/server
+EXECBINCLI 	= bin/client
+EXECBINTEST 	= bin/test
 SOURCES   	= ${CSOURCE} ${MKFILE}
 
 all:
 functions.o: src/functions.c src/functions.h src/devtools.h
 	${GCC} -c src/functions.c
 
-myclient.o: src/myclient.c src/functions.h src/devtools.h
-	${GCC} -c src/myclient.c
+client.o: src/client.c src/functions.h src/devtools.h
+	${GCC} -c src/client.c
 
-myserver.o: src/myserver.c src/functions.h src/devtools.h
-	${GCC} -c src/myserver.c
+server.o: src/server.c src/functions.h src/devtools.h
+	${GCC} -c src/server.c
 	
-mytest.o: src/test_main.c src/functions.h src/devtools.h
-	${GCC} -c src/mytest.c
+test.o: src/test.c src/functions.h src/devtools.h
+	${GCC} -c src/test.c
 
 #%.o : src/%.c
 #	${GCC} -c $<
 	
-myclient: myclient.o functions.o
-	${GCC} -o bin/myclient myclient.o functions.o -lpthread
+client: client.o functions.o
+	${GCC} -o bin/client client.o functions.o #-lpthread
 
-myserver: myserver.o functions.o
-	${GCC} -o bin/myserver myserver.o functions.o
+server: server.o functions.o
+	${GCC} -o bin/server server.o functions.o
 	
-test: myserver.o functions.o myclient.o test_main.o
-	${GCC} -o bin/mytest mytest.o functions.o
+test: server.o functions.o client.o test.o
+	${GCC} -o bin/test test.o functions.o
 
 clean : 
 	rm -f *.o
