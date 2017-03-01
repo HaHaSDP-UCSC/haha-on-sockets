@@ -8,3 +8,29 @@
  */
 
 #include "hahalib.h"
+
+#define MENUITEM_TITLE_MAXLEN 32
+
+typedef struct MenuItem MenuItem;
+
+typedef struct MenuItem {
+  void (*onEnter)();
+  void (*onExit)();
+  char title[MENUITEM_TITLE_MAXLEN];
+  bool active;
+  MenuItem* parent;
+  MenuItem* child;
+  MenuItem* prev;
+  MenuItem* next;
+} MenuItem;
+
+typedef struct Menu {
+  MenuItem* root;
+  MenuItem* current;
+} Menu;
+
+Menu* menuInit(void);
+int menuDestroy(Menu* this);
+
+MenuItem* menuItemInit(MenuItem* parent);
+int menuItemDestroy(MenuItem* this);
