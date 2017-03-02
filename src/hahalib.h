@@ -5,12 +5,6 @@
  * @author August Valera (avalera)
  * @version
  * @date 2017-02-28
- *
- * @section DESCRIPTIOM
- *
- * Includes random standard libraries
- *
- * Defines error functions
  */
 
 #ifndef __HAHALIB_H_

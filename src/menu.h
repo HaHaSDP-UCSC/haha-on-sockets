@@ -1,6 +1,6 @@
 /**
  * @file menu.c
- * @brief
+ * @brief Menu and MenuItems library defines
  *
  * @author August Valera (avalera)
  * @version
@@ -16,7 +16,7 @@ typedef struct MenuItem MenuItem;
 typedef struct MenuItem {
   void (*onEnter)();
   void (*onExit)();
-  char title[MENUITEM_TITLE_MAXLEN];
+  char value[MENUITEM_TITLE_MAXLEN];
   bool active;
   MenuItem* parent;
   MenuItem* child;
@@ -33,4 +33,6 @@ Menu* menuInit(void);
 int menuDestroy(Menu* this);
 
 MenuItem* menuItemInit(MenuItem* parent);
+void menuItemPrintTree(MenuItem* this);
+void menuItemPrintTreeHelper(MenuItem* this, int level);
 int menuItemDestroy(MenuItem* this);

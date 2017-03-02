@@ -5,10 +5,6 @@
  * @author August Valera (avalera)
  * @version
  * @date 2017-02-28
- *
- * @section DESCRIPTIOM
- *
- * No description
  */
 
 #include "hahalib.h"
