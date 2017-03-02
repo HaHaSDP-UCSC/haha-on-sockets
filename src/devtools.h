@@ -1,7 +1,7 @@
 /*
  * devtools.h
  *
- *  Edited on: Feb 14, 2017
+ *  Edited on: March 2, 2017
  *      Author: Kevin Lee
  */
 
@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 
+#define BOOL int
 #define TRUE 1
 #define FALSE 0
 #define ERROR -1
@@ -59,4 +60,3 @@
 #endif
 
 #endif /* SRC_DEVTOOLS_H_ */
-
