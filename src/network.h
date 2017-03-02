@@ -25,7 +25,6 @@
 #define IS_IMMEDIATE(val) val & FLAG_IMMEDIATE
 
 
-typdef basedest char*; //most likely any network.h can implement with char*
 typedef opcode char*;
 typedef unsigned char BYTE; /* Allow for device specifics */
 typedef flags BYTE; /*defined in devtools*/

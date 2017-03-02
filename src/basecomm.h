@@ -15,6 +15,7 @@
 */
 void init(); //unknown needed params
 bool sendToBase(Packet *p, Base dest);
-bool sendPacket(Packet *p, basedest dest);
+bool sendPacket(Packet *p, baseaddr dest);
 
+bool networkUp();
 #endif
