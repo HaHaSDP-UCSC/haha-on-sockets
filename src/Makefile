@@ -7,7 +7,7 @@
 
 GCC=gcc -g -O0 -std=gnu99
 # Uncomment below to enable stricter warnings
-GCC=gcc -g -O0 -Wall -Wextra -std=gnu99
+# GCC=gcc -g -O0 -Wall -Wextra -std=gnu99
 
 EXECBIN=base
 CSOURCE=${EXECBIN:=.c}

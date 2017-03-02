@@ -17,14 +17,14 @@
 Menu* createMenus(void) {
   Menu* menu = menuInit();
   MenuItem* root = menu->root;
-  MenuItem* main = menuItemInit(root, "Main Menu");
-  MenuItem* contacts = menuItemInit(main, "Contact list");
-  MenuItem* user = menuItemInit(main, "User info");
+  MenuItem* mm = menuItemInit(root, "Main Menu");
+  MenuItem* contacts = menuItemInit(mm, "Contact list");
+  MenuItem* user = menuItemInit(mm, "User info");
   MenuItem* userId = menuItemInit(user, "User ID");
   MenuItem* userName = menuItemInit(user, "User name");
   MenuItem* userAddr = menuItemInit(user, "User address");
   MenuItem* userPhone = menuItemInit(user, "User phone");
-  MenuItem* set = menuItemInit(main, "Device settings");
+  MenuItem* set = menuItemInit(mm, "Device settings");
   MenuItem* setOffice = menuItemInit(set, "Office mode");
   MenuItem* setAlert = menuItemInit(set, "Alert settings");
   MenuItem* setAlertSound = menuItemInit(setAlert, "Sound");
@@ -36,6 +36,10 @@ Menu* createMenus(void) {
   MenuItem* setNoticeContact = menuItemInit(setNotice, "Update info");
   MenuItem* setPair = menuItemInit(set, "Pair button");
   MenuItem* setDisable = menuItemInit(set, "Disable system");
+  menuItemInit(root, "System Active (??)");
+  menuItemInit(root, "Network Status (??)");
+  menuItemInit(root, "Button Status (??)");
+  menu->current = menu->root->child;
   return(menu);
 }
 
@@ -49,6 +53,34 @@ int main(int argc, char** argv) {
   printf("Test executable.\n");
   Menu* menu = createMenus();
   menuItemPrintTree(menu->root);
+
+  while(true) {
+    char input = getchar();
+    int move = -1;
+    switch(input) {
+      case 'w':
+        move = menuMove(menu, MENU_UP);
+        break;
+      case 'a':
+        move = menuMove(menu, MENU_LEFT);
+        break;
+      case 's':
+        move = menuMove(menu, MENU_DOWN);
+        break;
+      case 'd':
+        move = menuMove(menu, MENU_RIGHT);
+        break;
+      case 'q':
+        goto done;
+        break;
+      case '\n':
+        break;
+    }
+    if(move != -1)
+      printf("%s\n", menu->current->value);
+  }
+
+done:
   menuDestroy(menu);
   return(1);
 }

@@ -17,8 +17,48 @@ Menu* menuInit(void) {
   Menu* this = calloc(1, sizeof(Menu));
   this->root = menuItemInit(NULL, "MENU_ROOT");
   this->root->visible = false;
-  this->current = this->root;
+  this->current = NULL;
   return(this);
+}
+
+/**
+ * @brief Moves menu cursor in given direction
+ * @param menu Menu object containing cursor
+ * @param direct Direction to move
+ * @return 0 on success, 1 on invalid direction, -1 on error
+ */
+int menuMove(Menu* menu, MenuDirection direct) {
+  if(menu && menu->current) {
+    switch(direct) {
+      case MENU_LEFT:
+        // Root node should not be accessible
+        if(menu->current->parent && menu->current->parent->parent) {
+          menu->current = menu->current->parent;
+        } else return 1;
+        break;
+      case MENU_RIGHT:
+        if(menu->current->child) {
+          menu->current = menu->current->child;
+        } else return 1;
+        break;
+      case MENU_UP:
+        if(menu->current->prev) {
+          menu->current = menu->current->prev;
+        } else if(MENU_WRAP && menu->current->next) {
+          // Find last item
+          MenuItem* last;
+          for(last = menu->current->next; last->next; last = last->next);
+          menu->current = last;
+        } else return 1;
+        break;
+      case MENU_DOWN:
+        if(menu->current->next) {
+          menu->current = menu->current->next;
+        } else if(MENU_WRAP && menu->current->prev) {
+          menu->current = menu->current->parent->child;
+        } else return 1;
+    }
+  } else return -1;
 }
 
 /**
@@ -107,7 +147,7 @@ void menuItemPrintTreeHelper(MenuItem* this, int level) {
  */
 int menuItemDestroy(MenuItem* this) {
   if(this) {
-    printf("DELETE %s\n", this->value);
+    if(MENU_DBUG) printf("DELETE %s\n", this->value);
     while(this->child) {
       menuItemDestroy(this->child);
     }

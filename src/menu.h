@@ -10,6 +10,8 @@
 #include "hahalib.h"
 
 #define MENUITEM_TITLE_MAXLEN 32
+#define MENU_WRAP true
+#define MENU_DBUG true
 
 typedef struct MenuItem MenuItem;
 
@@ -29,7 +31,16 @@ typedef struct Menu {
   MenuItem* current;
 } Menu;
 
+typedef enum MenuDirection {
+  MENU_UNDEF = 0,
+  MENU_UP,
+  MENU_DOWN,
+  MENU_LEFT,
+  MENU_RIGHT
+} MenuDirection;
+
 Menu* menuInit(void);
+int menuMove(Menu* menu, MenuDirection direct);
 int menuDestroy(Menu* this);
 
 MenuItem* menuItemInit(MenuItem* parent, char* value);
