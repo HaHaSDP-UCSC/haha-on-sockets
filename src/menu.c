@@ -14,10 +14,11 @@
  * @return New Menu
  */
 Menu* menuInit(void) {
-  Menu* ret = calloc(1, sizeof(Menu));
-  ret->root = menuItemInit(NULL);
-  ret->current = ret->root;
-  return(ret);
+  Menu* this = calloc(1, sizeof(Menu));
+  this->root = menuItemInit(NULL, "MENU_ROOT");
+  this->root->visible = false;
+  this->current = this->root;
+  return(this);
 }
 
 /**
@@ -38,16 +39,17 @@ int menuDestroy(Menu* this) {
  * @param parent
  * @return New MenuItem
  */
-MenuItem* menuItemInit(MenuItem* parent) {
+MenuItem* menuItemInit(MenuItem* parent, char* value) {
   MenuItem* this = calloc(1, sizeof(MenuItem));
   this->onEnter = NULL;
   this->onExit = NULL;
-  this->active = true;
+  menuItemSetValue(this, value);
+  this->visible = true;
   this->parent = parent;
   this->child = NULL;
   this->next = NULL;
   this->prev = NULL;
-  if(this->parent) { // Only case this wouldn't happen is root
+  if(this->parent) { // Should be true except for root
     if(this->parent->child) { // Not first child
       this->prev = this->parent->child;
       while(this->prev->next) this->prev = this->prev->next;
@@ -59,6 +61,18 @@ MenuItem* menuItemInit(MenuItem* parent) {
   return(this);
 }
 
+/**
+ * @brief Sets value of MenuItem
+ * @param this MenuItem to edit
+ * @param value String value to copy over
+ * @return 0 on success, else error
+ */
+int menuItemSetValue(MenuItem* this, char* value) {
+  if(this && value) {
+    strcpy(this->value, value);
+  } else return(-1);
+  return(0);
+}
 
 /**
  * @brief Prints out tree representation of MenuItem and children
@@ -69,7 +83,6 @@ void menuItemPrintTree(MenuItem* this) {
     menuItemPrintTreeHelper(this, 0);
 }
 
-
 /**
  * @brief Recursive helper of menuItemPrintTree()
  * @param this Root of tree
@@ -79,7 +92,9 @@ void menuItemPrintTreeHelper(MenuItem* this, int level) {
   if(this) {
     for(int i = 0; i < level; i++)
       printf("\t");
-    printf("- %s\n", this->value);
+    if(this->visible) printf("> ");
+    else printf("X ");
+    printf("%s\n", this->value);
     for(MenuItem* child = this->child; child; child = child->next)
       menuItemPrintTreeHelper(child, level + 1);
   }
@@ -92,13 +107,15 @@ void menuItemPrintTreeHelper(MenuItem* this, int level) {
  */
 int menuItemDestroy(MenuItem* this) {
   if(this) {
+    printf("DELETE %s\n", this->value);
     while(this->child) {
       menuItemDestroy(this->child);
     }
     if(this->prev) { // Not first child
       this->prev->next = this->next;
     } else {
-      this->parent->child = this->next;
+      if(this->next) this->next->prev = NULL;
+      if(this->parent) this->parent->child = this->next;
     }
     free(this);
   } else return(-1);

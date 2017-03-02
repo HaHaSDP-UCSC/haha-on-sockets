@@ -20,6 +20,7 @@ clean:
 
 edit: clean
 	@ vim -p src/*
+	@ make default
 
 spotless:
 	@ cd src && make spotless

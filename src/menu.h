@@ -17,7 +17,7 @@ typedef struct MenuItem {
   void (*onEnter)();
   void (*onExit)();
   char value[MENUITEM_TITLE_MAXLEN];
-  bool active;
+  bool visible;
   MenuItem* parent;
   MenuItem* child;
   MenuItem* prev;
@@ -32,7 +32,8 @@ typedef struct Menu {
 Menu* menuInit(void);
 int menuDestroy(Menu* this);
 
-MenuItem* menuItemInit(MenuItem* parent);
+MenuItem* menuItemInit(MenuItem* parent, char* value);
+int menuItemSetValue(MenuItem* this, char* value);
 void menuItemPrintTree(MenuItem* this);
 void menuItemPrintTreeHelper(MenuItem* this, int level);
 int menuItemDestroy(MenuItem* this);
