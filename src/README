@@ -1,6 +1,9 @@
 NOTE: We have decided not to implement the button as a seperate client. Its
 features will be implemented in the base code (so ignore button folder).
 
+UML:
+https://www.lucidchart.com/invitations/accept/fff6ae88-9cf0-4dd6-99bc-e89010d1784a
+
 Files are organized like this:
 
 Anything ending in "device" is supposed to be the device specific code. Each
