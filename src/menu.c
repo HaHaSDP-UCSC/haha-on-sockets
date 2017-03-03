@@ -14,11 +14,11 @@
  * @return New Menu
  */
 Menu* menuInit(void) {
-  Menu* this = calloc(1, sizeof(Menu));
-  this->root = menuItemInit(NULL, "MENU_ROOT");
-  this->root->visible = false;
-  this->current = NULL;
-  return(this);
+    Menu* this = calloc(1, sizeof(Menu));
+    this->root = menuItemInit(NULL, "MENU_ROOT");
+    this->root->visible = false;
+    this->current = NULL;
+    return(this);
 }
 
 /**
@@ -28,37 +28,38 @@ Menu* menuInit(void) {
  * @return 0 on success, 1 on invalid direction, -1 on error
  */
 int menuMove(Menu* menu, MenuDirection direct) {
-  if(menu && menu->current) {
-    switch(direct) {
-      case MENU_LEFT:
-        // Root node should not be accessible
-        if(menu->current->parent && menu->current->parent->parent) {
-          menu->current = menu->current->parent;
-        } else return 1;
-        break;
-      case MENU_RIGHT:
-        if(menu->current->child) {
-          menu->current = menu->current->child;
-        } else return 1;
-        break;
-      case MENU_UP:
-        if(menu->current->prev) {
-          menu->current = menu->current->prev;
-        } else if(MENU_WRAP && menu->current->next) {
-          // Find last item
-          MenuItem* last;
-          for(last = menu->current->next; last->next; last = last->next);
-          menu->current = last;
-        } else return 1;
-        break;
-      case MENU_DOWN:
-        if(menu->current->next) {
-          menu->current = menu->current->next;
-        } else if(MENU_WRAP && menu->current->prev) {
-          menu->current = menu->current->parent->child;
-        } else return 1;
-    }
-  } else return -1;
+    if(menu && menu->current) {
+        switch(direct) {
+            case MENU_LEFT:
+                // Root node should not be accessible
+                if(menu->current->parent && menu->current->parent->parent) {
+                    menu->current = menu->current->parent;
+                } else return 1;
+                break;
+            case MENU_RIGHT:
+                if(menu->current->child) {
+                    menu->current = menu->current->child;
+                } else return 1;
+                break;
+            case MENU_UP:
+                if(menu->current->prev) {
+                    menu->current = menu->current->prev;
+                } else if(MENU_WRAP && menu->current->next) {
+                    // Find last item
+                    MenuItem* last;
+                    for(last = menu->current->next; last->next;
+                            last = last->next);
+                    menu->current = last;
+                } else return 1;
+                break;
+            case MENU_DOWN:
+                if(menu->current->next) {
+                    menu->current = menu->current->next;
+                } else if(MENU_WRAP && menu->current->prev) {
+                    menu->current = menu->current->parent->child;
+                } else return 1;
+        }
+    } else return -1;
 }
 
 /**
@@ -67,11 +68,11 @@ int menuMove(Menu* menu, MenuDirection direct) {
  * @return 0 on success, else error
  */
 int menuDestroy(Menu* this) {
-  if(this) {
-    menuItemDestroy(this->root);
-    free(this);
-  } else return(-1);
-  return(0);
+    if(this) {
+        menuItemDestroy(this->root);
+        free(this);
+    } else return(-1);
+    return(0);
 }
 
 /**
@@ -80,25 +81,25 @@ int menuDestroy(Menu* this) {
  * @return New MenuItem
  */
 MenuItem* menuItemInit(MenuItem* parent, char* value) {
-  MenuItem* this = calloc(1, sizeof(MenuItem));
-  this->onEnter = NULL;
-  this->onExit = NULL;
-  menuItemSetValue(this, value);
-  this->visible = true;
-  this->parent = parent;
-  this->child = NULL;
-  this->next = NULL;
-  this->prev = NULL;
-  if(this->parent) { // Should be true except for root
-    if(this->parent->child) { // Not first child
-      this->prev = this->parent->child;
-      while(this->prev->next) this->prev = this->prev->next;
-      this->prev->next = this;
-    } else {
-      this->parent->child = this;
+    MenuItem* this = calloc(1, sizeof(MenuItem));
+    this->onEnter = NULL;
+    this->onExit = NULL;
+    menuItemSetValue(this, value);
+    this->visible = true;
+    this->parent = parent;
+    this->child = NULL;
+    this->next = NULL;
+    this->prev = NULL;
+    if(this->parent) { // Should be true except for root
+        if(this->parent->child) { // Not first child
+            this->prev = this->parent->child;
+            while(this->prev->next) this->prev = this->prev->next;
+            this->prev->next = this;
+        } else {
+            this->parent->child = this;
+        }
     }
-  }
-  return(this);
+    return(this);
 }
 
 /**
@@ -108,10 +109,10 @@ MenuItem* menuItemInit(MenuItem* parent, char* value) {
  * @return 0 on success, else error
  */
 int menuItemSetValue(MenuItem* this, char* value) {
-  if(this && value) {
-    strcpy(this->value, value);
-  } else return(-1);
-  return(0);
+    if(this && value) {
+        strcpy(this->value, value);
+    } else return(-1);
+    return(0);
 }
 
 /**
@@ -119,8 +120,8 @@ int menuItemSetValue(MenuItem* this, char* value) {
  * @param this Root of tree
  */
 void menuItemPrintTree(MenuItem* this) {
-  if(this)
-    menuItemPrintTreeHelper(this, 0);
+    if(this)
+        menuItemPrintTreeHelper(this, 0);
 }
 
 /**
@@ -129,15 +130,15 @@ void menuItemPrintTree(MenuItem* this) {
  * @param level Level of recursion we are in
  */
 void menuItemPrintTreeHelper(MenuItem* this, int level) {
-  if(this) {
-    for(int i = 0; i < level; i++)
-      printf("\t");
-    if(this->visible) printf("> ");
-    else printf("X ");
-    printf("%s\n", this->value);
-    for(MenuItem* child = this->child; child; child = child->next)
-      menuItemPrintTreeHelper(child, level + 1);
-  }
+    if(this) {
+        for(int i = 0; i < level; i++)
+            printf("\t");
+        if(this->visible) printf("> ");
+        else printf("X ");
+        printf("%s\n", this->value);
+        for(MenuItem* child = this->child; child; child = child->next)
+            menuItemPrintTreeHelper(child, level + 1);
+    }
 }
 
 /**
@@ -146,18 +147,18 @@ void menuItemPrintTreeHelper(MenuItem* this, int level) {
  * @return 0 on success, else error
  */
 int menuItemDestroy(MenuItem* this) {
-  if(this) {
-    if(MENU_DBUG) printf("DELETE %s\n", this->value);
-    while(this->child) {
-      menuItemDestroy(this->child);
-    }
-    if(this->prev) { // Not first child
-      this->prev->next = this->next;
-    } else {
-      if(this->next) this->next->prev = NULL;
-      if(this->parent) this->parent->child = this->next;
-    }
-    free(this);
-  } else return(-1);
-  return(0);
+    if(this) {
+        if(MENU_DBUG) printf("DELETE %s\n", this->value);
+        while(this->child) {
+            menuItemDestroy(this->child);
+        }
+        if(this->prev) { // Not first child
+            this->prev->next = this->next;
+        } else {
+            if(this->next) this->next->prev = NULL;
+            if(this->parent) this->parent->child = this->next;
+        }
+        free(this);
+    } else return(-1);
+    return(0);
 }

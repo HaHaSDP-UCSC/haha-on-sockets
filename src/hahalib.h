@@ -21,6 +21,6 @@
 #define err_sys(...) perror(__VA_ARGS__), exit(1)
 
 #define streq(str1, str2) \
-  (strlen(str1) == strlen(str2)) && (strncmp(str1, str2, strlen(str1)) == 0)
+    (strlen(str1) == strlen(str2)) && (strncmp(str1, str2, strlen(str1)) == 0)
 
 #endif // __HAHALIB_H_

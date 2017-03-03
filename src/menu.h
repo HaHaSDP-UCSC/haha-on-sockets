@@ -19,27 +19,27 @@
 typedef struct MenuItem MenuItem;
 
 typedef struct MenuItem {
-  void (*onEnter)();
-  void (*onExit)();
-  char value[MENU_MAXLEN];
-  bool visible;
-  MenuItem* parent;
-  MenuItem* child;
-  MenuItem* prev;
-  MenuItem* next;
+    void (*onEnter)();
+    void (*onExit)();
+    char value[MENUITEM_TITLE_MAXLEN];
+    bool visible;
+    MenuItem* parent;
+    MenuItem* child;
+    MenuItem* prev;
+    MenuItem* next;
 } MenuItem;
 
 typedef struct Menu {
-  MenuItem* root;
-  MenuItem* current;
+    MenuItem* root;
+    MenuItem* current;
 } Menu;
 
 typedef enum MenuDirection {
-  MENU_UNDEF = 0,
-  MENU_UP,
-  MENU_DOWN,
-  MENU_LEFT,
-  MENU_RIGHT
+    MENU_UNDEF = 0,
+    MENU_UP,
+    MENU_DOWN,
+    MENU_LEFT,
+    MENU_RIGHT
 } MenuDirection;
 
 Menu* menuInit(void);
