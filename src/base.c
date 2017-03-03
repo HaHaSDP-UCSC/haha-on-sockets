@@ -9,6 +9,9 @@
 
 #include "hahalib.h"
 #include "menu.h"
+#include "lcd.h"
+
+extern char*** LCD;
 
 /**
  * @brief Initializes the menus for our project
@@ -50,12 +53,15 @@ Menu* createMenus(void) {
  * @return Status
  */
 int main(int argc, char** argv) {
-  printf("Test executable.\n");
+  printf("Test executable.\n\rWhoops");
   Menu* menu = createMenus();
   menuItemPrintTree(menu->root);
 
+  lcdInit();
+
   while(true) {
     char input = getchar();
+    printf("\r\r\r");
     int move = -1;
     switch(input) {
       case 'w':
@@ -81,6 +87,13 @@ int main(int argc, char** argv) {
   }
 
 done:
+  lcdUpdate();
+  printf("%d\n", lcdWrite(0, 0, "testing"));
+  lcdUpdate();
+  lcdClear();
+  strcpy(LCD[1], "swagger");
+  lcdUpdate();
+  lcdDestroy();
   menuDestroy(menu);
   return(1);
 }

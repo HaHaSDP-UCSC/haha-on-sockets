@@ -7,9 +7,12 @@
  * @date 2017-02-28
  */
 
+#ifndef __MENU_H__
+#define __MENU_H__
+
 #include "hahalib.h"
 
-#define MENUITEM_TITLE_MAXLEN 32
+#define MENU_MAXLEN 32
 #define MENU_WRAP true
 #define MENU_DBUG true
 
@@ -18,7 +21,7 @@ typedef struct MenuItem MenuItem;
 typedef struct MenuItem {
   void (*onEnter)();
   void (*onExit)();
-  char value[MENUITEM_TITLE_MAXLEN];
+  char value[MENU_MAXLEN];
   bool visible;
   MenuItem* parent;
   MenuItem* child;
@@ -48,3 +51,5 @@ int menuItemSetValue(MenuItem* this, char* value);
 void menuItemPrintTree(MenuItem* this);
 void menuItemPrintTreeHelper(MenuItem* this, int level);
 int menuItemDestroy(MenuItem* this);
+
+#endif // __MENU_H__

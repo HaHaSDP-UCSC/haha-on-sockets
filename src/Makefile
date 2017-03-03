@@ -12,7 +12,7 @@ GCC=gcc -g -O0 -std=gnu99
 EXECBIN=base
 CSOURCE=${EXECBIN:=.c}
 COBJECT=${CSOURCE:.c=.o}
-ISOURCE=hahalib.c menu.c
+ISOURCE=hahalib.c menu.c lcd.c
 IOBJECT=${ISOURCE:.c=.o}
 EXECDIR=../bin
 
