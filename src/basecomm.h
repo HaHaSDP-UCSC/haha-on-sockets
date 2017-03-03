@@ -9,13 +9,17 @@
 /* These functions will call the functions in network.h
 *  The network.h file is the actual implementation of network comm.
 */
-/* init()
+/* init_network()
 * Initialize any settings that are needed
-* Just pass it off to the device's init
+* Pass it off to the device's init
 */
-void init(); //unknown needed params
+void init_network(); //unknown needed params
+/* sendToBase()
+*  Get the packet ready and send as a char* to the devices send
+*/
 bool sendToBase(Packet *p, Base dest);
-bool sendPacket(Packet *p, baseaddr dest);
-
+bool sendPacket(Packet *p, char* dest);
+void recvPacket(Packet *p);
+Packet* procRecv(char* data); //received from networkdevice.c
 bool networkUp();
 #endif

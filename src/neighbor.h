@@ -13,4 +13,4 @@ typedef struct{
    char* firstname;
    char* lastname;
    //etc
-}neighbor;
+}Neighbor;
