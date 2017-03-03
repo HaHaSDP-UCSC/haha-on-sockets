@@ -1,6 +1,6 @@
 #ifndef _HA_BUTTON
 #define _HA_BUTTON
-#include "devtools.h"
+#include "../devtools.h"
 #include "buttondevice.h"
 //TODO: Need to define the button message specification between button->base
 typedef enum PressType{
@@ -12,6 +12,7 @@ typedef enum PressType{
 
 bool sendAlert(char* alert);
 bool sendMessage(char* msg);
+bool recvMessage(char* msg); //Called from buttondevice
 bool battLow();
 void buttonPress(PressType type);
 

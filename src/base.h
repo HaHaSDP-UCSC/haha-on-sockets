@@ -4,7 +4,8 @@
 
 typedef struct{
    //Base attributes
-   char* dest;
+   char* UID;
+   char* addr;
    //etc
 }Base;
 

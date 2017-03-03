@@ -9,7 +9,7 @@
 //sockets: probably called directly in loop (instead of interrupt)
 void init_button();
 bool pollButton(Button *b);
-bool recvAlert(Beacon *bc);
+bool recvAlert(Beacon *bc); //buttondevice will call this
 
 //Some helper functions for processing beacon messages
 void procBeacon(Beacon *bc, char* buff);

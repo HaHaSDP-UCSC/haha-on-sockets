@@ -14,12 +14,13 @@
 * Pass it off to the device's init
 */
 void init_network(); //unknown needed params
+
 /* sendToBase()
 *  Get the packet ready and send as a char* to the devices send
 */
 bool sendToBase(Packet *p, Base dest);
 bool sendPacket(Packet *p, char* dest);
-void recvPacket(Packet *p);
-Packet* procRecv(char* data); //received from networkdevice.c
+bool recvPacket(Packet *p);
+//Packet* procRecv(char* data); //received from networkdevice.c
 bool networkUp();
 #endif

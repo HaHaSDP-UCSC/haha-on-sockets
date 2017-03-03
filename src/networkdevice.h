@@ -14,7 +14,6 @@
 void _init_network();
 bool _data_send(char* data, char* addr); //actually send the stirng of data
 bool _recv_packet(char* data); //from sockets
-Packet* _recv_packet_up(char* data); //send the packet up to app
 
 /* For Later */
 void _get_network_errors();

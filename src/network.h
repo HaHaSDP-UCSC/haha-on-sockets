@@ -7,13 +7,12 @@
 
 /* BASE COMMUNICATION */
 typedef opcode char*;
-typedef data char*;
 typdef struct{
    //Packet params here
    opcode opcode;
    flags flags;
    char* dest;
-   data data;
+   char* data;
 }Packet;
 
 #endif
