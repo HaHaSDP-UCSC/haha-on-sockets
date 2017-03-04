@@ -5,14 +5,14 @@
 void init_network(); //unknown needed params
 
 /* sendToBase()
-*  Get the packet ready and send as a char* to the devices send
+*  Get the packet ready and send as a char* to the device to send.
 */
 bool sendToBase(Packet *p, Base dest){
 
 }
 
-/* Take the packet and conver it to a single char and send to networkdevice
-*  Return the return value from networkdevice
+/* Take the packet and convert it to a single char and send to network device
+*  Return the return value from network device
 */
 bool sendPacket(Packet *p, char* dest){
 

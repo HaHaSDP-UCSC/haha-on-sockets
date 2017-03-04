@@ -1,5 +1,5 @@
-#ifndef _HA_BASECOM
-#define _HA_BASECOM
+#ifndef _HA_BASECOMM
+#define _HA_BASECOMM
 
 #include "devtools.h"
 #include "network.h"

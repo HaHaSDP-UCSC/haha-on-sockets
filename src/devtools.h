@@ -10,7 +10,8 @@
 
 #include <stdio.h>
 
-#define BOOL int
+//Boolean values.
+#define bool int
 #define TRUE 1
 #define FALSE 0
 #define ERROR -1

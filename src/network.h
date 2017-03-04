@@ -6,13 +6,14 @@
 #include "flags.h"
 
 /* BASE COMMUNICATION */
-typedef opcode char*;
-typdef struct{
-   //Packet params here
-   opcode opcode;
-   flags flags;
-   char* dest;
-   char* data;
-}Packet;
+typedef char* opcode;
+
+typedef struct {
+	//Packet params here
+	opcode opcode;
+	flags flags;
+	char* dest;
+	char* data;
+} Packet;
 
 #endif

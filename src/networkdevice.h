@@ -11,14 +11,20 @@
 #include "base.h"
 
 /* Must Implement for App */
-void _init_network();
-bool _data_send(char* data, char* addr); //actually send the stirng of data
-bool _recv_packet(char* data); //from sockets
+void _init_network(char *port);
+bool _send_packet(char *buffer, int size, char *dstaddr, char* dstport);
+bool _recv_packet(char *buffer, int buffersize);
 
 /* For Later */
 void _get_network_errors();
 
 /* Device Specific functions */
 //Socket stuff
+
+#include "sys/socket.h"
+#include "netinet/in.h"
+#include <fcntl.h>
+#define	SA	struct sockaddr
+#define	LISTENQ	1024	/* 2nd argument to listen() */
 
 #endif
