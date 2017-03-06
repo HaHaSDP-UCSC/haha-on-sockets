@@ -12,7 +12,8 @@ typedef struct {
 	//Packet params here
 	opcode opcode;
 	flags flags;
-	char* dest;
+	char* src;
+	char* dst;
 	char* data;
 } Packet;
 

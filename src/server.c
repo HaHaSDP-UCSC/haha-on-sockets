@@ -5,9 +5,10 @@
  *      Author: kevin
  */
 
-#include "devtools.h"
 #include "sys/socket.h"
 #include "netinet/in.h"
+#include "devtools.h"
+#include <unistd.h>
 
 #define	SA	struct sockaddr
 #define CMD 4 //3 ASCII Char + null
@@ -57,7 +58,7 @@ int main(int argc, char **argv) {
 		exit(0);
 	}
 
-	if (!initServer(&listenfd, "127.0.0.1", argv[1])) {
+	if (!initServer(&listenfd, argv[1])) {
 		exit(0);
 	}
 
@@ -72,7 +73,7 @@ int main(int argc, char **argv) {
 			int socketNotClosed = 1;
 			int receiveLength = 0;
 			int offset = 0;
-			bzero(receivebuffer, MAXLEN); //Zero array.
+			//bzero(receivebuffer, MAXLEN); //Zero array.
 			bzero(command, CMD); //Zero array.
 			while (socketNotClosed) {
 				//Read command from client.

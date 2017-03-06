@@ -5,20 +5,22 @@
 #include "network.h"
 #include "base.h"
 
+#define BUFFERSIZE 1000
+
 /* Base Communication */
 /* These functions will call the functions in network.h
-*  The network.h file is the actual implementation of network comm.
-*/
+ *  The network.h file is the actual implementation of network comm.
+ */
 /* init_network()
-* Initialize any settings that are needed
-* Pass it off to the device's init
-*/
-void init_network(); //unknown needed params
+ * Initialize any settings that are needed
+ * Pass it off to the device's init
+ */
+bool init_network(char *listenport); //unknown needed params
 
 /* sendToBase()
-*  Get the packet ready and send as a char* to the devices send
-*/
-bool sendToBase(Packet *p, Base dest);
+ *  Get the packet ready and send as a char* to the devices send
+ */
+bool sendToBase(Packet *p, Base dest); //TODO what is this for?
 bool sendPacket(Packet *p, char* dest);
 bool recvPacket(Packet *p);
 //Packet* procRecv(char* data); //received from networkdevice.c

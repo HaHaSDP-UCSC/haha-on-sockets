@@ -12,28 +12,47 @@
 #include "storagedevice.h"
 
 /* The specifics of this part of the program will be different on the uC
-*  We will probably register some interrupts and interrupt timers. For the
-*  socket version we will have to poll.
-*/
+ *  We will probably register some interrupts and interrupt timers. For the
+ *  socket version we will have to poll.
+ */
 
-void init(){
-   //Setup everything
-   //Load stored information
-   //
+void init() {
+	//Setup everything
+	//Load stored information
+	//
 }
 
+int main(int argc, char** argv) {
+	int error = FALSE; //correct this later
 
-int main(int argc, char** argv){
-   int error = FALSE; //correct this later
-   //Initialize
-   //Register interrupts
+	char *listen = argv[2];
+	char *destination = argv[3];
 
-   //Forever Loop
-   for(;;){
-      //etc
+	if (argc != 3) {
+		printe("usage: <listenport> <destinationport>");
+	}
+	//Initialize
+	init_network(listen);
+	//Register interrupts
 
-   }
+	char buffer[BUFFERSIZE];
 
+	Packet prec;
+	prec.data = buffer;
 
-   return error;
+	Packet psend;
+	psend.src = listen;
+	psend.dst = destination;
+	psend.data = "Hello World\n";
+
+	sendPacket(&psend, destination);
+
+	for (;;) {
+		if (recvPacket(&prec) == TRUE) {
+			printf("%s", prec.data);
+		}
+
+	}
+
+	return error;
 }

@@ -13,9 +13,9 @@ int connfd, listenfd = 0;
  * Initialize the network device.
  * The port is the listening port.
  */
-bool _init_network(char *port) {
+bool _init_network(char *listenport) {
 	struct sockaddr_in servaddr;
-	if ((*listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		printe("Socket error.\n");
 		return FALSE;
 	}
@@ -30,15 +30,15 @@ bool _init_network(char *port) {
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	servaddr.sin_port = htons(atoi(port)); //Port
+	servaddr.sin_port = htons(atoi(listenport)); //Port
 
-	if (bind(*listenfd, (SA *) &servaddr, sizeof(servaddr)) == -1) {
+	if (bind(listenfd, (SA *) &servaddr, sizeof(servaddr)) == -1) {
 		printe("Bind error.\n");
 		return FALSE;
 	}
 
-	printf("Server started @ %s\n", port);
-	if (listen(*listenfd, LISTENQ) == -1) {
+	printf("Server started @ %s\n", listenport);
+	if (listen(listenfd, LISTENQ) == -1) {
 		printe("Listen error.\n");
 		return FALSE;
 	}
@@ -53,10 +53,12 @@ bool connectTo(char *server, char *port) {
 	//	return FALSE; //This means already connected to a socket.
 	//}
 	struct sockaddr_in servaddr;
-	if ((*connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+	if ((connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		printe("Socket error.\n");
 		return FALSE;
 	}
+	//setsockopt(connfd, SOCK_NONBLOCK);
+	fcntl(connfd, F_SETFL, O_NONBLOCK);  // set to non-blocking
 
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
@@ -78,7 +80,7 @@ bool connectTo(char *server, char *port) {
  * Accept connection on listen port.
  */
 bool acceptFrom() {
-	connfd = accept(listenfd, (SA *) NULL, SOCK_NONBLOCK); //TODO Nonblocking
+	connfd = accept(listenfd, (SA *) NULL, NULL); //TODO Nonblocking
 	if (connfd <= 0) {
 		return FALSE;
 	}
@@ -108,7 +110,7 @@ bool _data_send(char *buffer, int size, char *dstaddr, char *dstport) {
  *  the packet so that it is sent again (assumption made about how network works)
  *  If the data buffer is too small, the rest of the message is discarded.
  */
-bool _recv_packet(char * buffer, int buffersize) {
+bool _recv_packet(char *buffer, int buffersize) {
 	if (acceptFrom() == FALSE) {
 		return FALSE; //No packet to see.
 	}

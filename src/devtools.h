@@ -9,6 +9,8 @@
 #define SRC_DEVTOOLS_H_
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //Boolean values.
 #define bool int
