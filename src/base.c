@@ -7,7 +7,7 @@
  * @date 2017-02-28
  */
 
-#include "hahalib.h"
+#include "halib.h"
 #include "menu.h"
 #include "lcd.h"
 
@@ -56,6 +56,7 @@ int main(int argc, char** argv) {
     printf("Test executable.\n");
     Menu* menu = createMenus();
     menuItemPrintTree(menu->root);
+    lcdInit();
 
     while(true) {
         char input = getchar();
@@ -79,17 +80,14 @@ int main(int argc, char** argv) {
             case '\n':
                 break;
         }
-        if(move != -1)
-            printf("%s\n", menu->current->value);
+        if(move != -1) {
+            menuSetLcd(menu);
+            // lcdSetLine(0, menu->current->value);
+            lcdUpdate();
+        }
     }
 
 done:
-    lcdUpdate();
-    printf("%d\n", lcdWrite(0, 0, "testing"));
-    lcdUpdate();
-    lcdClear();
-    strcpy(LCD[1], "swagger");
-    lcdUpdate();
     lcdDestroy();
     menuDestroy(menu);
     return(1);

@@ -7,10 +7,11 @@
  * @date 2017-02-28
  */
 
-#ifndef __MENU_H__
-#define __MENU_H__
+#ifndef _HA_MENU_
+#define _HA_MENU_
 
-#include "hahalib.h"
+#include "halib.h"
+#include "lcd.h"
 
 #define MENU_MAXLEN 32
 #define MENU_WRAP true
@@ -21,7 +22,7 @@ typedef struct MenuItem MenuItem;
 typedef struct MenuItem {
     void (*onEnter)();
     void (*onExit)();
-    char value[MENUITEM_TITLE_MAXLEN];
+    char value[MENU_MAXLEN];
     bool visible;
     MenuItem* parent;
     MenuItem* child;
@@ -44,6 +45,7 @@ typedef enum MenuDirection {
 
 Menu* menuInit(void);
 int menuMove(Menu* menu, MenuDirection direct);
+int menuSetLcd(Menu* menu);
 int menuDestroy(Menu* this);
 
 MenuItem* menuItemInit(MenuItem* parent, char* value);
@@ -52,4 +54,4 @@ void menuItemPrintTree(MenuItem* this);
 void menuItemPrintTreeHelper(MenuItem* this, int level);
 int menuItemDestroy(MenuItem* this);
 
-#endif // __MENU_H__
+#endif // _HA_MENU_

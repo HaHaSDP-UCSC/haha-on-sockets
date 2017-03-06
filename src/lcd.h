@@ -6,18 +6,23 @@
  * @date 2017-03-02
  */
 
-#ifndef __LCD_H__
-#define __LCD_H__
+#ifndef _HA_LCD_
+#define _HA_LCD_
 
-#include "hahalib.h"
+#include "halib.h"
 
 #define LCD_LINES 4
 #define LCD_COLS 16
 
+#define LCD_SEPARATE "================"
+
 void lcdInit(void);
 void lcdClear(void);
 void lcdUpdate(void);
-int lcdWrite(int line, int col, char* msg);
+int lcdSetLine(int line, char* msg);
+int lcdGetLine(int line, char* msg);
+int lcdSetChar(int line, int col, char msg);
+char lcdGetChar(int line, int col);
 int lcdDestroy(void);
 
-#endif // __LCD_H__
+#endif // _HA_LCD_

@@ -62,6 +62,22 @@ int menuMove(Menu* menu, MenuDirection direct) {
     } else return -1;
 }
 
+int menuSetLcd(Menu* menu) {
+    int lines = 0;
+    if(menu && menu->current) {
+        lcdClear();
+        MenuItem* this = menu->current;
+        for(lines = 0; lines < LCD_LINES; lines++) {
+            lcdSetLine(lines, this->value);
+            if(this->next == NULL) {
+                this = this->parent->child;
+            } else this = this->next;
+            if(this == menu->current) break;
+        }
+    } else return(-1);
+    return(lines);
+}
+
 /**
  * @brief Destructor for global menu
  * @param this Menu to destroy

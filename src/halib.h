@@ -1,5 +1,5 @@
 /**
- * @file hahalib.h
+ * @file halib.h
  * @brief stdlib for HAHA project, contains imports and defines
  *
  * @author August Valera (avalera)
@@ -7,8 +7,8 @@
  * @date 2017-02-28
  */
 
-#ifndef __HAHALIB_H_
-#define __HAHALIB_H_
+#ifndef _HA_HALIB_
+#define _HA_HALIB_
 
 #include <string.h>
 #include <stdio.h>
@@ -23,4 +23,4 @@
 #define streq(str1, str2) \
     (strlen(str1) == strlen(str2)) && (strncmp(str1, str2, strlen(str1)) == 0)
 
-#endif // __HAHALIB_H_
+#endif // _HA_HALIB_

@@ -1,5 +1,5 @@
 /**
- * @file hahalib.c
+ * @file halib.c
  * @brief stdlib for HAHA project, contains global functions
  *
  * @author August Valera (avalera)
@@ -7,4 +7,4 @@
  * @date 2017-02-28
  */
 
-#include "hahalib.h"
+#include "halib.h"
