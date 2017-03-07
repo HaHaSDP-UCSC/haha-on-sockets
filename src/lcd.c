@@ -55,10 +55,14 @@ void lcdUpdate(void) {
  */
 int lcdSetLine(int line, char* msg) {
     //printf("lcdSetLine(%d, %s)\n", line, msg);
-    int chars = 0;
+    int chars = 0, i;
     if(LCD && line >= 0 && line < LCD_LINES) {
         strncpy(LCD[line], msg, LCD_COLS);
         chars = strlen(LCD[line]);
+        if(chars < LCD_COLS)
+            for(i = chars; i < LCD_COLS; i++) {
+                lcdSetChar(line, i, ' ');
+            }
     } else return(-1);
     //printf("success\n");
     return(chars);

@@ -5,6 +5,9 @@
  *      Author: Kevin Lee
  */
 
+// NOTICE! This file is depreciated.
+// TODO: Move contents into halib.h
+
 #ifndef SRC_DEVTOOLS_H_
 #define SRC_DEVTOOLS_H_
 
