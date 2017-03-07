@@ -25,8 +25,8 @@ void init() {
 int main(int argc, char** argv) {
 	int error = FALSE; //correct this later
 
-	char *listen = argv[2];
-	char *destination = argv[3];
+	char *listen = argv[1];
+	char *destination = argv[2];
 
 	if (argc != 3) {
 		printe("usage: <listenport> <destinationport>\n");
@@ -44,13 +44,22 @@ int main(int argc, char** argv) {
 	Packet psend;
 	psend.src = listen;
 	psend.dst = destination;
-	psend.data = "Hello World\n";
-
+	char linebuf[BUFFERSIZE];
+	int count = 0;
+	sprintf(linebuf, "%s %d\n", listen, count);
+	psend.data = linebuf;
 	sendPacket(&psend, destination);
 
 	for (;;) {
+		//Call recvPacket to poll the receive buffer.
 		if (recvPacket(&prec) == TRUE) {
 			printf("%s", prec.data);
+			sleep(2);
+			sprintf(linebuf, "%s %d\n", listen, count);
+			psend.data = linebuf;
+			sendPacket(&psend, destination);
+			sleep(2);
+			count++;
 		}
 
 	}
