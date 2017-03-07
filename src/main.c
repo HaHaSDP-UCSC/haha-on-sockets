@@ -29,7 +29,8 @@ int main(int argc, char** argv) {
 	char *destination = argv[3];
 
 	if (argc != 3) {
-		printe("usage: <listenport> <destinationport>");
+		printe("usage: <listenport> <destinationport>\n");
+		return ERROR;
 	}
 	//Initialize
 	init_network(listen);

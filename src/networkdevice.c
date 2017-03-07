@@ -92,7 +92,7 @@ bool acceptFrom() {
  *  Send the data to the address specified
  *  Return <= 0 for failure, otherwise good.
  */
-bool _data_send(char *buffer, int size, char *dstaddr, char *dstport) {
+bool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
 	connectTo(dstaddr, dstport);
 	int n = write(connfd, buffer, size); //TODO iterate in loop to write full.
 	close(connfd);

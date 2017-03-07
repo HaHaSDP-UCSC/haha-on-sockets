@@ -44,11 +44,11 @@ bool initServer(int *listenfd, char *port) {
 		return FALSE;
 	}
 
-	printf("Server started @ %s\n", port);
 	if (listen(*listenfd, LISTENQ) == -1) {
 		printe("Listen error.\n");
 		return FALSE;
 	}
+	printf("Server started @ %s\n", port);
 	return TRUE;
 }
 
