@@ -9,12 +9,10 @@
  * The network.h file is the actual implementation of network comm.
  */
 
-
-
 #ifndef _HA_BASECOMM
 #define _HA_BASECOMM
 
-#include "devtools.h"
+#include "halib.h"
 #include "network.h"
 #include "base.h"
 

@@ -9,7 +9,7 @@
 #ifndef _HA_STORAGEDEVICE_
 #define _HA_STORAGEDEVICE_
 
-#include "devtools.h"
+#include "halib.h"
 #include "storage.h"
 
 //For sockets this will probably just be some fread /fwrite()

@@ -9,7 +9,7 @@
 #ifndef _HA_NETDEFS
 #define _HA_NETDEFS
 
-#include "devtools.h"
+#include "halib.h"
 #include "flags.h"
 
 /* BASE COMMUNICATION */

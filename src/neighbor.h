@@ -9,7 +9,7 @@
 #ifndef _HA_NEIGHBOR_
 #define _HA_NEIGHBOR_
 
-#include "devtools.h"
+#include "halib.h"
 #include "base.h"
 
 #define MAXNAME 34

@@ -13,7 +13,7 @@
 #ifndef _HA_NETWORKDEVICE_
 #define _HA_NETWORKDEVICE_
 
-#include "devtools.h"
+#include "halib.h"
 #include "network.h"
 #include "base.h"
 /* Must Implement for App */

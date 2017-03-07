@@ -9,7 +9,7 @@
 #ifndef _HA_STORAGE_
 #define _HA_STORAGE_
 
-#include "devtools.h"
+#include "halib.h"
 
 //Need to specify the datatypes and how we will store data.
 //If we are using minimal data, JSON might be a good idea.

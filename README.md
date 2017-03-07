@@ -33,7 +33,6 @@ A Linux based proof of concept for the Home Assistance Button 	project.
    - buttondevice.c
    - buttondevice.h: Implementation of the button communication
    - buttonnetwork.h
-   - devtools.h: DEPRECIATED, move into halib.h
    - flags.h
    - hahaProgram.h
    - halib.c: stdlib for HAHA project, contains global functions

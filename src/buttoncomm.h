@@ -11,7 +11,7 @@
 #ifndef _HA_BUTTONCOM_
 #define _HA_BUTTONCOM_
 
-#include "devtools.h"
+#include "halib.h"
 #include "buttonnetwork.h"
 #include "button.h"
 
