@@ -13,6 +13,7 @@
 #include "basecomm.h"
 
 int connfd, listenfd = 0;
+//int outboundfd, inboundfd = 0;
 
 /**
  * Initialize the network device.
@@ -62,7 +63,6 @@ bool connectTo(char *server, char *port) {
         printe("Socket error.\n");
         return FALSE;
     }
-    //setsockopt(connfd, SOCK_NONBLOCK);
     fcntl(connfd, F_SETFL, O_NONBLOCK);  // set to non-blocking
 
     bzero(&servaddr, sizeof(servaddr));
@@ -75,7 +75,7 @@ bool connectTo(char *server, char *port) {
     }
 
     if (connect(connfd, (SA *) &servaddr, sizeof(servaddr)) < 0) {
-        printe("Connect error.\n");
+        printe("Connect error.\n"); //TODO may error because non-block or timeout
         return FALSE;
     }
     return TRUE;
@@ -98,7 +98,9 @@ bool acceptFrom() {
  *  Return <= 0 for failure, otherwise good.
  */
 bool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
-    connectTo(dstaddr, dstport);
+    if (connectTo(dstaddr, dstport) == FALSE) {
+        printe("Connect error. TODO WHY\n"); //TODO may error because non-block or timeout
+    }
     int n = write(connfd, buffer, size); //TODO iterate in loop to write full.
     close(connfd);
     if (n < 0) {
@@ -119,6 +121,7 @@ bool _recv_packet(char *buffer, int buffersize) {
     if (acceptFrom() == FALSE) {
         return FALSE; //No packet to see.
     }
+
     int receiveLength = 0;
     bzero(buffer, buffersize); //TODO do we need to clear buffer.
     int offset = 0;

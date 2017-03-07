@@ -47,3 +47,4 @@ README.md:
 	@ cat $@
 
 .PHONY: ${COMMANDS} ${EXTRA}
+
