@@ -43,9 +43,9 @@ README.md:
 		(FileDesc=$$(cat $$FilePath | grep "@brief" | head -n 1 | cut -d '@' -f 2 |\
 		cut -d ' ' -f 2-) && [ ! -z "$$FileDesc" ] && \
 		[ "$$FileDesc" != "brief" ] && \
-		echo "$$FilePre$$File: $$FileDesc" >>$@ || \
-		echo "$$FilePre$$File" >>$@ ) || \
-		echo "$$FilePre[$$File/]($$(echo $$FilePath | tail -c +3))" >>$@; \
+		echo "$$FilePre**$$File**: $$FileDesc" >>$@ || \
+		echo "$$FilePre**$$File**" >>$@ ) || \
+		echo "$$FilePre**[$$File/]($$(echo $$FilePath | tail -c +3))**" >>$@; \
 		done
 	@ cat $@
 
