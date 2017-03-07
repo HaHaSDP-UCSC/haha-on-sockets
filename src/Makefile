@@ -2,7 +2,7 @@
 #  @brief Makefile for src/ dir
 #  @author August Valera (avalera)
 #  @version
-#  @date 2017-02-28
+#  @date 2017-03-07
 #
 
 GCC=gcc -g -O0 # -std=c99
@@ -33,7 +33,7 @@ clean:
 	rm -f ${COBJECT} ${IOBJECT}
 
 spotless: clean
-	rm -f ${EXECDIR}/${EXECBIN}
+	for File in ${EXECBIN}; do rm -f ${EXECDIR}/$$File; done
 
 ci:
 	cd .. && make ci

@@ -1,7 +1,6 @@
 /**
  * @file halib.h
  * @brief stdlib for HAHA project, contains imports and defines
- *
  * @author August Valera (avalera)
  * @version
  * @date 2017-02-28

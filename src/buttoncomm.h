@@ -1,6 +1,15 @@
+/**
+ * @file buttoncomm.h
+ * @brief
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
+
+
 /* This will get the packet ready and send to buttondevice.c specific */
-#ifndef _HA_BUTTONCOM
-#define _HA_BUTTONCOM
+#ifndef _HA_BUTTONCOM_
+#define _HA_BUTTONCOM_
 
 #include "devtools.h"
 #include "buttonnetwork.h"
@@ -15,4 +24,4 @@ bool recvAlert(Beacon *bc); //buttondevice will call this
 void procBeacon(Beacon *bc, char* buff);
 //etc
 
-#endif
+#endif // _HA_BUTTONCOMM_

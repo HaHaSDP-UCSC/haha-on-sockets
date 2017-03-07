@@ -1,10 +1,17 @@
-/* Base to base communication
+/**
+ * @file networkdevice.h
+ * @brief Base to base communication
+ * @author
+ * @version
+ * @date 2017-03-07
+ *
  *  Functions here will be called by basecomm.h functions and will be the actual
  *  device implementation of network connectivity. By implementing this file for
  *  a new device, the base comm. can be changed to a new device
  */
-#ifndef _HA_NETWORKDEVICE
-#define _HA_NETWORKDEVICE
+
+#ifndef _HA_NETWORKDEVICE_
+#define _HA_NETWORKDEVICE_
 
 #include "devtools.h"
 #include "network.h"
@@ -26,7 +33,7 @@ void _get_network_errors();
 #include <arpa/inet.h>
 #include <sys/fcntl.h>
 
-#define	SA	struct sockaddr
-#define	LISTENQ	1024	/* 2nd argument to listen() */
+#define SA  struct sockaddr
+#define LISTENQ 1024    /* 2nd argument to listen() */
 
-#endif
+#endif // _HA_NETWORKDEVICE_

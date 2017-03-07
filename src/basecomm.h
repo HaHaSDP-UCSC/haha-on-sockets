@@ -1,3 +1,16 @@
+/**
+ * @file basecomm.h
+ * @brief Base communication
+ * @author
+ * @version
+ * @date 2017-03-07
+ *
+ * These functions will call the functions in network.h
+ * The network.h file is the actual implementation of network comm.
+ */
+
+
+
 #ifndef _HA_BASECOMM
 #define _HA_BASECOMM
 
@@ -7,10 +20,6 @@
 
 #define BUFFERSIZE 1000
 
-/* Base Communication */
-/* These functions will call the functions in network.h
- *  The network.h file is the actual implementation of network comm.
- */
 /* init_network()
  * Initialize any settings that are needed
  * Pass it off to the device's init

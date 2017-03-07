@@ -1,5 +1,13 @@
-#ifndef _HA_STORAGEDEVICE
-#define _HA_STORAGEDEVICE
+/**
+ * @file storagedevice.h
+ * @brief
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
+
+#ifndef _HA_STORAGEDEVICE_
+#define _HA_STORAGEDEVICE_
 
 #include "devtools.h"
 #include "storage.h"
@@ -10,4 +18,4 @@ bool _write_settings();
 bool _read_settings();
 
 
-#endif
+#endif // _HA_STORAGEDEVICE_

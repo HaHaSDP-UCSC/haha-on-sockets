@@ -1,4 +1,11 @@
-/* Definitions of network types */
+/**
+ * @file network.h
+ * @brief Definitions of network types
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
+
 #ifndef _HA_NETDEFS
 #define _HA_NETDEFS
 
@@ -17,4 +24,4 @@ typedef struct {
 	char* data;
 } Packet;
 
-#endif
+#endif // _HA_NETDEFS_

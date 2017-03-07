@@ -1,6 +1,10 @@
-/* This file can serve as a beginning for the Xbee implementation. For now it
-* serves as reference
-*/
+/**
+ * @file DEV_xbee.h
+ * @brief A beginning for Xbee implementation, reference
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
 
 //Different modes
 #define UNICAST 	0

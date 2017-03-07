@@ -1,4 +1,11 @@
-/* App layer implementation */
+/**
+ * @file basecomm.c
+ * @brief Application layer implementation
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
+
 #include "devtools.h"
 #include "basecomm.h"
 #include "networkdevice.h"

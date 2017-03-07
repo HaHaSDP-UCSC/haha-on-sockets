@@ -1,3 +1,11 @@
+/**
+ * @file flags.h
+ * @brief
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
+
 #ifndef _HA_FLAGS
 #define _HA_FLAGS
 

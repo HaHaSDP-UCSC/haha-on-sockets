@@ -1,7 +1,6 @@
 /**
  * @file menu.c
  * @brief Menu and MenuItems library defines
- *
  * @author August Valera (avalera)
  * @version
  * @date 2017-02-28

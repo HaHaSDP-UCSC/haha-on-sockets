@@ -1,4 +1,13 @@
-/* Definitions of Neighbor info */
+/**
+ * @file neighbor.h
+ * @brief Definitions of Neighbor info
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
+
+#ifndef _HA_NEIGHBOR_
+#define _HA_NEIGHBOR_
 
 #include "devtools.h"
 #include "base.h"
@@ -13,8 +22,10 @@
 #define MAXPHONE 16
 
 typedef struct{
-   char *firstname;
-   char *lastname;
-   Base *base; //Neighbors have bases
-   //etc
+    char *firstname;
+    char *lastname;
+    Base *base; //Neighbors have bases
+    //etc
 }Neighbor;
+
+#endif // _HA_NEIGHBOR_

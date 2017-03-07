@@ -30,17 +30,20 @@ spotless:
 README.md:
 	@ echo "# HaHaOnSockets" >$@
 	@ echo >>$@
-	@ echo "A Linux based proof of concept for the Home Assistance Button project." >>$@
+	@ echo "A Linux based proof of concept for the Home Assistance Button \
+		project." >>$@
 	@ echo >>$@
 	@ echo "## Directory Structure" >>$@
 	@ echo "" >>$@
-	@ for File in $$(find | grep -v '/\.' | sort -f | tail -n +2); do \
+	@ for File in $$(find | sort -snf | grep -v '/\.' | tail -n +2); do \
 		FileBullet=$$(echo $$File | sed 's#[^/]*/# |#g;s#| #  #g;s# |#- #g') && \
 		[ ! -d "$$File"  ] && \
 		( FileDesc=$$(cat $$File | grep "@brief" | head -n 1 | cut -d '@' -f 2 | \
-		cut -d ' ' -f 2-) && \
-		[ ! -z "$$FileDesc" ] && echo "$$FileBullet: $$FileDesc" >>$@ || \
+		cut -d ' ' -f 2-) && [ ! -z "$$FileDesc" ] && \
+		[ "$$FileDesc" != "brief" ] && \
+		echo "$$FileBullet: $$FileDesc" >>$@ || \
 		echo "$$FileBullet" >>$@ ) || echo "$$FileBullet/" >>$@; \
 		done
+	@ cat $@
 
 .PHONY: ${COMMANDS} ${EXTRA}

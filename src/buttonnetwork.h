@@ -1,3 +1,11 @@
+/**
+ * @file buttonnetwork.h
+ * @brief
+ * @author
+ * @version
+ * @date 2017-03-07
+ */
+
 /* Define the types of the button comm */
 #ifndef _HA_BUTTONNET
 #define _HA_BUTTONNET

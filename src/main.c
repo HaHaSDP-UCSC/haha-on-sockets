@@ -1,3 +1,12 @@
+/**
+ * @file main.c
+ * @brief Main program of the base station
+ * @author Brian, Kevin
+ * @version
+ * @date 2017-03-07
+ */
+
+
 /* Main program */
 #include "devtools.h"
 #include "hahaProgram.h"
@@ -17,43 +26,43 @@
  */
 
 void init() {
-	//Setup everything
-	//Load stored information
-	//
+    //Setup everything
+    //Load stored information
+    //
 }
 
 int main(int argc, char** argv) {
-	int error = FALSE; //correct this later
+    int error = FALSE; //correct this later
 
-	char *listen = argv[2];
-	char *destination = argv[3];
+    char *listen = argv[2];
+    char *destination = argv[3];
 
-	if (argc != 3) {
-		printe("usage: <listenport> <destinationport>\n");
-		return ERROR;
-	}
-	//Initialize
-	init_network(listen);
-	//Register interrupts
+    if (argc != 3) {
+        printe("usage: <listenport> <destinationport>\n");
+        return ERROR;
+    }
+    //Initialize
+    init_network(listen);
+    //Register interrupts
 
-	char buffer[BUFFERSIZE];
+    char buffer[BUFFERSIZE];
 
-	Packet prec;
-	prec.data = buffer;
+    Packet prec;
+    prec.data = buffer;
 
-	Packet psend;
-	psend.src = listen;
-	psend.dst = destination;
-	psend.data = "Hello World\n";
+    Packet psend;
+    psend.src = listen;
+    psend.dst = destination;
+    psend.data = "Hello World\n";
 
-	sendPacket(&psend, destination);
+    sendPacket(&psend, destination);
 
-	for (;;) {
-		if (recvPacket(&prec) == TRUE) {
-			printf("%s", prec.data);
-		}
+    for (;;) {
+        if (recvPacket(&prec) == TRUE) {
+            printf("%s", prec.data);
+        }
 
-	}
+    }
 
-	return error;
+    return error;
 }

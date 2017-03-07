@@ -1,11 +1,11 @@
-/*
- * devtools.h
- *
- *  Edited on: March 2, 2017
- *      Author: Kevin Lee
+/**
+ * @file devtools.h
+ * @brief DEPRECIATED, move into halib.h
+ * @author Kevin Lee
+ * @version
+ * @date 2017-03-02
  */
 
-// NOTICE! This file is depreciated.
 // TODO: Move contents into halib.h
 
 #ifndef SRC_DEVTOOLS_H_
