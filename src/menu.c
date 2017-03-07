@@ -147,12 +147,14 @@ void menuItemPrintTree(MenuItem* this) {
  */
 void menuItemPrintTreeHelper(MenuItem* this, int level) {
     if(this) {
-        for(int i = 0; i < level; i++)
+        int i;
+        for(i = 0; i < level; i++)
             printf("\t");
         if(this->visible) printf("> ");
         else printf("X ");
         printf("%s\n", this->value);
-        for(MenuItem* child = this->child; child; child = child->next)
+        MenuItem* child;
+        for(child = this->child; child; child = child->next)
             menuItemPrintTreeHelper(child, level + 1);
     }
 }

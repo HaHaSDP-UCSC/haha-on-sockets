@@ -5,14 +5,14 @@
 #  @date 2017-02-28
 #
 
-GCC=gcc -g -O0 -std=gnu99
+GCC=gcc -g -O0 # -std=c99
 # Uncomment below to enable stricter warnings
 # GCC=gcc -g -O0 -Wall -Wextra -std=gnu99
 
-EXECBIN=base
+EXECBIN=base server
 CSOURCE=${EXECBIN:=.c}
 COBJECT=${CSOURCE:.c=.o}
-ISOURCE=halib.c menu.c lcd.c
+ISOURCE=basecomm.c buttoncomm.c halib.c lcd.c menu.c networkdevice.c storage.c
 IOBJECT=${ISOURCE:.c=.o}
 EXECDIR=../bin
 

@@ -1,0 +1,39 @@
+NOTE: We have decided not to implement the button as a seperate client. Its
+features will be implemented in the base code (so ignore button folder).
+
+UML:
+https://www.lucidchart.com/invitations/accept/fff6ae88-9cf0-4dd6-99bc-e89010d1784a
+
+Files are organized like this:
+
+Anything ending in "device" is supposed to be the device specific code. Each
+one of these will pass data "up" to the next app layer.
+The button and base are configured as structs. This makes sense for the bases
+as there will be multiple ones stored (all the friends). Buttons is setup this
+way in case of future features where there are more than one button. They are
+each stored in their own header files and have no corresponding implementation.
+
+The FLAGS are defined in the flags file. With them are some lookup/set/clear
+defines that can be used like functions. Pass in the flags variable to them.
+EX: SET_ACK(flags) will activate the ACK flag. Likewise, CLR_ACK(flags).
+
+
+Each of these relationships works both ways. The device side will call the
+corresponding "receive" function in the upper layer. Likewise, the upper layer
+will call the send functions in the device layer. Acks should be handled in the
+upper layer. Also, it will be the job of the upper layer to convert packets into
+char, while it will be the job of the device layer to convert char (or whatever
+format it is receiving) into a Packet/Beacon/whatever the upper layer is
+expecting.
+
+***BASE***
+networkdevice <-> basecomm
+buttondevice  <-> buttoncomm
+
+***BUTTON***
+buttondevice  <-> button
+
+These files are just for definitions of the corresponding network/beacon
+communication types. They have no implementation.
+   network.h
+   buttonnetwork.h

@@ -16,7 +16,8 @@ char*** LCD;
 void lcdInit(void) {
     if(! LCD) {
         LCD = calloc(LCD_LINES, sizeof(char*));
-        for(int i = 0; i < LCD_LINES; i++)
+        int i;
+        for(i = 0; i < LCD_LINES; i++)
             LCD[i] = calloc(LCD_COLS, sizeof(char));
     }
 }
@@ -26,7 +27,8 @@ void lcdInit(void) {
  */
 void lcdClear(void) {
     if(LCD) {
-        for(int i = 0; i < LCD_LINES; i++)
+        int i;
+        for(i = 0; i < LCD_LINES; i++)
             lcdSetChar(i, 0, '\0');
 
     }
@@ -38,7 +40,8 @@ void lcdClear(void) {
 void lcdUpdate(void) {
     if(LCD) {
         printf("%s\n", LCD_SEPARATE);
-        for(int i = 0; i < LCD_LINES; i++)
+        int i;
+        for(i = 0; i < LCD_LINES; i++)
             printf("%s\n", LCD[i]);
         printf("%s\n", LCD_SEPARATE);
     }
@@ -111,7 +114,8 @@ char lcdGetChar(int line, int col) {
  */
 int lcdDestroy(void) {
     if(LCD) {
-        for(int i = 0; i < LCD_LINES; i++)
+        int i;
+        for(i = 0; i < LCD_LINES; i++)
             free(LCD[i]);
         free(LCD);
     } else return(-1);
