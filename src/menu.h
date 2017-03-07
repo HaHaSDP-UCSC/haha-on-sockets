@@ -7,6 +7,8 @@
  * @date 2017-02-28
  */
 
+// TODO: Implement menus with stack memory instead of malloc()
+
 #ifndef _HA_MENU_
 #define _HA_MENU_
 

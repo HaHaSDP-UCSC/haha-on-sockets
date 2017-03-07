@@ -7,6 +7,9 @@
  * @date 2017-02-28
  */
 
+// NOTICE! This file is depreciated.
+// TODO: Move contents into main.c
+
 #include "halib.h"
 #include "menu.h"
 #include "lcd.h"
