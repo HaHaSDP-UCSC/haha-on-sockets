@@ -35,14 +35,17 @@ README.md:
 	@ echo >>$@
 	@ echo "## Directory Structure" >>$@
 	@ echo "" >>$@
-	@ for File in $$(find | sort -snf | grep -v '/\.' | tail -n +2); do \
-		FileBullet=$$(echo $$File | sed 's#[^/]*/# |#g;s#| #   #g;s# |#- #g') && \
-		[ ! -d "$$File"  ] && \
-		( FileDesc=$$(cat $$File | grep "@brief" | head -n 1 | cut -d '@' -f 2 | \
+	@ for FilePath in $$(find | sort -snf | grep -v '/\.' | tail -n +2); do \
+		File=$$(basename $$FilePath); \
+		FileDir=$$(dirname $$FilePath); \
+		FilePre=$$(echo $$FileDir/ | sed 's#[^/]*/# |#g;s#| #   #g;s# |#- #g') && \
+		[ ! -d "$$FilePath"  ] && \
+		(FileDesc=$$(cat $$FilePath | grep "@brief" | head -n 1 | cut -d '@' -f 2 |\
 		cut -d ' ' -f 2-) && [ ! -z "$$FileDesc" ] && \
 		[ "$$FileDesc" != "brief" ] && \
-		echo "$$FileBullet: $$FileDesc" >>$@ || \
-		echo "$$FileBullet" >>$@ ) || echo "$$FileBullet/" >>$@; \
+		echo "$$FilePre$$File: $$FileDesc" >>$@ || \
+		echo "$$FilePre$$File" >>$@ ) || \
+		echo "$$FilePre[$$File/]($$(echo $$FilePath | tail -c +3))" >>$@; \
 		done
 	@ cat $@
 

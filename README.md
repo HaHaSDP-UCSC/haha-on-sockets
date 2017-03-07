@@ -6,14 +6,13 @@ A Linux based proof of concept for the Home Assistance Button 	project.
 
 - Makefile: Makefile for top level dir
 - README.md
-- bin/
+- [bin/](bin)
    - base
    - main
    - server
-- doc/
+- [docs/](docs)
    - Makefile
-- docs/
-- src/
+- [src/](src)
    - DEV_xbee.h: A beginning for Xbee implementation, reference
    - Makefile: Makefile for src/ dir
    - README
@@ -21,7 +20,7 @@ A Linux based proof of concept for the Home Assistance Button 	project.
    - base.h: Definition of the base
    - basecomm.c: Application layer implementation
    - basecomm.h: Base communication
-   - button/
+   - [button/](src/button)
       - button.c
       - button.h
       - buttondevice.c
