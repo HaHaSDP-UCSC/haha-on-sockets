@@ -39,9 +39,9 @@ Menu* createMenus(void) {
     MenuItem* setNoticeContact = menuItemInit(setNotice, "Update info");
     MenuItem* setPair = menuItemInit(set, "Pair button");
     MenuItem* setDisable = menuItemInit(set, "Disable system");
-    menuItemInit(root, "System Active (??)");
-    menuItemInit(root, "Network Status (??)");
-    menuItemInit(root, "Button Status (??)");
+    menuItemInit(root, "Activity (XXX)");
+    menuItemInit(root, "Network (XXX)");
+    menuItemInit(root, "Button (XXX)");
     menu->current = menu->root->child;
     return(menu);
 }

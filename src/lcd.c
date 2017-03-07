@@ -8,7 +8,7 @@
 
 #include "lcd.h"
 
-char*** LCD;
+char** LCD;
 
 /**
  * @brief Allocates memory for the LCD screen buffer
