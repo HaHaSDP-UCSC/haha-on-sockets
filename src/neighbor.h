@@ -17,8 +17,8 @@
 #define MAXLAST 17
 
 #define MAXUID 2
-#define MAXDEST 2
-#define MAXADDR 80
+//#define MAXDEST 2
+#define MAXADDR 75
 #define MAXPHONE 16
 
 typedef struct{
@@ -26,6 +26,6 @@ typedef struct{
     char *lastname;
     Base *base; //Neighbors have bases
     //etc
-}Neighbor;
+} Neighbor;
 
 #endif // _HA_NEIGHBOR_

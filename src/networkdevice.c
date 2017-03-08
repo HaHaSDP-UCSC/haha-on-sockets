@@ -10,7 +10,7 @@
  */
 
 #include "networkdevice.h"
-#include "basecomm.h"
+//#include "basecomm.h"
 
 int connfd, listenfd = 0;
 //int outboundfd, inboundfd = 0;
@@ -19,7 +19,7 @@ int connfd, listenfd = 0;
  * Initialize the network device.
  * The port is the listening port.
  */
-bool _init_network(char *listenport) {
+ebool _init_network(char *listenport) {
     struct sockaddr_in servaddr;
     if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printe("Socket error.\n");
@@ -54,7 +54,7 @@ bool _init_network(char *listenport) {
 /**
  * Use this method to connect to a device.
  */
-bool connectTo(char *server, char *port) {
+ebool connectTo(char *server, char *port) {
     //if (connfd) {
     //  return FALSE; //This means already connected to a socket.
     //}
@@ -84,7 +84,7 @@ bool connectTo(char *server, char *port) {
 /**
  * Accept connection on listen port.
  */
-bool acceptFrom() {
+ebool acceptFrom() {
     connfd = accept(listenfd, (SA *) NULL, NULL); //TODO Nonblocking
     if (connfd <= 0) {
         return FALSE;
@@ -97,7 +97,7 @@ bool acceptFrom() {
  *  Send the data to the address specified
  *  Return <= 0 for failure, otherwise good.
  */
-bool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
+ebool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
     if (connectTo(dstaddr, dstport) == FALSE) {
         printe("Connect error. TODO WHY\n"); //TODO may error because non-block or timeout
     }
@@ -117,7 +117,7 @@ bool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
  *  the packet so that it is sent again (assumption made about how network works)
  *  If the data buffer is too small, the rest of the message is discarded.
  */
-bool _recv_packet(char *buffer, int buffersize) {
+ebool _recv_packet(char *buffer, int buffersize) {
     if (acceptFrom() == FALSE) {
         return FALSE; //No packet to see.
     }
