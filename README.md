@@ -7,7 +7,6 @@ A Linux based proof of concept for the Home Assistance Button 	project.
 - **Makefile**: Makefile for top level dir
 - **README.md**
 - **[bin/](bin)**
-   - **base**
    - **main**
    - **server**
 - **[docs/](docs)**
@@ -16,7 +15,6 @@ A Linux based proof of concept for the Home Assistance Button 	project.
    - **DEV_xbee.h**: A beginning for Xbee implementation, reference
    - **Makefile**: Makefile for src/ dir
    - **README**
-   - **base.c**: Base station code, main of this repo
    - **base.h**: Definition of the base
    - **basecomm.c**: Application layer implementation
    - **basecomm.h**: Base communication
@@ -36,6 +34,8 @@ A Linux based proof of concept for the Home Assistance Button 	project.
    - **hahaProgram.h**
    - **halib.c**: stdlib for HAHA project, contains global functions
    - **halib.h**: stdlib for HAHA project, contains imports and defines
+   - **init.c**: Initialization file
+   - **init.h**: Initialization headers
    - **lcd.c**: LCD application level, given menu, prints to LCD
    - **lcd.h**: LCD application level, given menu, prints to LCD
    - **main.c**: Main program of the base station

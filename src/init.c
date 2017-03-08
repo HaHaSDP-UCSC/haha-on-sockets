@@ -1,25 +1,14 @@
 /**
- * @file base.c
- * @brief Base station code, main of this repo
+ * @file init.c
+ * @brief Initialization file
  * @author August Valera (avalera)
  * @version
- * @date 2017-02-28
+ * @date 2017-03-07
  */
 
-// NOTICE! This file is depreciated.
-// TODO: Move contents into main.c
+#include "init.h"
 
-#include "halib.h"
-#include "menu.h"
-#include "lcd.h"
-
-extern char*** LCD;
-
-/**
- * @brief Initializes the menus for our project
- * @return Menu
- */
-Menu* createMenus(void) {
+Menu* initMenus(void) {
     Menu* menu = menuInit();
     MenuItem* root = menu->root;
     MenuItem* mm = menuItemInit(root, "Main Menu");
@@ -46,51 +35,4 @@ Menu* createMenus(void) {
     menuItemInit(root, "Button (XXX)");
     menu->current = menu->root->child;
     return(menu);
-}
-
-/**
- * @brief Main of the program
- * @param argc Number of args
- * @param argv Array of args
- * @return Status
- */
-int main(int argc, char** argv) {
-    printf("Test executable.\n");
-    Menu* menu = createMenus();
-    menuItemPrintTree(menu->root);
-    lcdInit();
-
-    while(true) {
-        char input = getchar();
-        int move = -1;
-        switch(input) {
-            case 'w':
-                move = menuMove(menu, MENU_UP);
-                break;
-            case 'a':
-                move = menuMove(menu, MENU_LEFT);
-                break;
-            case 's':
-                move = menuMove(menu, MENU_DOWN);
-                break;
-            case 'd':
-                move = menuMove(menu, MENU_RIGHT);
-                break;
-            case 'q':
-                goto done;
-                break;
-            case '\n':
-                break;
-        }
-        if(move != -1) {
-            menuSetLcd(menu);
-            // lcdSetLine(0, menu->current->value);
-            lcdUpdate();
-        }
-    }
-
-done:
-    lcdDestroy();
-    menuDestroy(menu);
-    return(1);
 }

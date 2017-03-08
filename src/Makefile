@@ -19,10 +19,10 @@ SUPPRES = #-Wno-incompatible-pointer-types
 GCC     = gcc -g -O0  -Wall ${SUPPRESS}
 #GCC     = gcc -g -O0 ${SUPPRESS}
 
-EXECBIN	=base server main
+EXECBIN	=server main
 CSOURCE	=${EXECBIN:=.c}
 COBJECT	=${CSOURCE:.c=.o}
-ISOURCE	=basecomm.c buttoncomm.c halib.c lcd.c menu.c networkdevice.c storage.c
+ISOURCE	=basecomm.c buttoncomm.c halib.c init.c lcd.c menu.c networkdevice.c storage.c
 IOBJECT	=${ISOURCE:.c=.o}
 EXECDIR	=../bin
 

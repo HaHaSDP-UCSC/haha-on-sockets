@@ -84,7 +84,7 @@
 #if COLORED
 #define ERRORPRINT(...) fprintf(stderr, CRED), __VA_ARGS__, fprintf(ERRORPRINT)
 #else
-#define ERRORPRUNT(...)  __VA_ARGS__
+#define ERRORPRINT(...) __VA_ARGS__
 #endif // COLORED
 
 #define printex(...) printe(stderr, __VA_ARGS__), fflush(stderr), exit(1)
