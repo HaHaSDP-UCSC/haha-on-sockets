@@ -16,7 +16,6 @@
 
 #define MENU_MAXLEN 32
 #define MENU_WRAP true
-#define MENU_DBUG true
 
 typedef struct MenuItem MenuItem;
 

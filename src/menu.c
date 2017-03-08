@@ -152,10 +152,10 @@ void menuItemPrintTreeHelper(MenuItem* this, int level) {
     if(this) {
         int i;
         for(i = 0; i < level; i++)
-            printf("\t");
-        if(this->visible) printf("> ");
-        else printf("X ");
-        printf("%s\n", this->value);
+            printd("\t");
+        if(this->visible) printd("> ");
+        else printd("X ");
+        printd("%s\n", this->value);
         MenuItem* child;
         for(child = this->child; child; child = child->next)
             menuItemPrintTreeHelper(child, level + 1);
@@ -169,7 +169,7 @@ void menuItemPrintTreeHelper(MenuItem* this, int level) {
  */
 int menuItemDestroy(MenuItem* this) {
     if(this) {
-        if(MENU_DBUG) printf("DELETE %s\n", this->value);
+        printd("DELETE %s\n", this->value);
         while(this->child) {
             menuItemDestroy(this->child);
         }

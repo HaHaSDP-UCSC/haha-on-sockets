@@ -12,8 +12,8 @@
 
 //TODO unknown needed params
 bool init_network(char *listenport) {
-	_init_network(listenport);
-	return TRUE;
+    _init_network(listenport);
+    return TRUE;
 }
 
 /**
@@ -21,7 +21,7 @@ bool init_network(char *listenport) {
  *  TODO WHAT IS THIS?
  */
 bool sendToBase(Packet *p, Base dest) {
-	return FALSE; //TODO fix.
+    return FALSE; //TODO fix.
 }
 
 /**
@@ -30,21 +30,18 @@ bool sendToBase(Packet *p, Base dest) {
  */
 bool sendPacket(Packet *p, char* dest) {
 
-	_send_packet(p->data, strlen(p->data), "127.0.0.1", p->dst); //TODO turn packet into sendable.
-	return FALSE; //TODO fix.
+    _send_packet(p->data, strlen(p->data), "127.0.0.1", p->dst); //TODO turn packet into sendable.
+    return FALSE; //TODO fix.
 }
 
 /**
  * Will be called by networkdevice.c
  */
 bool recvPacket(Packet *p) {
-	if (_recv_packet(p->data, BUFFERSIZE) == TRUE) {
-		return TRUE;
-	}
-	return FALSE; //TODO fix.
+    return _recv_packet(p->data, BUFFERSIZE); // TODO fix
 }
 
 //TODO For later
 bool networkUp() {
-	return FALSE; //TODO fix.
+    return FALSE; //TODO fix.
 }
