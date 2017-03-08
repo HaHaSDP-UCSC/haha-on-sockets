@@ -68,7 +68,10 @@ int menuSetLcd(Menu* menu) {
         MenuItem* this = menu->current;
         for(lines = 0; lines < LCD_LINES; lines++) {
             lcdSetLine(lines, this->value);
-            if(lines == 0 && this->child) lcdSetChar(0, LCD_COLS - 1, '>');
+            if(this->child) {
+                if(lines == 0) lcdSetChar(lines, LCD_COLS - 1, '>');
+                else lcdSetChar(lines, LCD_COLS - 1, '-');
+            }
             if(this->next == NULL) {
                 this = this->parent->child;
             } else this = this->next;
