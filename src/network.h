@@ -11,17 +11,20 @@
 
 #include "halib.h"
 #include "flags.h"
+#include "neighbor.h"
 
 /* BASE COMMUNICATION */
 typedef char* opcode;
+typedef uint16_t uid;
 
 typedef struct {
 	//Packet params here
 	opcode opcode;
 	flags flags;
-	char* src;
-	char* dst;
-	char* data;
+	uid SRCUID;
+	uid DESTUID;
+	uid ORIGINUID;
+	char SRCNAME[MAXNAME];
 } Packet;
 
 #endif // _HA_NETDEFS_

@@ -70,9 +70,9 @@ int main(int argc, char** argv) {
     int count = 0;
     sprintf(linebuf, "%s %d\n", listen, count);
     psend.data = linebuf;
-    sendPacket(&psend, destination);
 
-    if(fork() != 0) {
+	int pid = fork();
+    if(pid != 0) {
         while(true) {
             char input = getchar();
             int move = -1;
@@ -104,6 +104,7 @@ int main(int argc, char** argv) {
             }
         }
     } else {
+		sendPacket(&psend, destination);
         for (;;) {
             //Call recvPacket to poll the receive buffer.
             if (recvPacket(&prec) == TRUE) {

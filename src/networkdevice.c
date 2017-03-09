@@ -10,7 +10,7 @@
  */
 
 #include "networkdevice.h"
-//#include "basecomm.h"
+#include "basecomm.h"
 
 int connfd, listenfd = 0;
 //int outboundfd, inboundfd = 0;
@@ -93,7 +93,6 @@ ebool acceptFrom() {
 }
 
 /**
- *  Receiving side of basecomm.c
  *  Send the data to the address specified
  *  Return <= 0 for failure, otherwise good.
  */
@@ -113,17 +112,16 @@ ebool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
 /**
  *  Take a packet from the network layer and construct a Packet and populate
  *  send to recvPacket() in the upper layer. If the packet parses correctly
- *  the return is != 0, otherwise there was an error and we need to not ack
- *  the packet so that it is sent again (assumption made about how network works)
- *  If the data buffer is too small, the rest of the message is discarded.
+ *  the return is number of bytes. TODO
+ *  If the data buffer is too small, the rest of the message is discarded. TODO
  */
-ebool _recv_packet(char *buffer, int buffersize) {
+int _recv_packet(char *buffer, int buffersize) {
+	//Do stuff network specific
     if (acceptFrom() == FALSE) {
-        return FALSE; //No packet to see.
+        return FALSE; //No packet to see. No connection accepted.
     }
-
     int receiveLength = 0;
-    bzero(buffer, buffersize); //TODO do we need to clear buffer.
+    //bzero(buffer, buffersize); //TODO do we need to clear buffer.
     int offset = 0;
 
     //If receiveLength == 0, client has reached EOF.
@@ -136,9 +134,14 @@ ebool _recv_packet(char *buffer, int buffersize) {
         printe("Read Packet Error.\n");
         return ERROR;
     }
+	
+	//Do stuff to bring it up to upper layer.
+	Packet *p;
+	
+	
 
     printv("Device Disconnected.\n");
     close(connfd);
-    return TRUE;
+    return offset;
 }
 

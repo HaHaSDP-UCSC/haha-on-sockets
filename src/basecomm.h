@@ -17,6 +17,7 @@
 #include "base.h"
 
 #define BUFFERSIZE 1000
+#define STATICDATAOFFSET 2
 
 /* init_network()
  * Initialize any settings that are needed
