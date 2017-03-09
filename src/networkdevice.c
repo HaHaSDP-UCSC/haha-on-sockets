@@ -43,7 +43,7 @@ ebool _init_network(char *listenport) {
         return FALSE;
     }
 
-    printf("Server started @ %s\n", listenport);
+    printv("Listen port started @ %s\n", listenport);
     if (listen(listenfd, LISTENQ) == -1) {
         printe("Listen error.\n");
         return FALSE;
@@ -97,12 +97,15 @@ ebool acceptFrom() {
  *  Return <= 0 for failure, otherwise good.
  */
 ebool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
+	printd("Starting _send_packet.\n");
     if (connectTo(dstaddr, dstport) == FALSE) {
         printe("Connect error. TODO WHY\n"); //TODO may error because non-block or timeout
     }
     int n = write(connfd, buffer, size); //TODO iterate in loop to write full.
+	printd("Write data. n: %d\n", n);
     close(connfd);
     if (n < 0) {
+    	printe("Connection write failed. n: %d\n", n);
         return ERROR;
     }
     printv("Packet Sent.\n");
@@ -134,11 +137,6 @@ int _recv_packet(char *buffer, int buffersize) {
         printe("Read Packet Error.\n");
         return ERROR;
     }
-	
-	//Do stuff to bring it up to upper layer.
-	Packet *p;
-	
-	
 
     printv("Device Disconnected.\n");
     close(connfd);

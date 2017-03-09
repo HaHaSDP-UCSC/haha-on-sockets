@@ -1,7 +1,7 @@
 /**
  * @file basecomm.h
  * @brief Base communication
- * @author
+ * @author Kevin Lee
  * @version
  * @date 2017-03-07
  *
@@ -15,9 +15,9 @@
 #include "halib.h"
 #include "network.h"
 #include "base.h"
+#include "baseopcode.h"
 
 #define BUFFERSIZE 1000
-#define STATICDATAOFFSET 2
 
 /* init_network()
  * Initialize any settings that are needed
@@ -28,9 +28,8 @@ ebool init_network(char *listenport); //unknown needed params
 /* sendToBase()
  *  Get the packet ready and send as a char* to the devices send
  */
-ebool sendToBase(Packet *p, Base dest); //TODO what is this for?
-ebool sendPacket(Packet *p, char* dest);
-ebool recvPacket(Packet *p);
+ebool sendPacket(Packet *p, Base *dest);
+ebool recvPacket(Packet *p, Base *src);
 ebool processPacket(Packet *p);
 //Packet* procRecv(char* data); //received from networkdevice.c
 ebool networkUp();

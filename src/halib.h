@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h> //TODO don't think we need this if we don't use malloc/calloc
 #include <unistd.h> //TODO do we need this?
+#include <stdint.h>
 #include <errno.h>
 
 // UNP error functions, DEPRECATED

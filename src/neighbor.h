@@ -1,7 +1,7 @@
 /**
  * @file neighbor.h
  * @brief Definitions of Neighbor info
- * @author
+ * @author Kevin Lee
  * @version
  * @date 2017-03-07
  */
@@ -20,6 +20,8 @@
 //#define MAXDEST 2
 #define MAXADDR 75
 #define MAXPHONE 16
+
+#define MAXBUFFER 255 //TODO CORRECT THIS
 
 typedef struct{
     char *firstname;

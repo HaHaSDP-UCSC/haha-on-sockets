@@ -6,7 +6,6 @@
  * @date 2017-03-07
  */
 
-
 /* Main program */
 #include "halib.h"
 #include "init.h"
@@ -21,17 +20,17 @@
 #include "storagedevice.h"
 
 // Global variables
-Menu* menu;
-char* listenPort;
-char* destination;
+Menu *menu;
+char *listenPort;
+char *destinationPort;
 
 /**
  * @brief Setup
  */
 void initMain() {
-    menu = initMenus();
-    init_network(listen);
-    lcdInit();
+	menu = initMenus();
+	init_network(listenPort);
+	lcdInit();
 }
 
 /**
@@ -41,87 +40,107 @@ void initMain() {
  * @return Error code
  */
 int main(int argc, char** argv) {
-    int error = FALSE; //correct this later
+	int error = FALSE; //correct this later
 
-    // Get command line arguments
-    listenPort = argv[1];
-    destination = argv[2];
-    if (argc != 3) {
-        printe("usage: <listenport> <destinationport>\n");
-        return ERROR;
-    }
+	// Get command line arguments
+	listenPort = argv[1];
+	destinationPort = argv[2];
+	if (argc != 3) {
+		printe("usage: <listenport> <destinationport>\n");
+		return ERROR;
+	}
 
-    // Initialize
-    initMain();
+	// Initialize
+	initMain();
 
-    // Debug
-    menuItemPrintTree(menu->root);
+	// Debug
+	menuItemPrintTree(menu->root);
 
-    // Register interrupts
-    char buffer[BUFFERSIZE];
+	// Register interrupts
+	char buffer[BUFFERSIZE];
 
-    Packet prec;
-    prec.data = buffer;
+	Packet psend;
+	psend.opcode = PING_REQUEST;
+	psend.flags = NULL;
+	SET_ACK(psend.flags);
+	psend.SRCUID = atoi(listenPort);
+	psend.DESTUID = atoi(destinationPort);
+	psend.ORIGINUID = NULL;
 
-    Packet psend;
-    psend.src = listen;
-    psend.dst = destination;
-    char linebuf[BUFFERSIZE];
-    int count = 0;
-    sprintf(linebuf, "%s %d\n", listen, count);
-    psend.data = linebuf;
+	printf("psend.SRCUID: %d\n", psend.SRCUID);
+	printf("psend.DESTUID: %d\n", psend.DESTUID);
+	printf("psend.ORIGINUID: %d\n", psend.ORIGINUID);
 
-	int pid = fork();
-    if(pid != 0) {
-        while(true) {
-            char input = getchar();
-            int move = -1;
-            switch(input) {
-                case 'w':
-                    move = menuMove(menu, MENU_UP);
-                    break;
-                case 'a':
-                    move = menuMove(menu, MENU_LEFT);
-                    break;
-                case 's':
-                    move = menuMove(menu, MENU_DOWN);
-                    break;
-                case 'd':
-                    move = menuMove(menu, MENU_RIGHT);
-                    break;
-                case 'h':
-                    printv("HELP BUTTON PRESSED\n");
-                    break;
-                case 'q':
-                    goto done;
-                    break;
-                case '\n':
-                    break;
-            }
-            if(move != -1) {
-                menuSetLcd(menu);
-                lcdUpdate();
-            }
-        }
-    } else {
-		sendPacket(&psend, destination);
-        for (;;) {
-            //Call recvPacket to poll the receive buffer.
-            if (recvPacket(&prec) == TRUE) {
-                printf("%s", prec.data);
-                sleep(2);
-                sprintf(linebuf, "%s %d\n", listen, count);
-                psend.data = linebuf;
-                sendPacket(&psend, destination);
-                sleep(2);
-                count++;
-            }
-        }
-    }
 
-done:
-    lcdDestroy();
-    menuDestroy(menu);
+	Base dest;
+	dest.addr = "127.0.0.1"; //Network Address.
+	dest.UID = destinationPort; //TODO For some reason, destinationPort FAILS.
+	printf("dest.DESTUID: %s\n", dest.UID);
 
-    return error;
+	Packet prec;
+	//prec.data = buffer;
+	/**
+	 Packet psend;
+	 psend.src = listenPort;
+	 psend.dst = destination;
+	 char linebuf[BUFFERSIZE];
+	 int count = 0;
+	 sprintf(linebuf, "%s %d\n", listenPort, count);
+	 psend.data = linebuf;*/
+
+	int pid = 0;
+	//int pid = fork();
+	if (pid != 0) {
+		while (true) {
+			char input = getchar();
+			int move = -1;
+			switch (input) {
+			case 'w':
+				move = menuMove(menu, MENU_UP);
+				break;
+			case 'a':
+				move = menuMove(menu, MENU_LEFT);
+				break;
+			case 's':
+				move = menuMove(menu, MENU_DOWN);
+				break;
+			case 'd':
+				move = menuMove(menu, MENU_RIGHT);
+				break;
+			case 'h':
+				printv("HELP BUTTON PRESSED\n");
+				break;
+			case 'q':
+				goto done;
+				//TODO NO GOTO's
+				break;
+			case '\n':
+				break;
+			}
+			if (move != -1) {
+				menuSetLcd(menu);
+				lcdUpdate();
+			}
+		}
+	} else {
+
+		int count = 0;
+		sendPacket(&psend, &dest);
+		Base src;
+		for (;;) {
+			//Call recvPacket to poll the receive buffer.
+			if (recvPacket(&prec, &src) == TRUE) {
+				sleep(2);
+				sendPacket(&psend, &dest);
+				sleep(2);
+				count++;
+				printf("Count: %d\n", count);
+			}
+		}
+	}
+
+	done: lcdDestroy();
+	menuDestroy(menu);
+
+	return error;
 }

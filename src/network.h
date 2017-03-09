@@ -24,7 +24,9 @@ typedef struct {
 	uid SRCUID;
 	uid DESTUID;
 	uid ORIGINUID;
-	char SRCNAME[MAXNAME];
+	char SRCNAME[MAXNAME]; //TODO optimize this.
+	//char SRCPHONE[MAXPHONE];
+	//char SRCHOMEADDR[MAXHOMEADDR];
 } Packet;
 
 #endif // _HA_NETDEFS_

@@ -11,8 +11,8 @@
 
 typedef struct{
     //Base attributes
-    char* UID;
-    char* addr;
+    char *addr;
+    char *UID; //TODO Fix this.
     //etc
 } Base;
 
