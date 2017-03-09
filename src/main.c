@@ -54,9 +54,6 @@ int main(int argc, char** argv) {
     // Initialize
     initMain();
 
-    // Debug
-    menuItemPrintTree(menu->root);
-
     // Register interrupts
     char buffer[BUFFERSIZE];
 
@@ -91,6 +88,9 @@ int main(int argc, char** argv) {
                     break;
                 case 'h':
                     printv("HELP BUTTON PRESSED\n");
+                    break;
+                case 't':
+                    menuItemPrintTree(menu->root);
                     break;
                 case 'q':
                     goto done;

@@ -33,6 +33,10 @@ Menu* initMenus(void) {
     menuItemInit(root, "Activity (XXX)");
     menuItemInit(root, "Network (XXX)");
     menuItemInit(root, "Button (XXX)");
+    MenuItem* eventButton = menuItemInit(root, "__BUTTON__");
+    eventButton->active = false;
+    menuItemInit(eventButton, "Help request");
+    menuItemInit(eventButton, "INSERT NAME");
     menu->current = menu->root->child;
     return(menu);
 }
