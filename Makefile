@@ -21,7 +21,7 @@ clean:
 	@ cd src && make clean
 
 edit: clean
-	@ vim -p src/*
+	@ $$EDITOR src/
 	@ make default
 
 spotless:

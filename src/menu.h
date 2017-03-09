@@ -20,8 +20,8 @@
 typedef struct MenuItem MenuItem;
 
 typedef struct MenuItem {
-    void (*onEnter)();
-    void (*onExit)();
+    void (*onView)();
+    void (*onClick)();
     char value[MENU_MAXLEN];
     bool visible;
     MenuItem* parent;
@@ -53,5 +53,8 @@ int menuItemSetValue(MenuItem* this, char* value);
 void menuItemPrintTree(MenuItem* this);
 void menuItemPrintTreeHelper(MenuItem* this, int level);
 int menuItemDestroy(MenuItem* this);
+void* menuItemOnViewDefault(Menu* menu);
+void* menuItemOnClickDefault(Menu* menu);
+
 
 #endif // _HA_MENU_
