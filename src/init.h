@@ -13,5 +13,6 @@
 #include "menu.h"
 
 Menu* initMenus(void);
+void* jumpToRoot(Menu* menu);
 
 #endif // _HA_INIT_

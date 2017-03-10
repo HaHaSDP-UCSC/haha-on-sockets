@@ -63,6 +63,9 @@ int menuSetLcd(Menu* menu) {
             if(this->child) {
                 if(lines == 0) lcdSetChar(lines, LCD_COLS - 1, '>');
                 else lcdSetChar(lines, LCD_COLS - 1, '-');
+            } else if(this->onClick != menuItemOnClickDefault) {
+                if(lines == 0) lcdSetChar(lines, LCD_COLS - 1, '>');
+                else lcdSetChar(lines, LCD_COLS - 1, '~');
             }
             this = menuItemGetNext(this);
             if(this == menu->current) break;

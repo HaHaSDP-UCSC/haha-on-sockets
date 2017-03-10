@@ -24,7 +24,11 @@ Menu* initMenus(void) {
     menuItemInit(setAlert, "Sound");
     menuItemInit(setAlert, "Lights");
     MenuItem* setTest = menuItemInit(set, "Test button");
-    menuItemInit(setTest, "Stop testing");
+    menuItemInit(setTest, "BUTTON TEST");
+    menuItemInit(setTest, "Press button now");
+    menuItemInit(setTest, "to test signal.");
+    MenuItem* setTestStop = menuItemInit(setTest, "Stop testing");
+    setTestStop->onClick = jumpToRoot;
     MenuItem* setNotice = menuItemInit(set, "Notice settings");
     menuItemInit(setNotice, "Test button");
     menuItemInit(setNotice, "Update info");
@@ -39,4 +43,9 @@ Menu* initMenus(void) {
     menuItemInit(eventButton, "INSERT NAME");
     menu->current = menu->root->child;
     return(menu);
+}
+
+void* jumpToRoot(Menu* menu) {
+    menu->current = menu->root->child;
+    return NULL;
 }
