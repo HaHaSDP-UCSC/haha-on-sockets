@@ -16,10 +16,11 @@
 #include "halib.h"
 #include "network.h"
 #include "base.h"
+
 /* Must Implement for App */
 bool _init_network(char *listenport);
 bool _send_packet(char *buffer, int size, char *dstaddr, char* dstport);
-bool _recv_packet(char *buffer, int buffersize);
+int _recv_packet(char *buffer, int buffersize);
 
 /* For Later */
 void _get_network_errors();

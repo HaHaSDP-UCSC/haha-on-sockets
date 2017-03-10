@@ -6,7 +6,6 @@
  * @date 2017-03-07
  */
 
-
 /* Main program */
 #include "halib.h"
 #include "init.h"
@@ -21,17 +20,17 @@
 #include "storagedevice.h"
 
 // Global variables
-Menu* menu;
-char* listenPort;
-char* destination;
+Menu *menu;
+char *listenPort;
+char *destinationPort;
 
 /**
  * @brief Setup
  */
 void initMain() {
-    menu = initMenus();
-    init_network(listen);
-    lcdInit();
+	menu = initMenus();
+	init_network(listenPort);
+	lcdInit();
 }
 
 /**
@@ -41,39 +40,73 @@ void initMain() {
  * @return Error code
  */
 int main(int argc, char** argv) {
-    int error = FALSE; //correct this later
 
-    // Get command line arguments
-    listenPort = argv[1];
-    destination = argv[2];
-    if (argc != 3) {
-        printe("usage: <listenport> <destinationport>\n");
-        return ERROR;
-    }
+	int error = FALSE; //correct this later
 
-    // Initialize
-    initMain();
+	// Get command line arguments
+	listenPort = argv[1];
+	destinationPort = argv[2];
+	if (argc != 3) {
+		printe("usage: <listenport> <destinationport>\n");
+		return ERROR;
+	}
+	
+	// Initialize
+	initMain();
 
-    // Register interrupts
-    char buffer[BUFFERSIZE];
+	// Debug
+	menuItemPrintTree(menu->root);
 
-    Packet prec;
-    prec.data = buffer;
+	// Register interrupts
+	char buffer[BUFFERSIZE];
 
-    Packet psend;
-    psend.src = listen;
-    psend.dst = destination;
-    char linebuf[BUFFERSIZE];
-    int count = 0;
-    sprintf(linebuf, "%s %d\n", listen, count);
-    psend.data = linebuf;
-    sendPacket(&psend, destination);
+	Packet psend;
+	psend.opcode = PING_REQUEST;
+	psend.flags = NULL;
+	SET_ACK(psend.flags);
+	psend.SRCUID = (uint16_t) atoi(listenPort);
+	psend.DESTUID = (uint16_t) atoi(destinationPort);
+	psend.ORIGINUID = NULL;
+	strcpy(psend.SRCNAME, "Hello World.");
 
-    if(fork() != 0) {
-        while(true) {
-            char input = getchar();
-            int move = -1;
-            switch(input) {
+	printf("psend.SRCUID: %d\n", psend.SRCUID);
+	printf("psend.DESTUID: %d\n", psend.DESTUID);
+	printf("psend.ORIGINUID: %d\n", psend.ORIGINUID);
+
+	
+	Packet phelp;
+	phelp.opcode = PING_REQUEST;
+	phelp.flags = NULL;
+	SET_ACK(phelp.flags);
+	phelp.SRCUID = (uint16_t) atoi(listenPort);
+	phelp.DESTUID = (uint16_t) atoi(destinationPort);
+	phelp.ORIGINUID = NULL;
+	strcpy(phelp.SRCNAME, "Hello World.");
+	
+
+	Base dest;
+	dest.addr = "127.0.0.1"; //Network Address.
+	dest.UID = destinationPort; //TODO For some reason, destinationPort FAILS.
+	printf("dest.DESTUID: %s\n", dest.UID);
+
+	Packet prec;
+	//prec.data = buffer;
+	/**
+	 Packet psend;
+	 psend.src = listenPort;
+	 psend.dst = destination;
+	 char linebuf[BUFFERSIZE];
+	 int count = 0;
+	 sprintf(linebuf, "%s %d\n", listenPort, count);
+	 psend.data = linebuf;*/
+
+	int pid = 0;
+	//int pid = fork();
+	if (pid != 0) {
+		while (true) {
+			char input = getchar();
+			int move = -1;
+			switch(input) {
                 case 'w':
                     move = menuMove(menu, MENU_UP);
                     break;
@@ -93,6 +126,7 @@ int main(int argc, char** argv) {
                     menuItemPrintTree(menu->root);
                     break;
                 case 'q':
+                    // YES GOTOs
                     goto done;
                     break;
                 case '\n':
@@ -102,25 +136,26 @@ int main(int argc, char** argv) {
                 menuSetLcd(menu);
                 lcdUpdate();
             }
-        }
-    } else {
-        for (;;) {
-            //Call recvPacket to poll the receive buffer.
-            if (recvPacket(&prec) == TRUE) {
-                printf("%s", prec.data);
-                sleep(2);
-                sprintf(linebuf, "%s %d\n", listen, count);
-                psend.data = linebuf;
-                sendPacket(&psend, destination);
-                sleep(2);
-                count++;
-            }
-        }
-    }
+		}
+	} else {
 
-done:
-    lcdDestroy();
-    menuDestroy(menu);
+		int count = 0;
+		sendPacket(&psend, &dest);
+		Base src;
+		for (;;) {
+			//Call recvPacket to poll the receive buffer.
+			if (recvPacket(&prec, &src) == TRUE) {
+				sleep(2);
+				sendPacket(&psend, &dest);
+				sleep(2);
+				count++;
+				printf("Count: %d\n", count);
+			}
+		}
+	}
 
-    return error;
+	done: lcdDestroy();
+	menuDestroy(menu);
+
+	return error;
 }

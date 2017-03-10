@@ -11,12 +11,14 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <stdlib.h> //TODO don't think we need this if we don't use malloc/calloc
+#include <unistd.h> //TODO do we need this?
+#include <stdint.h>
 #include <errno.h>
 
-// UNP error functions, DEPRECIATED
+// UNP error functions, DEPRECATED
 // TODO: replace with printex() and perrorex()
+// TODO we should never exit(0).
 #define err_quit(...) fprintf(stderr, __VA_ARGS__), fflush(stderr), exit(1)
 #define err_sys(...) perror(__VA_ARGS__), exit(1)
 
@@ -28,6 +30,9 @@
 #define bool int
 #define true 1
 #define false 0
+
+// Boolean with error.
+#define ebool int
 #define TRUE 1
 #define FALSE 0
 #define ERROR -1

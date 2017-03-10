@@ -19,7 +19,7 @@ int connfd, listenfd = 0;
  * Initialize the network device.
  * The port is the listening port.
  */
-bool _init_network(char *listenport) {
+ebool _init_network(char *listenport) {
     struct sockaddr_in servaddr;
     if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printe("Socket error.\n");
@@ -43,7 +43,7 @@ bool _init_network(char *listenport) {
         return FALSE;
     }
 
-    printf("Server started @ %s\n", listenport);
+    printv("Listen port started @ %s\n", listenport);
     if (listen(listenfd, LISTENQ) == -1) {
         printe("Listen error.\n");
         return FALSE;
@@ -54,7 +54,7 @@ bool _init_network(char *listenport) {
 /**
  * Use this method to connect to a device.
  */
-bool connectTo(char *server, char *port) {
+ebool connectTo(char *server, char *port) {
     //if (connfd) {
     //  return FALSE; //This means already connected to a socket.
     //}
@@ -84,7 +84,7 @@ bool connectTo(char *server, char *port) {
 /**
  * Accept connection on listen port.
  */
-bool acceptFrom() {
+ebool acceptFrom() {
     connfd = accept(listenfd, (SA *) NULL, NULL); //TODO Nonblocking
     if (connfd <= 0) {
         return FALSE;
@@ -93,17 +93,19 @@ bool acceptFrom() {
 }
 
 /**
- *  Receiving side of basecomm.c
  *  Send the data to the address specified
  *  Return <= 0 for failure, otherwise good.
  */
-bool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
+ebool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
+	printd("Starting _send_packet.\n");
     if (connectTo(dstaddr, dstport) == FALSE) {
         printe("Connect error. TODO WHY\n"); //TODO may error because non-block or timeout
     }
     int n = write(connfd, buffer, size); //TODO iterate in loop to write full.
+	printd("Write data. n: %d\n", n);
     close(connfd);
     if (n < 0) {
+    	printe("Connection write failed. n: %d\n", n);
         return ERROR;
     }
     printv("Packet Sent.\n");
@@ -113,17 +115,16 @@ bool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
 /**
  *  Take a packet from the network layer and construct a Packet and populate
  *  send to recvPacket() in the upper layer. If the packet parses correctly
- *  the return is != 0, otherwise there was an error and we need to not ack
- *  the packet so that it is sent again (assumption made about how network works)
- *  If the data buffer is too small, the rest of the message is discarded.
+ *  the return is number of bytes. TODO
+ *  If the data buffer is too small, the rest of the message is discarded. TODO
  */
-bool _recv_packet(char *buffer, int buffersize) {
+int _recv_packet(char *buffer, int buffersize) {
+	//Do stuff network specific
     if (acceptFrom() == FALSE) {
-        return FALSE; //No packet to see.
+        return FALSE; //No packet to see. No connection accepted.
     }
-
     int receiveLength = 0;
-    bzero(buffer, buffersize); //TODO do we need to clear buffer.
+    //bzero(buffer, buffersize); //TODO do we need to clear buffer.
     int offset = 0;
 
     //If receiveLength == 0, client has reached EOF.
@@ -139,6 +140,6 @@ bool _recv_packet(char *buffer, int buffersize) {
 
     printv("Device Disconnected.\n");
     close(connfd);
-    return TRUE;
+    return offset;
 }
 
