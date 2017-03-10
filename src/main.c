@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 		printe("usage: <listenport> <destinationport>\n");
 		return ERROR;
 	}
-
+	
 	// Initialize
 	initMain();
 
@@ -63,14 +63,25 @@ int main(int argc, char** argv) {
 	psend.opcode = PING_REQUEST;
 	psend.flags = NULL;
 	SET_ACK(psend.flags);
-	psend.SRCUID = atoi(listenPort);
-	psend.DESTUID = atoi(destinationPort);
+	psend.SRCUID = (uint16_t) atoi(listenPort);
+	psend.DESTUID = (uint16_t) atoi(destinationPort);
 	psend.ORIGINUID = NULL;
+	strcpy(psend.SRCNAME, "Hello World.");
 
 	printf("psend.SRCUID: %d\n", psend.SRCUID);
 	printf("psend.DESTUID: %d\n", psend.DESTUID);
 	printf("psend.ORIGINUID: %d\n", psend.ORIGINUID);
 
+	
+	Packet phelp;
+	phelp.opcode = PING_REQUEST;
+	phelp.flags = NULL;
+	SET_ACK(phelp.flags);
+	phelp.SRCUID = (uint16_t) atoi(listenPort);
+	phelp.DESTUID = (uint16_t) atoi(destinationPort);
+	phelp.ORIGINUID = NULL;
+	strcpy(phelp.SRCNAME, "Hello World.");
+	
 
 	Base dest;
 	dest.addr = "127.0.0.1"; //Network Address.
@@ -109,6 +120,7 @@ int main(int argc, char** argv) {
 				break;
 			case 'h':
 				printv("HELP BUTTON PRESSED\n");
+				sendPacket(&phelp, &dest);
 				break;
 			case 'q':
 				goto done;
