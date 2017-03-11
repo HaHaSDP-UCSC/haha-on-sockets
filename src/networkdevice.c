@@ -31,6 +31,7 @@ ebool _init_network(char *listenport) {
 
     if (status == -1) {
         printe("fcntl error.\n");
+        return FALSE;
     }
 
     bzero(&servaddr, sizeof(servaddr));

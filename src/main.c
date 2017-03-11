@@ -44,12 +44,12 @@ int main(int argc, char** argv) {
 
 	// Get command line arguments
 	listenPort = argv[1];
-	//destinationPort = argv[2];
+	destinationPort = argv[2];
 	if (argc != 3) {
 		printe("usage: <listenport> <destinationport>\n");
 		return ERROR;
 	}
-	
+
 	// Initialize
 	initMain();
 
@@ -61,55 +61,54 @@ int main(int argc, char** argv) {
 	//Create a PING packet to send.
 	Packet psend;
 	psend.opcode = PING_REQUEST;
-	psend.flags = 0;
-	SET_ACK(psend.flags);
-	psend.SRCUID = (uint16_t) atoi(listenPort);
-	psend.DESTUID = (uint16_t) atoi(argv[2]);
-	psend.ORIGINUID = 0;
-	strcpy(psend.SRCFIRSTNAME, "HaHa");
-	strcpy(psend.SRCLASTNAME, "Button");
+	psend.flags = 0; //Toggle these flags to trigger different things.
+	//SET_ACK(psend.flags);
+	psend.SRCUID = (uint16_t) atoi(listenPort); //This machines UID.
+	psend.DESTUID = (uint16_t) atoi(destinationPort); //Destination machines UID.
+	psend.ORIGINUID = 0; //Original Machines UID.
+	strcpy(psend.SRCFIRSTNAME, "HaHa"); //First Name
+	strcpy(psend.SRCLASTNAME, "Button"); //Last Name
 
-	printf("psend.SRCUID: %d\n", psend.SRCUID);
-	printf("psend.DESTUID: %d\n", psend.DESTUID);
-	printf("psend.ORIGINUID: %d\n", psend.ORIGINUID);
+	printf("psend.SRCUID:       %d\n", psend.SRCUID);
+	printf("psend.DESTUID:      %d\n", psend.DESTUID);
+	printf("psend.ORIGINUID:    %d\n", psend.ORIGINUID);
+	printf("psend.SRCFIRSTNAME: %s\n", psend.SRCFIRSTNAME);
+	printf("psend.SRCLASTNAME:  %s\n", psend.SRCLASTNAME);
 
 	//Create a HELP packet to send.
 	Packet phelp;
 	phelp.opcode = HELP_REQUEST;
-	phelp.flags = 0;
+	phelp.flags = 0; //Toggle these flags to trigger different things.
 	SET_ACK(phelp.flags);
 	phelp.SRCUID = (uint16_t) atoi(listenPort);
-	phelp.DESTUID = (uint16_t) atoi(argv[2]);
+	phelp.DESTUID = (uint16_t) atoi(destinationPort);
 	phelp.ORIGINUID = 0;
 	strcpy(phelp.SRCFIRSTNAME, "Foo");
 	strcpy(phelp.SRCLASTNAME, "Bar");
 	strcpy(phelp.SRCPHONE, "123-456-7890"); //Should actually be unformatted.
-	strcpy(phelp.SRCHOMEADDR,
-			"4657 Where the Sidewalk Ends St. Apartment 23\n"
+	strcpy(phelp.SRCHOMEADDR, "4657 Where the Sidewalk Ends St. Apartment 23\n"
 			"Santa Cruz, CA 12345-9876");
+
+	printf("\n");
+	printf("phelp.SRCUID:       %d\n", phelp.SRCUID);
+	printf("phelp.DESTUID:      %d\n", phelp.DESTUID);
+	printf("phelp.ORIGINUID:    %d\n", phelp.ORIGINUID);
+	printf("phelp.SRCFIRSTNAME: %s\n", phelp.SRCFIRSTNAME);
+	printf("phelp.SRCLASTNAME:  %s\n", phelp.SRCLASTNAME);
+	printf("phelp.SRCPHONE:     %s\n", phelp.SRCPHONE);
+	printf("phelp.SRCHOMEADDR:\n%s\n", phelp.SRCHOMEADDR);
 
 	Base dest;
 	dest.addr = "127.0.0.1"; //Network Address.
-	dest.UID = argv[2]; //TODO For some reason, destinationPort FAILS.
+	dest.UID = destinationPort; //TODO For some reason, destinationPort FAILS.
 	printf("dest.DESTUID: %s\n", dest.UID);
-
-	Packet prec;
-	//prec.data = buffer;
-	/**
-	 Packet psend;
-	 psend.src = listenPort;
-	 psend.dst = destination;
-	 char linebuf[BUFFERSIZE];
-	 int count = 0;
-	 sprintf(linebuf, "%s %d\n", listenPort, count);
-	 psend.data = linebuf;*/
 
 	int pid = 0;
 	pid = fork(); //Turn this off and set the PID to use only MENU or PACKETs
 	if (pid != 0) {
 		//Menu
+		printd("Waiting for input. WASD H Q\n");
 		while (true) {
-			printd("Waiting for input. WASD H Q\n");
 			char input = getchar();
 			int move = -1;
 			switch (input) {
@@ -145,15 +144,16 @@ int main(int argc, char** argv) {
 		//Packets
 		int count = 0;
 		sendPacket(&psend, &dest);
-		Base src;
+		Packet prec; //Receive Packet.
+		Base src; //Receive Base Source Packet. //TODO implement
+
 		for (;;) {
 			//Call recvPacket to poll the receive buffer.
 			if (recvPacket(&prec, &src) == TRUE) {
+				printf("Count: %d\n", count++);
 				sleep(2);
 				sendPacket(&psend, &dest);
 				sleep(2);
-				count++;
-				printf("Count: %d\n", count);
 			}
 		}
 	}

@@ -14,9 +14,13 @@
 ebool convertFromPacketToData(Packet *p, unsigned char *data);
 ebool convertFromDataToPacket(Packet *p, unsigned char *data, int datalen);
 
-//TODO unknown needed params
+/**
+ * Initializes the network.
+ */
 ebool init_network(char *listenport) {
-	_init_network(listenport);
+	if (_init_network(listenport) <= 0) {
+		return FALSE;
+	}
 	return TRUE;
 }
 
@@ -46,12 +50,12 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 	case PING_REQUEST:
 		printd("PING OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			printd("SRCUID: 0x%x\n", p->DESTUID);
+			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
 			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
 			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
 			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 		} else {
-			printd("SRCUID: 0x%x\n", p->SRCUID);
+			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
 			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
 			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
 			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
@@ -150,14 +154,14 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			if ((n = strlen((char *) &data[offset])) < (MAXFIRSTNAME - 1)) {
+			if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
 				strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet. TODO Optimize
 				offset += n + 1; //String length + null terminator.
 				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
 			} else {
 				printe("Malformed First Name String.\n");
 			}
-			if ((n = strlen((char *) &data[offset])) < (MAXLASTNAME - 1)) {
+			if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
 				strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet. TODO Optimize
 				offset += n + 1; //String length + null terminator.
 				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
