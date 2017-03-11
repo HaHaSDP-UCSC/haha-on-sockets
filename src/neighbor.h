@@ -12,13 +12,13 @@
 #include "halib.h"
 #include "base.h"
 
-#define MAXNAME 34
-#define MAXFIRST 17
-#define MAXLAST 17
+//#define MAXNAME 34
+#define MAXFIRSTNAME 17
+#define MAXLASTNAME 17
 
 #define MAXUID 2
 //#define MAXDEST 2
-#define MAXADDR 75
+#define MAXHOMEADDR 75
 #define MAXPHONE 16
 
 #define MAXBUFFER 255 //TODO CORRECT THIS

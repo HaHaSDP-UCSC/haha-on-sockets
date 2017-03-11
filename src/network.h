@@ -14,19 +14,21 @@
 #include "neighbor.h"
 
 /* BASE COMMUNICATION */
-typedef char* opcode;
+typedef unsigned char opcode;
 typedef uint16_t uid;
 
 typedef struct {
 	//Packet params here
+	//opcode opcode;
 	opcode opcode;
 	flags flags;
 	uid SRCUID;
 	uid DESTUID;
 	uid ORIGINUID;
-	char SRCNAME[MAXNAME]; //TODO optimize this.
-	//char SRCPHONE[MAXPHONE];
-	//char SRCHOMEADDR[MAXHOMEADDR];
+	char SRCFIRSTNAME[MAXFIRSTNAME]; //TODO optimize for space.
+	char SRCLASTNAME[MAXFIRSTNAME]; //TODO optimize for space.
+	char SRCPHONE[MAXPHONE]; //TODO optimize for space.
+	char SRCHOMEADDR[MAXHOMEADDR]; //TODO optimize for space.
 } Packet;
 
 #endif // _HA_NETDEFS_

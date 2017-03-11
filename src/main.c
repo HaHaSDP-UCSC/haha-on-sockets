@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
 	// Get command line arguments
 	listenPort = argv[1];
-	destinationPort = argv[2];
+	//destinationPort = argv[2];
 	if (argc != 3) {
 		printe("usage: <listenport> <destinationport>\n");
 		return ERROR;
@@ -57,35 +57,40 @@ int main(int argc, char** argv) {
 	menuItemPrintTree(menu->root);
 
 	// Register interrupts
-	char buffer[BUFFERSIZE];
 
+	//Create a PING packet to send.
 	Packet psend;
 	psend.opcode = PING_REQUEST;
-	psend.flags = NULL;
+	psend.flags = 0;
 	SET_ACK(psend.flags);
 	psend.SRCUID = (uint16_t) atoi(listenPort);
-	psend.DESTUID = (uint16_t) atoi(destinationPort);
-	psend.ORIGINUID = NULL;
-	strcpy(psend.SRCNAME, "Hello World.");
+	psend.DESTUID = (uint16_t) atoi(argv[2]);
+	psend.ORIGINUID = 0;
+	strcpy(psend.SRCFIRSTNAME, "HaHa");
+	strcpy(psend.SRCLASTNAME, "Button");
 
 	printf("psend.SRCUID: %d\n", psend.SRCUID);
 	printf("psend.DESTUID: %d\n", psend.DESTUID);
 	printf("psend.ORIGINUID: %d\n", psend.ORIGINUID);
 
-	
+	//Create a HELP packet to send.
 	Packet phelp;
-	phelp.opcode = PING_REQUEST;
-	phelp.flags = NULL;
+	phelp.opcode = HELP_REQUEST;
+	phelp.flags = 0;
 	SET_ACK(phelp.flags);
 	phelp.SRCUID = (uint16_t) atoi(listenPort);
-	phelp.DESTUID = (uint16_t) atoi(destinationPort);
-	phelp.ORIGINUID = NULL;
-	strcpy(phelp.SRCNAME, "Hello World.");
-	
+	phelp.DESTUID = (uint16_t) atoi(argv[2]);
+	phelp.ORIGINUID = 0;
+	strcpy(phelp.SRCFIRSTNAME, "Foo");
+	strcpy(phelp.SRCLASTNAME, "Bar");
+	strcpy(phelp.SRCPHONE, "123-456-7890"); //Should actually be unformatted.
+	strcpy(phelp.SRCHOMEADDR,
+			"4657 Where the Sidewalk Ends St. Apartment 23\n"
+			"Santa Cruz, CA 12345-9876");
 
 	Base dest;
 	dest.addr = "127.0.0.1"; //Network Address.
-	dest.UID = destinationPort; //TODO For some reason, destinationPort FAILS.
+	dest.UID = argv[2]; //TODO For some reason, destinationPort FAILS.
 	printf("dest.DESTUID: %s\n", dest.UID);
 
 	Packet prec;
@@ -100,9 +105,11 @@ int main(int argc, char** argv) {
 	 psend.data = linebuf;*/
 
 	int pid = 0;
-	//int pid = fork();
+	pid = fork(); //Turn this off and set the PID to use only MENU or PACKETs
 	if (pid != 0) {
+		//Menu
 		while (true) {
+			printd("Waiting for input. WASD H Q\n");
 			char input = getchar();
 			int move = -1;
 			switch (input) {
@@ -135,7 +142,7 @@ int main(int argc, char** argv) {
 			}
 		}
 	} else {
-
+		//Packets
 		int count = 0;
 		sendPacket(&psend, &dest);
 		Base src;

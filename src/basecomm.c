@@ -11,8 +11,8 @@
 
 #define MINPACKETSIZE 4 //TODO define better
 
-ebool convertFromPacketToData(Packet *p, char *data);
-ebool convertFromDataToPacket(Packet *p, char *data, int datalen);
+ebool convertFromPacketToData(Packet *p, unsigned char *data);
+ebool convertFromDataToPacket(Packet *p, unsigned char *data, int datalen);
 
 //TODO unknown needed params
 ebool init_network(char *listenport) {
@@ -24,38 +24,51 @@ ebool init_network(char *listenport) {
  * Processes Packet data to send on network. Converts into byte data.
  * They are processed based on their opcode.
  */
-int convertFromPacketToData(Packet *p, char *data) {
+int convertFromPacketToData(Packet *p, unsigned char *data) {
 	printd("Convert Packet to Data.\n");
-	int offset = 0;
 	int n = 0;
 	if (p == NULL) {
 		//Malformed packet.
 		printe("Null Packet.\n");
 		return ERROR;
 	}
-	char opcode = p->opcode;
-	char flags = p->flags;
+	unsigned char opcode = p->opcode;
+	unsigned char flags = p->flags;
+
+	int offset = 0;
 	data[offset++] = opcode;
 	data[offset++] = flags;
 
-	printd("Opcode: 0x%x\n", opcode);
-	printd("Flags: 0x%x\n", flags);
+	printd("Opcode: 0x%x\n", data[offset - 2]);
+	printd("Flags: 0x%x\n", data[offset - 1]);
 
 	switch (opcode) {
 	case PING_REQUEST:
 		printd("PING OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			data[offset++] = (char) (p->DESTUID >> 8); //Add SRCUID to packet.
-			data[offset++] = (char) p->DESTUID;
+			printd("SRCUID: 0x%x\n", p->DESTUID);
+			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
+			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
+			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 		} else {
-			data[offset++] = (char) (p->SRCUID >> 8); //Add SRCUID to packet.
-			data[offset++] = (char) p->SRCUID;
-			if ((n = strlen(p->SRCNAME)) < MAXNAME-2) {
-				printf("SRCNAME: %s\nstrlen: %d\n", p->SRCNAME, n);
-				strcpy(&data[offset++], p->SRCNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n+1;
+			printd("SRCUID: 0x%x\n", p->SRCUID);
+			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
+			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
+			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
+
+			if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
+				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
+				strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
+				offset += n + 1; //String length + null terminator.
 			} else {
-				printe("Malformed String.\n");
+				printe("Malformed First Name.\n");
+			}
+			if ((n = strlen(p->SRCLASTNAME)) < MAXLASTNAME - 1) {
+				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
+				strcpy((char *) &data[offset], p->SRCLASTNAME); //Add SRCNAME to packet. TODO Optimize
+				offset += n + 1; //String length + null terminator.
+			} else {
+				printe("Malformed Last Name.\n");
 			}
 		}
 		break;
@@ -64,9 +77,8 @@ int convertFromPacketToData(Packet *p, char *data) {
 		break;
 	}
 	printd("Exiting packet to data conversion.\n");
-	printd("Offset-1: %d.\n", offset-1);
-	return offset-1; //TODO is the math right?
-	//return FALSE;
+	printd("Offset: %d.\n", offset);
+	return offset;
 }
 
 /**
@@ -74,14 +86,14 @@ int convertFromPacketToData(Packet *p, char *data) {
  * Returns if successful or not.
  */
 ebool sendPacket(Packet *p, Base *dest) {
-	char data[MAXBUFFER];
+	unsigned char data[MAXBUFFER];
 	int datalen = 0;
 	if ((datalen = convertFromPacketToData(p, data)) <= 0) {
 		printe("Error converting packet.\n");
 		return FALSE;
 	}
 
-	if (_send_packet(data, datalen, dest->addr, dest->UID) <= 0) {
+	if (_send_packet((char *) data, datalen, dest->addr, dest->UID) <= 0) {
 		printe("Error sending packet.\n");
 		return FALSE;
 	}
@@ -98,7 +110,7 @@ ebool recvPacket(Packet *p, Base *src) {
 		//printe("No packet to receive.\n");
 		return FALSE;
 	}
-	convertFromDataToPacket(p, buffer, receivelen);
+	convertFromDataToPacket(p, (unsigned char *) buffer, receivelen);
 
 	return TRUE; //TODO Fix
 }
@@ -107,17 +119,22 @@ ebool recvPacket(Packet *p, Base *src) {
  * Processes received data from network. Converts into packet form.
  * They are processed based on their opcode.
  */
-int convertFromDataToPacket(Packet *p, char *data, int datalen) {
+int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	printd("Convert Data to Packet.\n");
-	int offset = 0;
 	int n = 0;
+	printf("Datalen: %d\n", datalen);
 	if (datalen < MINPACKETSIZE) {
 		//Malformed packet.
 		printe("Packet too small.\n");
 		return ERROR;
 	}
-	char opcode = data[0];
-	char flags = data[1];
+
+	int offset = 0;
+	unsigned char opcode = data[offset++];
+	unsigned char flags = data[offset++];
+
+	p->opcode = opcode;
+	p->flags = flags;
 
 	printd("Opcode: 0x%x\n", opcode);
 	printd("Flags: 0x%x\n", flags);
@@ -126,21 +143,28 @@ int convertFromDataToPacket(Packet *p, char *data, int datalen) {
 	case PING_REQUEST:
 		printd("PING OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			p->DESTUID = (data[offset++] << 8) + data[offset++]; //Add SRCUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; //Add DESTUID to packet.
+			printd("DESTUID: %u\n", p->DESTUID);
 		} else {
-			p->DESTUID = (data[offset++] << 8) + data[offset++]; //Add SRCUID to packet.
-			if ((n = strlen(&data[offset]) < MAXNAME-2)) {
-				strcpy(p->SRCNAME, &data[offset++]); //Add SRCNAME to packet. TODO Optimize
-				offset += n+1;
-				printf("Read:\nSRCNAME: %s\nstrlen: %d\n", p->SRCNAME, n);
+			p->SRCUID = data[offset++] << 8;
+			p->SRCUID += data[offset++]; //Add SRCUID to packet.
+			printd("SRCUID: %u\n", p->SRCUID);
+			if ((n = strlen((char *) &data[offset])) < (MAXFIRSTNAME - 1)) {
+				strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet. TODO Optimize
+				offset += n + 1; //String length + null terminator.
+				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
 			} else {
-				printe("Malformed String.\n");
+				printe("Malformed First Name String.\n");
+			}
+			if ((n = strlen((char *) &data[offset])) < (MAXLASTNAME - 1)) {
+				strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet. TODO Optimize
+				offset += n + 1; //String length + null terminator.
+				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
+			} else {
+				printe("Malformed First Name String.\n");
 			}
 		}
-
-		printd("DESTUID: %d\n", p->DESTUID);
-		printd("Offset-1: %d.\n", offset-1);
-
 		break;
 	case HELP_REQUEST:
 		printd("HELP REQ OPCODE.\n");
@@ -278,7 +302,8 @@ int convertFromDataToPacket(Packet *p, char *data, int datalen) {
 		return ERROR;
 	}
 	printd("Exiting data to packet conversion.\n");
-	return offset-1;
+	printd("Offset: %d.\n", offset);
+	return offset;
 }
 
 ebool processPacket(Packet *p) {
