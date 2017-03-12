@@ -20,10 +20,10 @@
 typedef struct MenuItem MenuItem;
 
 typedef struct MenuItem {
-    void (*onEnter)();
-    void (*onExit)();
+    void (*onView)();
+    void (*onClick)();
     char value[MENU_MAXLEN];
-    bool visible;
+    bool active;
     MenuItem* parent;
     MenuItem* child;
     MenuItem* prev;
@@ -52,6 +52,12 @@ MenuItem* menuItemInit(MenuItem* parent, char* value);
 int menuItemSetValue(MenuItem* this, char* value);
 void menuItemPrintTree(MenuItem* this);
 void menuItemPrintTreeHelper(MenuItem* this, int level);
+MenuItem* menuItemGetNext(MenuItem* this);
+MenuItem* menuItemGetPrev(MenuItem* this);
+MenuItem* menuItemGetLast(MenuItem* this);
 int menuItemDestroy(MenuItem* this);
+void* menuItemOnViewDefault(Menu* menu);
+void* menuItemOnClickDefault(Menu* menu);
+
 
 #endif // _HA_MENU_

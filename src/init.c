@@ -12,27 +12,40 @@ Menu* initMenus(void) {
     Menu* menu = menuInit();
     MenuItem* root = menu->root;
     MenuItem* mm = menuItemInit(root, "Main Menu");
-    MenuItem* contacts = menuItemInit(mm, "Contact list");
+    menuItemInit(mm, "Contact list");
     MenuItem* user = menuItemInit(mm, "User info");
-    MenuItem* userId = menuItemInit(user, "User ID");
-    MenuItem* userName = menuItemInit(user, "User name");
-    MenuItem* userAddr = menuItemInit(user, "User address");
-    MenuItem* userPhone = menuItemInit(user, "User phone");
+    menuItemInit(user, "User ID");
+    menuItemInit(user, "User name");
+    menuItemInit(user, "User address");
+    menuItemInit(user, "User phone");
     MenuItem* set = menuItemInit(mm, "Device settings");
-    MenuItem* setOffice = menuItemInit(set, "Office mode");
+    menuItemInit(set, "Office mode");
     MenuItem* setAlert = menuItemInit(set, "Alert settings");
-    MenuItem* setAlertSound = menuItemInit(setAlert, "Sound");
-    MenuItem* setAlertLight = menuItemInit(setAlert, "Lights");
+    menuItemInit(setAlert, "Sound");
+    menuItemInit(setAlert, "Lights");
     MenuItem* setTest = menuItemInit(set, "Test button");
-    MenuItem* setTestExit = menuItemInit(setTest, "Stop testing");
+    menuItemInit(setTest, "BUTTON TEST");
+    menuItemInit(setTest, "Press button now");
+    menuItemInit(setTest, "to test signal.");
+    MenuItem* setTestStop = menuItemInit(setTest, "Stop testing");
+    setTestStop->onClick = jumpToRoot;
     MenuItem* setNotice = menuItemInit(set, "Notice settings");
-    MenuItem* setNoticeTest = menuItemInit(setNotice, "Test button");
-    MenuItem* setNoticeContact = menuItemInit(setNotice, "Update info");
-    MenuItem* setPair = menuItemInit(set, "Pair button");
-    MenuItem* setDisable = menuItemInit(set, "Disable system");
+    menuItemInit(setNotice, "Test button");
+    menuItemInit(setNotice, "Update info");
+    menuItemInit(set, "Pair button");
+    menuItemInit(set, "Disable system");
     menuItemInit(root, "Activity (XXX)");
     menuItemInit(root, "Network (XXX)");
     menuItemInit(root, "Button (XXX)");
+    MenuItem* eventButton = menuItemInit(root, "__BUTTON__");
+    eventButton->active = false;
+    menuItemInit(eventButton, "Help request");
+    menuItemInit(eventButton, "INSERT NAME");
     menu->current = menu->root->child;
     return(menu);
+}
+
+void* jumpToRoot(Menu* menu) {
+    menu->current = menu->root->child;
+    return NULL;
 }

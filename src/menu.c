@@ -14,8 +14,8 @@
  */
 Menu* menuInit(void) {
     Menu* this = calloc(1, sizeof(Menu));
-    this->root = menuItemInit(NULL, "MENU_ROOT");
-    this->root->visible = false;
+    this->root = menuItemInit(NULL, "__ROOT__");
+    this->root->active = false;
     this->current = NULL;
     return(this);
 }
@@ -33,32 +33,24 @@ int menuMove(Menu* menu, MenuDirection direct) {
                 // Root node should not be accessible
                 if(menu->current->parent && menu->current->parent->parent) {
                     menu->current = menu->current->parent;
-                } else return 1;
+                } else return(1);
                 break;
             case MENU_RIGHT:
-                if(menu->current->child) {
-                    menu->current = menu->current->child;
-                } else return 1;
+                menu->current->onClick(menu);
                 break;
             case MENU_UP:
-                if(menu->current->prev) {
-                    menu->current = menu->current->prev;
-                } else if(MENU_WRAP && menu->current->next) {
-                    // Find last item
-                    MenuItem* last;
-                    for(last = menu->current->next; last->next;
-                            last = last->next);
-                    menu->current = last;
-                } else return 1;
+                menu->current = menuItemGetPrev(menu->current);
                 break;
             case MENU_DOWN:
-                if(menu->current->next) {
-                    menu->current = menu->current->next;
-                } else if(MENU_WRAP && menu->current->prev) {
-                    menu->current = menu->current->parent->child;
-                } else return 1;
+                menu->current = menuItemGetNext(menu->current);
+                break;
+            default:
+                return(-1);
+                break;
         }
-    } else return -1;
+    } else return(-1);
+    menu->current->onView(menu);
+    return(0);
 }
 
 int menuSetLcd(Menu* menu) {
@@ -71,10 +63,11 @@ int menuSetLcd(Menu* menu) {
             if(this->child) {
                 if(lines == 0) lcdSetChar(lines, LCD_COLS - 1, '>');
                 else lcdSetChar(lines, LCD_COLS - 1, '-');
+            } else if(this->onClick != menuItemOnClickDefault) {
+                if(lines == 0) lcdSetChar(lines, LCD_COLS - 1, '>');
+                else lcdSetChar(lines, LCD_COLS - 1, '~');
             }
-            if(this->next == NULL) {
-                this = this->parent->child;
-            } else this = this->next;
+            this = menuItemGetNext(this);
             if(this == menu->current) break;
         }
     } else return(-1);
@@ -101,10 +94,10 @@ int menuDestroy(Menu* this) {
  */
 MenuItem* menuItemInit(MenuItem* parent, char* value) {
     MenuItem* this = calloc(1, sizeof(MenuItem));
-    this->onEnter = NULL;
-    this->onExit = NULL;
+    this->onView = menuItemOnViewDefault;
+    this->onClick = menuItemOnClickDefault;
     menuItemSetValue(this, value);
-    this->visible = true;
+    this->active = true;
     this->parent = parent;
     this->child = NULL;
     this->next = NULL;
@@ -153,13 +146,50 @@ void menuItemPrintTreeHelper(MenuItem* this, int level) {
         int i;
         for(i = 0; i < level; i++)
             printd("\t");
-        if(this->visible) printd("> ");
+        if(this->active) printd("* ");
         else printd("X ");
         printd("%s\n", this->value);
         MenuItem* child;
         for(child = this->child; child; child = child->next)
             menuItemPrintTreeHelper(child, level + 1);
     }
+}
+
+MenuItem* menuItemGetNext(MenuItem* this) {
+    if(this && this->parent) {
+        MenuItem* current = this->next;
+        while(current != this) {
+            if(! current) {
+                if(MENU_WRAP) current = this->parent->child;
+                else return(this);
+            }
+            if(current->active) return(current);
+            current = current->next;
+        }
+    }
+    return(this);
+}
+
+MenuItem* menuItemGetPrev(MenuItem* this) {
+    if(this && this->parent) {
+        MenuItem* current = this->prev;
+        while(current != this) {
+            if(! current) {
+                if(MENU_WRAP) current = menuItemGetLast(this);
+                else return(this);
+            }
+            if(current->active) return(current);
+            current = current->prev;
+        }
+    }
+    return(this);
+}
+
+MenuItem* menuItemGetLast(MenuItem* this) {
+    MenuItem* last;
+    if(this) for(last = this; last->next; last = last->next);
+    else return(this);
+    return(last);
 }
 
 /**
@@ -180,6 +210,20 @@ int menuItemDestroy(MenuItem* this) {
             if(this->parent) this->parent->child = this->next;
         }
         free(this);
+    } else return(-1);
+    return(0);
+}
+
+void* menuItemOnViewDefault(Menu* menu) {
+    menuSetLcd(menu);
+    return NULL;
+}
+
+void* menuItemOnClickDefault(Menu* menu) {
+    if(menu && menu->current) {
+        if(menu->current->child) {
+            menu->current = menu->current->child;
+        } else return(1);
     } else return(-1);
     return(0);
 }

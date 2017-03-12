@@ -40,6 +40,7 @@ void initMain() {
  * @return Error code
  */
 int main(int argc, char** argv) {
+
 	int error = FALSE; //correct this later
 
 	// Get command line arguments
@@ -111,34 +112,36 @@ int main(int argc, char** argv) {
 		while (true) {
 			char input = getchar();
 			int move = -1;
-			switch (input) {
-			case 'w':
-				move = menuMove(menu, MENU_UP);
-				break;
-			case 'a':
-				move = menuMove(menu, MENU_LEFT);
-				break;
-			case 's':
-				move = menuMove(menu, MENU_DOWN);
-				break;
-			case 'd':
-				move = menuMove(menu, MENU_RIGHT);
-				break;
-			case 'h':
-				printv("HELP BUTTON PRESSED\n");
-				sendPacket(&phelp, &dest);
-				break;
-			case 'q':
-				goto done;
-				//TODO NO GOTO's
-				break;
-			case '\n':
-				break;
-			}
-			if (move != -1) {
-				menuSetLcd(menu);
-				lcdUpdate();
-			}
+			switch(input) {
+                case 'w':
+                    move = menuMove(menu, MENU_UP);
+                    break;
+                case 'a':
+                    move = menuMove(menu, MENU_LEFT);
+                    break;
+                case 's':
+                    move = menuMove(menu, MENU_DOWN);
+                    break;
+                case 'd':
+                    move = menuMove(menu, MENU_RIGHT);
+                    break;
+                case 'h':
+                    printv("HELP BUTTON PRESSED\n");
+                    break;
+                case 't':
+                    menuItemPrintTree(menu->root);
+                    break;
+                case 'q':
+                    // YES GOTOs
+                    goto done;
+                    break;
+                case '\n':
+                    break;
+            }
+            if(move != -1) {
+                menuSetLcd(menu);
+                lcdUpdate();
+            }
 		}
 	} else {
 		//Packets
