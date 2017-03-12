@@ -174,13 +174,17 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("HELP REQ OPCODE.\n");
 		//TODO FIX
 		if (!IS_ACK(flags)) {
-			//TODO FIX
-			//Add SRCUID to packet.
+            p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add SRCHOMEADDR to packet.
 			//Add SRCPHONE to packet.
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
+			p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+	        printd("SRCUID: %u\n", p->SRCUID);
+
 		}
 		break;
 
@@ -188,13 +192,18 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("HELP RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-			//Add SRCUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 		}
 		break;
 
+    //TODO:
 	case HELP_FROM_ANYONE_REQUEST:
 		printd("HELP FROM ANYONE REQUEST OPCODE.\n");
 		//Add SRCUID to packet.
@@ -206,18 +215,23 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("HELP FROM ANYONE RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-			//Add SRCUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 			//Add SRCNAME to packet.
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
-			//Add DESTUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
+            //Add DESTUID to packet.
 			//Add SRCHOMEADDR to packet.
 			//Add SRCPHONE to packet.
 		}
 		break;
 
+    //TODO:BROADCAST
 	case FIND_HOPS_REQUEST:
 		printd("FIND HOPS REQUEST OPCODE.\n");
 		//Add ORIGINUID to packet.
@@ -228,16 +242,21 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("FIND HOPS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-			//Add SRCUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add ORIGINUID to packet.
 			//Add TTL to packet.
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 		}
 		break;
 
+    //TODO:BROADCAST
 	case FIND_NEIGHBORS_REQUEST:
 		printd("FIND NEIGHBORS REQUEST OPCODE.\n");
 		//Add ORIGINUID to packet.
@@ -248,13 +267,17 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("FIND NEIGHBORS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-			//Add SRCUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add ORIGINUID to packet.
 			//Add TTL to packet.
 			//Add SRCNAME to packet.
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
+			p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 		}
 		break;
@@ -263,12 +286,16 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("FRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-			//Add SRCUID to packet.
+			p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 			//Add SRCNAME to packet.
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
+			p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 			//Add SRCNAME to packet.
 		}
@@ -278,11 +305,15 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("FRIEND RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-			//Add SRCUID to packet.
+			p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
+			p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 		}
 		break;
@@ -291,11 +322,15 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("UNFRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-			//Add SRCUID to packet.
+			p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);/Add SRCUID to packet.
 			//Add DESTUID to packet.
 		} else {
 			//TODO FIX
-			//Add SRCUID to packet.
+		    p->SRCUID = data[offset++] << 8;
+            p->SRCUID += data[offset++]; //Add SRCUID to packet.
+    	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add DESTUID to packet.
 		}
 		break;
