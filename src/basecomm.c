@@ -76,6 +76,109 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 			}
 		}
 		break;
+
+    case HELP_REQUEST:
+		printd("HELP REQ OPCODE.\n");
+	    if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+        break;
+
+    case HELP_RESPONSE:
+		printd("HELP RESPONSE OPCODE.\n");
+        if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+        break;
+
+    //TODO:BROADCAST
+	case HELP_FROM_ANYONE_REQUEST:
+		printd("HELP FROM ANYONE REQUEST OPCODE.\n");
+        if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+        break;
+
+	case HELP_FROM_ANYONE_RESPONSE:
+		printd("HELP FROM ANYONE RESPONSE OPCODE.\n");
+        if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+        break;
+
+    //TODO:BROADCAST
+	case FIND_HOPS_REQUEST:
+		printd("FIND HOPS REQUEST OPCODE.\n");
+	     if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+	    break;
+
+	case FIND_HOPS_RESPONSE:
+		printd("FIND HOPS RESPONSE OPCODE.\n");
+        if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+        break;
+
+    //TODO:BROADCAST
+	case FIND_NEIGHBORS_REQUEST:
+		printd("FIND NEIGHBORS REQUEST OPCODE.\n");
+		if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+        break;
+
+	case FIND_NEIGHBORS_RESPONSE:
+		printd("FIND NEIGHBORS RESPONSE OPCODE.\n");
+		if (!IS_ACK(flags)) {
+
+		} else {
+
+		}
+		break;
+
+	case FRIEND_REQUEST:
+		printd("FRIEND REQUEST OPCODE.\n");
+        if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+		break;
+
+    case FRIEND_RESPONSE:
+		printd("FRIEND RESPONSE OPCODE.\n");
+		if (!IS_ACK(flags)) {
+
+		} else {
+
+		}
+		break;
+
+	case UNFRIEND_REQUEST:
+		printd("UNFRIEND REQUEST OPCODE.\n");
+		if (!IS_ACK(flags)) {
+
+        } else {
+
+        }
+		break;
+
 	default:
 		printe("Unimplemented OPCODE.\n");
 		break;
@@ -203,7 +306,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		}
 		break;
 
-    //TODO:
+    //TODO:BROADCAST
 	case HELP_FROM_ANYONE_REQUEST:
 		printd("HELP FROM ANYONE REQUEST OPCODE.\n");
 		//Add SRCUID to packet.
@@ -242,16 +345,17 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("FIND HOPS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//TODO FIX
-		    p->SRCUID = data[offset++] << 8;
+			p->SRCUID = data[offset++] << 8;
             p->SRCUID += data[offset++]; //Add SRCUID to packet.
     	    printd("SRCUID: %u\n", p->SRCUID);
 			//Add ORIGINUID to packet.
 			//Add TTL to packet.
 		} else {
 			//TODO FIX
-		    p->SRCUID = data[offset++] << 8;
+			p->SRCUID = data[offset++] << 8;
             p->SRCUID += data[offset++]; //Add SRCUID to packet.
     	    printd("SRCUID: %u\n", p->SRCUID);
+
 			//Add DESTUID to packet.
 		}
 		break;
