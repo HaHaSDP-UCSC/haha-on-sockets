@@ -62,7 +62,7 @@
 #define printd(args...) fprintf(stdout, args)
 #endif // COLORED
 #else
-#define printd(...) (void)0
+#define printd(...) (void)0;
 #endif // DEBUG
 
 // Verbose messages
@@ -74,7 +74,7 @@
 #define printv(args...) fprintf(stdout, args)
 #endif // COLORED
 #else
-#define printv(...) (void)0
+#define printv(...) (void)0;
 #endif // VERBOSE
 
 // Error messages
