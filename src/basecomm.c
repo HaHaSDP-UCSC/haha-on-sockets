@@ -343,12 +343,10 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	case HELP_RESPONSE:
 		printd("HELP RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
 		} else {
-			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
@@ -370,14 +368,16 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 			//Add SRCNAME to packet.
 		} else {
 			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+		    p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 			//Add SRCHOMEADDR to packet.
 			//Add SRCPHONE to packet.
 		}
@@ -404,7 +404,8 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID = data[offset++] << 8;
             p->SRCUID += data[offset++]; //Add SRCUID to packet.
     	    printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+		    p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 		}
 		break;
 
@@ -430,7 +431,8 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 		}
 		break;
 
@@ -441,14 +443,16 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 			//Add SRCNAME to packet.
 		} else {
 			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 			//Add SRCNAME to packet.
 		}
 		break;
@@ -460,13 +464,15 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; /	//Add DESTUID to packet.
 		} else {
 			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 		}
 		break;
 
@@ -477,13 +483,15 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 		} else {
 			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add DESTUID to packet.
+			p->DESTUID = data[offset++] << 8;
+			p->DESTUID += data[offset++]; /	//Add DESTUID to packet.
 		}
 		break;
 
