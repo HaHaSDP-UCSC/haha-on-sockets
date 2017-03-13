@@ -227,18 +227,6 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		}
 		break;
 
-	case FRIEND_RESPONSE:
-		printd("FRIEND RESPONSE OPCODE.\n");
-		if (!IS_ACK(flags)) {
-			//TODO FIX
-			//Add SRCUID to packet.
-			//Add DESTUID to packet.
-		} else {
-			//TODO FIX
-			//Add SRCUID to packet.
-			//Add DESTUID to packet.
-		}
-		break;
 
 	case UNFRIEND_REQUEST:
 		printd("UNFRIEND REQUEST OPCODE.\n");
@@ -465,7 +453,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
 			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; /	//Add DESTUID to packet.
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 		} else {
 			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
@@ -491,7 +479,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
 			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; /	//Add DESTUID to packet.
+			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
 		}
 		break;
 

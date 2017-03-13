@@ -46,10 +46,8 @@ int main(int argc, char** argv) {
 	// Get command line arguments
 	listenPort = argv[1];
 	destinationPort = argv[2];
-	if (argc != 3) {
-		printe("usage: <listenport> <destinationport>\n");
-		return ERROR;
-	}
+	if (argc != 3)
+		printex("usage: <listenport> <destinationport>\n");
 
 	// Initialize
 	initMain();

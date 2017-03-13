@@ -4,48 +4,50 @@ A Linux based proof of concept for the Home Assistance Button 	project.
 
 ## Directory Structure
 
-- **Makefile**: Makefile for top level dir
-- **README.md**
-- **[bin/](bin)**
-   - **main**
-   - **server**
 - **[docs/](docs)**
    - **Makefile**
+- **README.md**
+- **[bin/](bin)**
+   - **base**
+   - **server**
+   - **main**
 - **[src/](src)**
-   - **DEV_xbee.h**: A beginning for Xbee implementation, reference
-   - **Makefile**: Makefile for src/ dir
-   - **README**
-   - **base.h**: Definition of the base
-   - **basecomm.c**: Application layer implementation
-   - **basecomm.h**: Base communication
-   - **[button/](src/button)**
-      - **button.c**
-      - **button.h**
-      - **buttondevice.c**
-      - **buttondevice.h**
-      - **main.c**
-   - **button.h**
-   - **buttoncomm.c**
-   - **buttoncomm.h**
-   - **buttondevice.c**
-   - **buttondevice.h**: Implementation of the button communication
-   - **buttonnetwork.h**
-   - **flags.h**
-   - **hahaProgram.h**
-   - **halib.c**: stdlib for HAHA project, contains global functions
-   - **halib.h**: stdlib for HAHA project, contains imports and defines
-   - **init.c**: Initialization file
-   - **init.h**: Initialization headers
-   - **lcd.c**: LCD application level, given menu, prints to LCD
-   - **lcd.h**: LCD application level, given menu, prints to LCD
-   - **main.c**: Main program of the base station
-   - **menu.c**: Menu and MenuItem library functions
    - **menu.h**: Menu and MenuItems library defines
+   - **networkdevice.h**: Base to base communication
+   - **buttoncomm.c**
+   - **buttondevice.h**: Include the function prototypes and stuctures
+   - **menu.c**: Menu and MenuItem library functions
+   - **basecomm.h**: Base communication
    - **neighbor.h**: Definitions of Neighbor info
    - **network.h**: Definitions of network types
-   - **networkdevice.c**: Implementation of network specific communication
-   - **networkdevice.h**: Base to base communication
+   - **buttondevice.c**: Implementation of the button communication
    - **server.c**: Don't use this
-   - **storage.c**
-   - **storage.h**
+   - **buttoncomm.h**
+   - **baseopcode.h**
+   - **networkdevice.c**: Implementation of network specific communication
+   - **DEV_xbee.h**: A beginning for Xbee implementation, reference
+   - **halib.c**: stdlib for HAHA project, contains global functions
+   - **init.h**: Initialization headers
+   - **[button/](src/button)**
+      - **buttondevice.h**
+      - **buttondevice.c**
+      - **button.h**
+      - **button.c**
+      - **main.c**
+   - **button.h**
+   - **init.c**: Initialization file
+   - **lcd.c**: LCD application level, given menu, prints to LCD
    - **storagedevice.h**
+   - **basecomm.c**: Application layer implementation
+   - **storage.h**
+   - **README**
+   - **storage.c**
+   - **halib.h**: stdlib for HAHA project, contains imports and defines
+   - **main.h**
+   - **Makefile**: Makefile for src/ dir
+   - **lcd.h**: LCD application level, given menu, prints to LCD
+   - **base.h**: Definition of the base
+   - **flags.h**
+   - **main.c**: Main program of the base station
+   - **buttonnetwork.h**
+- **Makefile**: Makefile for top level dir
