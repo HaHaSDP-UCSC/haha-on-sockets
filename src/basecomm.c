@@ -312,15 +312,25 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 
 	case HELP_REQUEST:
 		printd("HELP REQ OPCODE.\n");
-		//TODO FIX
 		if (!IS_ACK(flags)) {
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
-			//Add SRCHOMEADDR to packet.
-			//Add SRCPHONE to packet.
+            if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
+				strcpy(p->SRCHOMEADDR, (char *) &data[offset]); //Add SRCHOMEADDR to packet
+				offset += n + 1; //String length + null terminator.
+				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
+			} else {
+				printe("Malformed Home Address String.\n");
+			}
+            if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
+				strcpy(p->SRCPHONE, (char *) &data[offset]); //Add SRCPHONE to packet
+				offset += n + 1; //String length + null terminator.
+				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCPHONE, n);
+			} else {
+				printe("Malformed Phone Number String.\n");
+			}
 		} else {
-			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
 			printd("SRCUID: %u\n", p->SRCUID);
@@ -351,7 +361,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 
 	case HELP_FROM_ANYONE_RESPONSE:
 		printd("HELP FROM ANYONE RESPONSE OPCODE.\n");
-		if (!IS_ACK(flags)) {
+		if (!IS_ACK(flags)) 
 			//TODO FIX
 			p->SRCUID = data[offset++] << 8;
 			p->SRCUID += data[offset++]; //Add SRCUID to packet.
