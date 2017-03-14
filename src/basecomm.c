@@ -75,11 +75,8 @@ bool ttl) {
 	}
 	if (destuid) {
 		printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-		printd("Offset: %d\n", offset);
 		data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-		printd("Offset: %d\n", offset);
 		data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-		printd("Offset: %d\n", offset);
 		printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
 	if (originuid) {
