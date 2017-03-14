@@ -151,7 +151,7 @@ bool ttl) {
 	}
 	if (originuid) {
 		p->ORIGINUID = data[offset++] << 8;
-		p->ORIGINUID += data[offset++]; //Add DESTUID to packet.
+		p->ORIGINUID += data[offset++]; //Add ORIGINUID to packet.
 		printd("ORIGINUID: %u\n", p->ORIGINUID);
 	}
 	if (srcname) {
@@ -224,17 +224,15 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("PING OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add DESTUID
-			//srcuid, destuid, srcname, srchomeaddr, srcphone, ttl
+			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
 			success = formPacketToData(p, data, &offset, false, true,
-			false,
-			false, false, false, false);
+			false, false, false, false, false);
 		} else {
 			//Add SRCUID
 			//Add SRCNAME
-			//srcuid, destuid, srcname, srchomeaddr, srcphone, ttl
+			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
 			success = formPacketToData(p, data, &offset, true, false,
-			true,
-			false, false, false, false);
+			false, true, false, false, false);
 		}
 		break;
 
@@ -620,15 +618,13 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			//Add DESTUID
 			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
 			success = formDataToPacket(p, data, &offset, false, true,
-			false,
-			false, false, false, false);
+			false, false, false, false, false);
 		} else {
 			//Add SRCUID
 			//ADD SRCNAME
 			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
 			success = formDataToPacket(p, data, &offset, true, false,
-			true,
-			false, false, false, false);
+			false, true, false, false, false);
 		}
 		break;
 
