@@ -11,6 +11,16 @@
 
 #define MINPACKETSIZE 4 //TODO define better
 
+typedef struct {
+	bool srcuid;
+	bool destuid;
+	bool originuid;
+	bool srcname;
+	bool srchomeaddr;
+	bool srcphone;
+	bool ttl;
+} setPacketFields;
+
 ebool convertFromPacketToData(Packet *p, unsigned char *data);
 ebool convertFromDataToPacket(Packet *p, unsigned char *data, int datalen);
 
@@ -61,31 +71,30 @@ ebool recvPacket(Packet *p, Base *src) {
 /**
  * Creates a packet from a standardized structure to be sent.
  */
-bool formPacketToData(Packet *p, unsigned char *data, int *oldoffset, bool srcuid,
-bool destuid, bool originuid, bool srcname, bool srchomeaddr, bool srcphone,
-bool ttl) {
+bool formPacketToData(Packet *p, unsigned char *data, int *oldoffset,
+		setPacketFields fields) {
 	int n = 0;
 	int offset = *oldoffset;
 
-	if (srcuid) {
+	if (fields.srcuid) {
 		printd("Expected SRCUID: 0x%x\n", p->SRCUID);
 		data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
 		data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
 		printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
-	if (destuid) {
+	if (fields.destuid) {
 		printd("Expected DESTUID: 0x%x\n", p->DESTUID);
 		data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
 		data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
 		printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
-	if (originuid) {
+	if (fields.originuid) {
 		printd("Expected ORIGINUID: 0x%x\n", p->ORIGINUID);
 		data[offset++] = p->ORIGINUID >> 8; //Add UPPER ORIGINUID to packet.
 		data[offset++] = p->ORIGINUID; //Add LOWER ORIGINUID to packet.
 		printd("ORIGINUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
-	if (srcname) {
+	if (fields.srcname) {
 		if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
 			printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
 			strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
@@ -103,7 +112,7 @@ bool ttl) {
 			return false;
 		}
 	}
-	if (srchomeaddr) {
+	if (fields.srchomeaddr) {
 		if ((n = strlen(p->SRCHOMEADDR)) < MAXHOMEADDR - 1) {
 			printd("SRCHOMEADDR: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
 			strcpy((char *) &data[offset], p->SRCHOMEADDR); //Add SRCHOMEADDR to packet. TODO Optimize
@@ -113,7 +122,7 @@ bool ttl) {
 			return false;
 		}
 	}
-	if (srcphone) {
+	if (fields.srcphone) {
 		if ((n = strlen(p->SRCPHONE)) < MAXPHONE - 1) {
 			printd("SRCPHONE: %s\nstrlen: %d\n", p->SRCPHONE, n);
 			strcpy((char *) &data[offset], p->SRCPHONE); //Add SRCNAME to packet. TODO Optimize
@@ -123,7 +132,7 @@ bool ttl) {
 			return false;
 		}
 	}
-	if (ttl) {
+	if (fields.ttl) {
 		data[offset++] = p->ttl;
 	}
 	*oldoffset = offset; //Make the old offset new.
@@ -133,28 +142,27 @@ bool ttl) {
 /**
  * Creates a packet from a standardized structure to be received.
  */
-bool formDataToPacket(Packet *p, unsigned char *data, int *oldoffset, bool srcuid,
-bool destuid, bool originuid, bool srcname, bool srchomeaddr, bool srcphone,
-bool ttl) {
+bool formDataToPacket(Packet *p, unsigned char *data, int *oldoffset,
+		setPacketFields fields) {
 	int n = 0;
 	int offset = *oldoffset;
 
-	if (srcuid) {
+	if (fields.srcuid) {
 		p->SRCUID = data[offset++] << 8;
 		p->SRCUID += data[offset++]; //Add SRCUID to packet.
 		printd("SRCUID: %u\n", p->SRCUID);
 	}
-	if (destuid) {
+	if (fields.destuid) {
 		p->DESTUID = data[offset++] << 8;
 		p->DESTUID += data[offset++]; //Add DESTUID to packet.
 		printd("DESTUID: %u\n", p->DESTUID);
 	}
-	if (originuid) {
+	if (fields.originuid) {
 		p->ORIGINUID = data[offset++] << 8;
 		p->ORIGINUID += data[offset++]; //Add ORIGINUID to packet.
 		printd("ORIGINUID: %u\n", p->ORIGINUID);
 	}
-	if (srcname) {
+	if (fields.srcname) {
 		if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
 			strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet. TODO Optimize
 			offset += n + 1; //String length + null terminator.
@@ -170,7 +178,7 @@ bool ttl) {
 			printe("Malformed Last Name String.\n");
 		}
 	}
-	if (srchomeaddr) {
+	if (fields.srchomeaddr) {
 		if ((n = strlen((char *) &data[offset])) < MAXHOMEADDR - 1) {
 			strcpy(p->SRCHOMEADDR, (char *) &data[offset]); //Add SRCHOMEADDR to packet
 			offset += n + 1; //String length + null terminator.
@@ -180,7 +188,7 @@ bool ttl) {
 		}
 
 	}
-	if (srcphone) {
+	if (fields.srcphone) {
 		if ((n = strlen((char *) &data[offset])) < MAXPHONE - 1) {
 			strcpy(p->SRCPHONE, (char *) &data[offset]); //Add SRCPHONE to packet
 			offset += n + 1; //String length + null terminator.
@@ -210,6 +218,7 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 	int n = 0; //TODO delete this, deprecated
 	unsigned char opcode = p->opcode;
 	unsigned char flags = p->flags;
+	setPacketFields fields = { 0 };
 
 	int offset = 0;
 	data[offset++] = opcode;
@@ -224,15 +233,14 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("PING OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add DESTUID
-			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
-			success = formPacketToData(p, data, &offset, false, true,
-			false, false, false, false, false);
+			fields.destuid = true;
+			success = formPacketToData(p, data, &offset, fields);
 		} else {
 			//Add SRCUID
 			//Add SRCNAME
-			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
-			success = formPacketToData(p, data, &offset, true, false,
-			false, true, false, false, false);
+			fields.srcuid = true;
+			fields.srcname = true;
+			success = formPacketToData(p, data, &offset, fields);
 		}
 		break;
 
@@ -240,10 +248,10 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("HELP REQ OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
-            //Add SRCHOMEADDR to packet.
-            //Add SRCPHONE
-            success = formPacketToData(p, data, &offset, );
-        } else {
+			//Add SRCHOMEADDR to packet.
+			//Add SRCPHONE
+			//success = formPacketToData(p, data, &offset, );
+		} else {
 			//Add SRCUID to packet.
 		}
 		break;
@@ -269,14 +277,14 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("HELP FROM ANYONE RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
-            //Add DESTUID
-            //Add SRCNAME
-        }else {
+			//Add DESTUID
+			//Add SRCNAME
+		} else {
 			//Add SRCUID to packet.
-            //Add DESTUID to packet.
-            //Add SRCHOMEADDR to packet.
-            //Add SRCPHONE to packet.
-        }
+			//Add DESTUID to packet.
+			//Add SRCHOMEADDR to packet.
+			//Add SRCPHONE to packet.
+		}
 		break;
 
 		//TODO:BROADCAST
@@ -290,12 +298,12 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("FIND HOPS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SCRUID to packet.
-            //Add ORIGINUID to packet.
-            //Add TTL to packet.
+			//Add ORIGINUID to packet.
+			//Add TTL to packet.
 		} else {
-            //Addd SRCUID to packet.
-            //Add DESTUID to packet.
-        }
+			//Addd SRCUID to packet.
+			//Add DESTUID to packet.
+		}
 		break;
 
 		//TODO:BROADCAST
@@ -309,25 +317,25 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("FIND NEIGHBORS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
-            //Add ORIGIN UID to packet.
+			//Add ORIGIN UID to packet.
 			//Add TTL to packet.
 			//Add SRCNAME to packet.
 		} else {
-            //Add SRCUID to packet.
-            //Add DESTUID to packet.
-        }
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
+		}
 		break;
 
 	case FRIEND_REQUEST:
 		printd("FRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
-            //Add DESTUID to packet.
-            //Add SRCNAME to packet.
+			//Add DESTUID to packet.
+			//Add SRCNAME to packet.
 		} else {
-            //Add SRCUID to packet.
-            //Add DESTUID to packet.
-            //Add SRCNAME to packet.
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
+			//Add SRCNAME to packet.
 		}
 		break;
 
@@ -335,12 +343,12 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("FRIEND RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
-            //Add DESTUID to packet.
-            //Add SRCNAME to packet.
-        } else {
-            //Add SRCUID to packet.
-            //Add DESTUID to packet.
-            //Add SRCNAME to packet.
+			//Add DESTUID to packet.
+			//Add SRCNAME to packet.
+		} else {
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
+			//Add SRCNAME to packet.
 		}
 		break;
 
@@ -348,7 +356,7 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("UNFRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
-            //Add DESTUID to packet.
+			//Add DESTUID to packet.
 		} else {
 			//Add SRCUID to packet.
 			//Add DESTUID to packet.
@@ -387,6 +395,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	int offset = 0;
 	unsigned char opcode = data[offset++];
 	unsigned char flags = data[offset++];
+	setPacketFields fields = { 0 };
 
 	p->opcode = opcode;
 	p->flags = flags;
@@ -394,8 +403,8 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	printd("Opcode: 0x%x\n", opcode);
 	printd("Flags: 0x%x\n", flags);
 
-//TODO Do a check to see if this packet needs to be processed.
-//If the packet is not expected, drop the packet.
+	//TODO Do a check to see if this packet needs to be processed.
+	//If the packet is not expected, drop the packet.
 	/**
 	 * if (!isExpecting(opcode, PING_REQUEST_FLAG)) {
 	 *  //drop packet
@@ -408,15 +417,14 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("PING OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add DESTUID
-			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
-			success = formDataToPacket(p, data, &offset, false, true,
-			false, false, false, false, false);
+			fields.destuid = true;
+			success = formDataToPacket(p, data, &offset, fields);
 		} else {
 			//Add SRCUID
 			//ADD SRCNAME
-			//srcuid, destuid, originuid, srcname, srchomeaddr, srcphone, ttl
-			success = formDataToPacket(p, data, &offset, true, false,
-			false, true, false, false, false);
+			fields.srcuid = true;
+			fields.srcname = true;
+			success = formDataToPacket(p, data, &offset, fields);
 		}
 		break;
 
@@ -425,7 +433,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
 			//Add SRCHOMEADDR to packet
-		    //Add SRCPHONE to packet
+			//Add SRCPHONE to packet
 		} else {
 			//Add SRCUID to packet.
 		}
@@ -440,7 +448,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		}
 		break;
 
-    //TODO:BROADCAST
+		//TODO:BROADCAST
 	case HELP_FROM_ANYONE_REQUEST:
 		printd("HELP FROM ANYONE REQUEST OPCODE.\n");
 		//Add SRCUID to packet.
@@ -458,11 +466,11 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			//Add SRCUID to packet.
 			//Add DESTUID to packet.
 			//Add SRCHOMEADDR to packet
-		    //Add SRCPHONE to packet
+			//Add SRCPHONE to packet
 		}
 		break;
 
-	//TODO:BROADCAST
+		//TODO:BROADCAST
 	case FIND_HOPS_REQUEST:
 		printd("FIND HOPS REQUEST OPCODE.\n");
 		//Add ORIGINUID to packet.
@@ -481,7 +489,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		}
 		break;
 
-	//TODO:BROADCAST
+		//TODO:BROADCAST
 	case FIND_NEIGHBORS_REQUEST:
 		printd("FIND NEIGHBORS REQUEST OPCODE.\n");
 		//Add ORIGINUID to packet.
@@ -492,10 +500,10 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("FIND NEIGHBORS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
-		    //Add ORIGINUID to packet
+			//Add ORIGINUID to packet
 			//Add TTL to packet.
 			//Add SRCNAME to packet.
-        } else {
+		} else {
 			//Add SRCUID to packet.
 			//Add DESTUID to packet.
 		}
@@ -506,12 +514,12 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		if (!IS_ACK(flags)) {
 			//Add SRCUID to packet.
 			//Add DESTUID to packet.
-            //Add SRCNAME to packet.
+			//Add SRCNAME to packet.
 		} else {
 			//Add SRCUID to packet.
 			//Add DESTUID to packet.
 			//Add SRCNAME to packet.
-        }
+		}
 		break;
 
 	case FRIEND_RESPONSE:
