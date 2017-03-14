@@ -369,7 +369,19 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
                 p->DESTUID = data[offset++] << 8;
                 p->DESTUID += data[offset++]; ///Add DESTUID to packet.
                 printd("DESTUID: %u\n", p->DESTUID);
-                //Add SRCNAME to packet.
+                if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
+                    strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
+                } else {
+                    printe("Malformed First Name String.\n");
+                }
+                if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
+                    strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
+                } else {
+                    printe("Malformed Last Name String.\n");
             } else {
                 p->SRCUID = data[offset++] << 8;
                 p->SRCUID += data[offset++]; //Add SRCUID to packet.
@@ -415,7 +427,6 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
                     printe("Malformed Origin UID String.\n");
                 //Add TTL to packet.
             } else {
-                //TODO FIX
                 p->SRCUID = data[offset++] << 8;
                 p->SRCUID += data[offset++]; //Add SRCUID to packet.
                 printd("SRCUID: %u\n", p->SRCUID);
@@ -446,9 +457,21 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
                 } else {
                     printe("Malformed Origin UID String.\n");
                 //Add TTL to packet.
-                //Add SRCNAME to packet.
+                if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
+                    strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
+                } else {
+                    printe("Malformed First Name String.\n");
+                }
+                if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
+                    strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
+                } else {
+                    printe("Malformed Last Name String.\n");
+
             } else {
-                //TODO FIX
                 p->SRCUID = data[offset++] << 8;
                 p->SRCUID += data[offset++]; //Add SRCUID to packet.
                 printd("SRCUID: %u\n", p->SRCUID);
@@ -461,23 +484,46 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
         case FRIEND_REQUEST:
             printd("FRIEND REQUEST OPCODE.\n");
             if (!IS_ACK(flags)) {
-                //TODO FIX
                 p->SRCUID = data[offset++] << 8;
                 p->SRCUID += data[offset++]; //Add SRCUID to packet.
                 printd("SRCUID: %u\n", p->SRCUID);
                 p->DESTUID = data[offset++] << 8;
                 p->DESTUID += data[offset++]; ///Add DESTUID to packet.
                 printd("DESTUID: %u\n", p->DESTUID);
-                //Add SRCNAME to packet.
+                if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
+                    strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
+                } else {
+                    printe("Malformed First Name String.\n");
+                }
+                if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
+                    strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
+                } else {
+                    printe("Malformed Last Name String.\n");
             } else {
-                //TODO FIX
                 p->SRCUID = data[offset++] << 8;
                 p->SRCUID += data[offset++]; //Add SRCUID to packet.
                 printd("SRCUID: %u\n", p->SRCUID);
                 p->DESTUID = data[offset++] << 8;
                 p->DESTUID += data[offset++]; ///Add DESTUID to packet.
                 printd("DESTUID: %u\n", p->DESTUID);
-                //Add SRCNAME to packet.
+                if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
+                    strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
+                } else {
+                    printe("Malformed First Name String.\n");
+                }
+                if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
+                    strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
+                    offset += n + 1; //String length + null terminator.
+                    printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
+                } else {
+                    printe("Malformed Last Name String.\n");
+
             }
             break;
 
