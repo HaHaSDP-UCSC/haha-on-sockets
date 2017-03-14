@@ -241,44 +241,21 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 	case HELP_REQUEST:
 		printd("HELP REQ OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-			if ((n = strlen(p->SRCHOMEADDR)) < MAXHOMEADDR - 1) {
-				printd("SRCHOMEADDR: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
-				strcpy((char *) &data[offset], p->SRCHOMEADDR); //Add SRCHOMEADDR to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Home Address.\n");
-			}
-			if ((n = strlen(p->SRCPHONE)) < MAXPHONE - 1) {
-				printd("SRCPHONE: %s\nstrlen: %d\n", p->SRCPHONE, n);
-				strcpy((char *) &data[offset], p->SRCPHONE); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Phone Number.\n");
-			}
-		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
+			//Add SRCUID to packet.
+            //Add SRCHOMEADDR to packet.
+            //Add SRCPHONE
+            success = formPacketToData(p, data, &offset, );
+        } else {
+			//Add SRCUID to packet.
 		}
 		break;
 
 	case HELP_RESPONSE:
 		printd("HELP RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
+			//Add SRCUID to packet.
 		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
+			//Add SRCUID to packet.
 		}
 		break;
 
@@ -293,54 +270,15 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 	case HELP_FROM_ANYONE_RESPONSE:
 		printd("HELP FROM ANYONE RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-			if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-				strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed First Name.\n");
-			}
-			if ((n = strlen(p->SRCLASTNAME)) < MAXLASTNAME - 1) {
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-				strcpy((char *) &data[offset], p->SRCLASTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Last Name.\n");
-			}
-		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-			if ((n = strlen(p->SRCHOMEADDR)) < MAXHOMEADDR - 1) {
-				printd("SRCHOMEADDR: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
-				strcpy((char *) &data[offset], p->SRCHOMEADDR); //Add SRCHOMEADDR to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Home Address.\n");
-			}
-			if ((n = strlen(p->SRCPHONE)) < MAXPHONE - 1) {
-				printd("SRCPHONE: %s\nstrlen: %d\n", p->SRCPHONE, n);
-				strcpy((char *) &data[offset], p->SRCPHONE); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Phone Number.\n");
-			}
-		}
+			//Add SRCUID to packet.
+            //Add DESTUID
+            //Add SRCNAME
+        }else {
+			//Add SRCUID to packet.
+            //Add DESTUID to packet.
+            //Add SRCHOMEADDR to packet.
+            //Add SRCPHONE to packet.
+        }
 		break;
 
 		//TODO:BROADCAST
@@ -353,30 +291,13 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 	case FIND_HOPS_RESPONSE:
 		printd("FIND HOPS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			//TODO FIX
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-			if ((n = strlen(p->ORIGINUID)) < MAXUID - 1) {
-				printd("ORIGINUID: %s\nstrlen: %d\n", p->ORIGINUID, n);
-				strcpy((char *) &data[offset], p->ORIGINUID); //Add ORIGINUID to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Origin UID.\n");
-			}
-			//TODO Add TTL to packet.
+			//Add SCRUID to packet.
+            //Add ORIGINUID to packet.
+            //Add TTL to packet.
 		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-		}
+            //Addd SRCUID to packet.
+            //Add DESTUID to packet.
+        }
 		break;
 
 		//TODO:BROADCAST
@@ -389,179 +310,50 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 	case FIND_NEIGHBORS_RESPONSE:
 		printd("FIND NEIGHBORS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			//TODO FIX
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-			if ((n = strlen(p->ORIGINUID)) < MAXUID - 1) {
-				printd("ORIGINUID: %s\nstrlen: %d\n", p->ORIGINUID, n);
-				strcpy((char *) &data[offset], p->ORIGINUID); //Add ORIGINUID to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Origin UID.\n");
-			}
-			//TODO Add TTL to packet.
-			//
-			if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-				strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed First Name.\n");
-			}
-			if ((n = strlen(p->SRCLASTNAME)) < MAXLASTNAME - 1) {
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-				strcpy((char *) &data[offset], p->SRCLASTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Last Name.\n");
-			}
-
+			//Add SRCUID to packet.
+            //Add ORIGIN UID to packet.
+			//Add TTL to packet.
+			//Add SRCNAME to packet.
 		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-		}
+            //Add SRCUID to packet.
+            //Add DESTUID to packet.
+        }
 		break;
 
 	case FRIEND_REQUEST:
 		printd("FRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-				strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed First Name.\n");
-			}
-			if ((n = strlen(p->SRCLASTNAME)) < MAXLASTNAME - 1) {
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-				strcpy((char *) &data[offset], p->SRCLASTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Last Name.\n");
-			}
+			//Add SRCUID to packet.
+            //Add DESTUID to packet.
+            //Add SRCNAME to packet.
 		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-				strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed First Name.\n");
-			}
-			if ((n = strlen(p->SRCLASTNAME)) < MAXLASTNAME - 1) {
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-				strcpy((char *) &data[offset], p->SRCLASTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Last Name.\n");
-			}
-
+            //Add SRCUID to packet.
+            //Add DESTUID to packet.
+            //Add SRCNAME to packet.
 		}
 		break;
 
 	case FRIEND_RESPONSE:
 		printd("FRIEND RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-			if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-				strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed First Name.\n");
-			}
-			if ((n = strlen(p->SRCLASTNAME)) < MAXLASTNAME - 1) {
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-				strcpy((char *) &data[offset], p->SRCLASTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Last Name.\n");
-			}
-		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-			if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-				strcpy((char *) &data[offset], p->SRCFIRSTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed First Name.\n");
-			}
-			if ((n = strlen(p->SRCLASTNAME)) < MAXLASTNAME - 1) {
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-				strcpy((char *) &data[offset], p->SRCLASTNAME); //Add SRCNAME to packet. TODO Optimize
-				offset += n + 1; //String length + null terminator.
-			} else {
-				printe("Malformed Last Name.\n");
-			}
+			//Add SRCUID to packet.
+            //Add DESTUID to packet.
+            //Add SRCNAME to packet.
+        } else {
+            //Add SRCUID to packet.
+            //Add DESTUID to packet.
+            //Add SRCNAME to packet.
 		}
 		break;
 
 	case UNFRIEND_REQUEST:
 		printd("UNFRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
+			//Add SRCUID to packet.
+            //Add DESTUID to packet.
 		} else {
-			printd("Expected SRCUID: 0x%x\n", p->SRCUID);
-			data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
-			data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
-			printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
-
-			printd("Expected DESTUID: 0x%x\n", p->DESTUID);
-			data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
-			data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
-			printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
 		}
 		break;
 
@@ -635,45 +427,24 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	case HELP_REQUEST:
 		printd("HELP REQ OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			if ((n = strlen((char *) &data[offset])) < MAXHOMEADDR - 1) {
-				strcpy(p->SRCHOMEADDR, (char *) &data[offset]); //Add SRCHOMEADDR to packet
-				offset += n + 1; //String length + null terminator.
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
-			} else {
-				printe("Malformed Home Address String.\n");
-			}
-			if ((n = strlen((char *) &data[offset])) < MAXPHONE - 1) {
-				strcpy(p->SRCPHONE, (char *) &data[offset]); //Add SRCPHONE to packet
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCPHONE, n);
-			} else {
-				printe("Malformed Phone Number String.\n");
-			}
+			//Add SRCUID to packet.
+			//Add SRCHOMEADDR to packet
+		    //Add SRCPHONE to packet
 		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-
+			//Add SRCUID to packet.
 		}
 		break;
 
 	case HELP_RESPONSE:
 		printd("HELP RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
+			//Add SRCUID to packet.
 		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
+			//Add SRCUID to packet.
 		}
 		break;
 
-		//TODO:BROADCAST
+    //TODO:BROADCAST
 	case HELP_FROM_ANYONE_REQUEST:
 		printd("HELP FROM ANYONE REQUEST OPCODE.\n");
 		//Add SRCUID to packet.
@@ -684,50 +455,18 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	case HELP_FROM_ANYONE_RESPONSE:
 		printd("HELP FROM ANYONE RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
-			if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
-				strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-			} else {
-				printe("Malformed First Name String.\n");
-			}
-			if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
-				strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-			} else {
-				printe("Malformed Last Name String.\n");
-			}
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
+			//Add SRCNAME to packet.
 		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; ///Add DESTUID to packet.
-			if ((n = strlen((char *) &data[offset])) < MAXHOMEADDR - 1) {
-				strcpy(p->SRCHOMEADDR, (char *) &data[offset]); //Add SRCHOMEADDR to packet
-				offset += n + 1; //String length + null terminator.
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
-			} else {
-				printe("Malformed Home Address String.\n");
-			}
-			if ((n = strlen((char *) &data[offset])) < MAXPHONE - 1) {
-				strcpy(p->SRCPHONE, (char *) &data[offset]); //Add SRCPHONE to packet
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCPHONE, n);
-			} else {
-				printe("Malformed Phone Number String.\n");
-			}
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
+			//Add SRCHOMEADDR to packet
+		    //Add SRCPHONE to packet
 		}
 		break;
 
-		//TODO:BROADCAST
+	//TODO:BROADCAST
 	case FIND_HOPS_REQUEST:
 		printd("FIND HOPS REQUEST OPCODE.\n");
 		//Add ORIGINUID to packet.
@@ -737,29 +476,16 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	case FIND_HOPS_RESPONSE:
 		printd("FIND HOPS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			//TODO FIX
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			if ((n = strlen((char *) &data[offset])) < MAXUID - 1) {
-				strcpy(p->ORIGINUID, (char *) &data[offset]); //Add ORIGINUID to packet
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->ORIGINUID, n);
-			} else {
-				printe("Malformed Origin UID String.\n");
-				//Add TTL to packet.
-			}
+			//Add SRCUID to packet.
+			//Add ORIGINUID to packet
+			//Add TTL to packet.
 		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
 		}
 		break;
 
-		//TODO:BROADCAST
+	//TODO:BROADCAST
 	case FIND_NEIGHBORS_REQUEST:
 		printd("FIND NEIGHBORS REQUEST OPCODE.\n");
 		//Add ORIGINUID to packet.
@@ -769,126 +495,48 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	case FIND_NEIGHBORS_RESPONSE:
 		printd("FIND NEIGHBORS RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			//TODO FIX
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			if ((n = strlen((char *) &data[offset])) < MAXUID - 1) {
-				strcpy(p->ORIGINUID, (char *) &data[offset]); //Add ORIGINUID to packet
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->ORIGINUID, n);
-			} else {
-				printe("Malformed Origin UID String.\n");
-			}
-			//TODO Add TTL to packet.
-			if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
-				strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-			} else {
-				printe("Malformed First Name String.\n");
-			}
-			if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
-				strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-			} else {
-				printe("Malformed Last Name String.\n");
-
-			}
-		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
+			//Add SRCUID to packet.
+		    //Add ORIGINUID to packet
+			//Add TTL to packet.
+			//Add SRCNAME to packet.
+        } else {
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
 		}
 		break;
 
 	case FRIEND_REQUEST:
 		printd("FRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
-			if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
-				strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-			} else {
-				printe("Malformed First Name String.\n");
-			}
-			if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
-				strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-			} else {
-				printe("Malformed Last Name String.\n");
-			}
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
+            //Add SRCNAME to packet.
 		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
-			if ((n = strlen((char *) &data[offset])) < MAXFIRSTNAME - 1) {
-				strcpy(p->SRCFIRSTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
-			} else {
-				printe("Malformed First Name String.\n");
-			}
-			if ((n = strlen((char *) &data[offset])) < MAXLASTNAME - 1) {
-				strcpy(p->SRCLASTNAME, (char *) &data[offset]); //Add SRCNAME to packet.
-				offset += n + 1; //String length + null terminator.
-				printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCLASTNAME, n);
-			} else {
-				printe("Malformed Last Name String.\n");
-
-			}
-		}
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
+			//Add SRCNAME to packet.
+        }
 		break;
 
 	case FRIEND_RESPONSE:
 		printd("FRIEND RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
 		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
 		}
 		break;
 
 	case UNFRIEND_REQUEST:
 		printd("UNFRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
 		} else {
-			p->SRCUID = data[offset++] << 8;
-			p->SRCUID += data[offset++]; //Add SRCUID to packet.
-			printd("SRCUID: %u\n", p->SRCUID);
-			p->DESTUID = data[offset++] << 8;
-			p->DESTUID += data[offset++]; //Add DESTUID to packet.
-			printd("DESTUID: %u\n", p->DESTUID);
+			//Add SRCUID to packet.
+			//Add DESTUID to packet.
 		}
 		break;
 
