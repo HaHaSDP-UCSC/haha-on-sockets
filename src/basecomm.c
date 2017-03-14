@@ -197,7 +197,7 @@ bool formDataToPacket(Packet *p, unsigned char *data, int *oldoffset,
 			printe("Malformed Phone Number String.\n");
 		}
 	}
-	if (ttl) {
+	if (fields.ttl) {
 		p->ttl = data[offset++];
 	}
 	*oldoffset = offset; //Make the old offset new.
