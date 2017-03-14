@@ -10,7 +10,6 @@
  */
 
 #include "networkdevice.h"
-#include "basecomm.h"
 
 int connfd, listenfd = 0;
 //int outboundfd, inboundfd = 0;
