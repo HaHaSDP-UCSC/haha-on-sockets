@@ -13,14 +13,15 @@
 #include "base.h"
 
 //#define MAXNAME 34
-#define MAXFIRSTNAME 17
-#define MAXLASTNAME 17
+#define MAXFIRSTNAME 17  // Null terminated
+#define MAXLASTNAME 17   // Null terminated
 
-#define MAXUID 2
+
+#define MAXUID 2         // Null terminated
 //#define MAXDEST 2
-#define MAXHOMEADDR 75
-#define MAXPHONE 16
+#define MAXHOMEADDR 75   // Null terminated
 
+#define MAXPHONE 16      // Null terminated
 #define MAXBUFFER 255 //TODO CORRECT THIS
 
 typedef struct{
