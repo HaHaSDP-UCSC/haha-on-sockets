@@ -84,9 +84,10 @@ int main(int argc, char** argv) {
 	phelp.ORIGINUID = 0;
 	strcpy(phelp.SRCFIRSTNAME, "Foo");
 	strcpy(phelp.SRCLASTNAME, "Bar");
-	strcpy(phelp.SRCPHONE, "123-456-7890"); //Should actually be unformatted.
+	strcpy(phelp.SRCPHONE, "123-456-7890"); //TODO Should actually be unformatted.
 	strcpy(phelp.SRCHOMEADDR, "4657 Where the Sidewalk Ends St. Apartment 23\n"
 			"Santa Cruz, CA 12345-9876");
+	phelp.ttl = 0;
 
 	printf("\n");
 	printf("phelp.SRCUID:       %d\n", phelp.SRCUID);
@@ -96,6 +97,7 @@ int main(int argc, char** argv) {
 	printf("phelp.SRCLASTNAME:  %s\n", phelp.SRCLASTNAME);
 	printf("phelp.SRCPHONE:     %s\n", phelp.SRCPHONE);
 	printf("phelp.SRCHOMEADDR:\n%s\n", phelp.SRCHOMEADDR);
+	printf("phelp.ttl: %d\n", phelp.ttl);
 
 	Base dest;
 	dest.addr = "127.0.0.1"; //Network Address.
@@ -125,6 +127,7 @@ int main(int argc, char** argv) {
                     break;
                 case 'h':
                     printv("HELP BUTTON PRESSED\n");
+            		sendPacket(&phelp, &dest);
                     break;
                 case 't':
                     menuItemPrintTree(menu->root);

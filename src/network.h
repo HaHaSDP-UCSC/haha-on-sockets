@@ -15,6 +15,7 @@
 
 /* BASE COMMUNICATION */
 typedef unsigned char opcode;
+typedef unsigned char ttl;
 typedef uint16_t uid;
 
 typedef struct {
@@ -29,6 +30,7 @@ typedef struct {
 	char SRCLASTNAME[MAXFIRSTNAME]; //TODO optimize for space.
 	char SRCPHONE[MAXPHONE]; //TODO optimize for space.
 	char SRCHOMEADDR[MAXHOMEADDR]; //TODO optimize for space.
+	ttl ttl;
 } Packet;
 
 #endif // _HA_NETDEFS_
