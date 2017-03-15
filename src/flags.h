@@ -1,7 +1,7 @@
 /**
  * @file flags.h
- * @brief
- * @author
+ * @brief Flags to be set in packets.
+ * @author Brian
  * @version
  * @date 2017-03-07
  */
