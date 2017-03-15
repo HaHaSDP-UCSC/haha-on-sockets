@@ -1,12 +1,13 @@
 # HaHaOnSockets
 
-A Linux based proof of concept for the Home Assistance Button project.
+A Linux based proof of concept for the Home Assistance Button 	project.
 
 ## Directory Structure
 
 - **Makefile**: Makefile for top level dir
 - **README.md**
 - **[bin/](bin)**
+   - **base**
    - **main**
    - **server**
 - **[docs/](docs)**
@@ -18,7 +19,7 @@ A Linux based proof of concept for the Home Assistance Button project.
    - **base.h**: Definition of the base
    - **basecomm.c**: Application layer implementation
    - **basecomm.h**: Base communication
-   - **baseopcode.h**
+   - **baseopcode.h**: Base communication opcodes.
    - **[button/](src/button)**
       - **button.c**
       - **button.h**
@@ -31,7 +32,7 @@ A Linux based proof of concept for the Home Assistance Button project.
    - **buttondevice.c**: Implementation of the button communication
    - **buttondevice.h**: Include the function prototypes and stuctures
    - **buttonnetwork.h**
-   - **flags.h**
+   - **flags.h**: Flags to be set in packets.
    - **halib.c**: stdlib for HAHA project, contains global functions
    - **halib.h**: stdlib for HAHA project, contains imports and defines
    - **init.c**: Initialization file

@@ -313,8 +313,11 @@ int main(int argc, char** argv) {
           }
           */
     }
-done: lcdDestroy();
-      menuDestroy(menu);
+done:
 
-      return error;
+    writeBase(&self);
+    lcdDestroy();
+    menuDestroy(menu);
+
+    return error;
 }

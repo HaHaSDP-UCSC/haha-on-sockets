@@ -145,6 +145,8 @@ void* listFriends(Menu* menu) {
             sprintf(title, "%d: Port %d", j++, self.friends[i]);
             menuItemInit(this, title);
         }
+    MenuItem* addFriend = menuItemInit(this, "Add Friend");
+    addFriend->onClick = addFriendInput;
     menuItemOnClickDefault(menu);
     return(NULL);
 }
@@ -174,6 +176,22 @@ void* eventButtonAccept(Menu* menu) {
 void* eventButtonDeny(Menu* menu) {
     // TODO code to deny help request
     printd("Help request denied :(\n");
+    jumpToRoot(menu);
+    return(NULL);
+}
+
+void* addFriendInput(Menu* menu) {
+    printf("Enter in your friend's port number: ");
+    int friend;
+    if(scanf("%d", &friend) == 1) {
+        if(friend > 0) {
+            int i;
+            for(i = 0; i < 128; i++)
+                if(self.friends[i] == 0)
+                    break;
+            self.friends[i] = friend;
+        } else printe("Invalid port number provided");
+    } else printe("Invalid input provided");
     jumpToRoot(menu);
     return(NULL);
 }

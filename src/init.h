@@ -30,5 +30,6 @@ void* listFriends(Menu* menu);
 void* eventButtonView(Menu* menu);
 void* eventButtonAccept(Menu* menu);
 void* eventButtonDeny(Menu* menu);
+void* addFriendInput(Menu* menu);
 
 #endif // _HA_INIT_
