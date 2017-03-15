@@ -1,4 +1,20 @@
-*.tar.gz
-***/bin/*
+##
+# @file .gitignore
+# @brief List of files/directories to not check into version control
+# @author August Valera (avalera)
+# @version
+# @date 2017-03-15
+#
+
+# Bin directory
+bin/*
+
+# Object files
 *.o
+
+# Base database files
 *.base
+
+# Doxygen generated subdirectories
+docs/latex
+docs/html
