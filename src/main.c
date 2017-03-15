@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
 
 	// Register interrupts
 
-	//Create a PING packet to send.
+	//Create a generic packet to send.
 	Packet psend;
 	psend.opcode = PING_REQUEST;
 	psend.flags = 0; //Toggle these flags to trigger different things.
@@ -150,7 +150,7 @@ int main(int argc, char** argv) {
 
 	Base dest;
 	dest.addr = "127.0.0.1"; //Network Address.
-	dest.UID = destinationPort; //TODO For some reason, destinationPort FAILS.
+	dest.UID = destinationPort;
 	printf("dest.DESTUID: %s\n", dest.UID);
 
 	int pid = 0;
@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
 				menuItemPrintTree(menu->root);
 				break;
 			case 'q':
-				// YES GOTOs
+				// YES GOTOs TODO Why are we even exiting main.
 				goto done;
 				break;
 			case '\n':
@@ -210,38 +210,95 @@ int main(int argc, char** argv) {
 		 }
 		 }
 		 */
-		time_t begin, end;
-		begin = time(NULL);
-		int friendsLeft = 0;
-		int numFriends = 4;
-		int timeinterval = 5; //Seconds before calling next person.
-
+		int inHelpMode = false; //TODO need signal from menu interface.
 		Packet prec; //Receive Packet.
-		Base src; //Receive Base Source Packet. //TODO implement
-		while (friendsLeft < numFriends) {
-			if (recvPacket(&prec, &src) == TRUE) {
-				printf("Received Packet.\n");
-			}
-			end = time(NULL);
-			if (difftime(end, begin) >= timeinterval) {
-				printd("Time: %.1f\n", difftime(end, begin));
-				begin = time(NULL);
-				//Start going down a list of friends.
-				printd("Current Friend %d @ %s didn't answer.\n", friendsLeft, dest.UID);
-				//TODO load in next friend.
-				sendPacket(&phelp, &dest);
-				friendsLeft++;
-			}
-		}
+		Base src; //Receive Base Source Packet.
 
-		if (friendsLeft >= numFriends) {
-			//Out of friends
-			printe("No friends left to save you.\n");
-		}
 		while (1) {
-			//Burn time.
-		}
+			if (inHelpMode) {
+				time_t begin, end;
+				begin = time(NULL);
+				int friendsLeft = 0;
+				int numFriends = 4;
+				int timeinterval = 5; //Seconds before calling next person.
+				bool rejected = 0;
 
+				while (friendsLeft < numFriends) {
+					if (recvPacket(&prec, &src) == TRUE) {
+						printf("Received Packet.\n");
+						if (prec.opcode == HELP_REQUEST && (IS_ACK(prec.flags))) {
+							//This friend is connected to network. TODO do stuff later
+						}
+
+						if (prec.opcode == HELP_RESPONSE
+								&& (!IS_ACK(psend.flags))) {
+							//Check if this is the friend we are looking for.
+							//TODO compares the source with whom we current friend check.
+							if (prec.SRCUID == atoi(dest.UID)) {
+								if (IS_ACCEPT(prec.flags)) {
+									printv("Here comes the cavalry.\n");
+								} else {
+									printv("Rejected.\n");
+									//immediately go to next person.
+									rejected = true;
+								}
+							} else {
+								//Not the SRCUID we were expecting. TODO probably drop this.
+							}
+						} else {
+							//Not a help response.
+							//TODO a different type of packet.
+						}
+					}
+					end = time(NULL);
+					if (difftime(end, begin) >= timeinterval || rejected) {
+						printd("Time: %.1f\n", difftime(end, begin));
+						begin = time(NULL);
+						//Start going down a list of friends.
+						printv("Current Friend %d @ %s didn't answer.\n",
+								friendsLeft, dest.UID);
+						//TODO load in next friend. Needs that storage thing.
+						sendPacket(&phelp, &dest);
+						friendsLeft++;
+						rejected = false;
+					}
+				}
+
+				if (friendsLeft >= numFriends) {
+					//Out of friends
+					printe("No friends left to save you.\n");
+				}
+				while (1) {
+					//Burn trees.
+				}
+			} else {
+				//Listening mode.
+				if (recvPacket(&prec, &src) == TRUE) {
+					printf("Received Packet.\n");
+					if (prec.opcode == HELP_REQUEST
+							&& (!IS_ACK(phelp.flags))) {
+						uid myFriend = 0; //TODO compares the source with friends list.
+						if (prec.SRCUID == myFriend) {
+							bool accept = false; //TODO user input needs to block.
+							if (accept) {
+								printv("I am going to help you.\n");
+								//TODO generate the help response packet for accepting.
+							} else {
+								printv("Do not help.\n");
+								//TODO generate the help response packet for canceling.
+							}
+						} else {
+							//Not the SRCUID we were expecting. TODO
+						}
+					} else {
+						if (prec.opcode == HELP_REQUEST && (!IS_ACK(phelp.flags))) {
+
+						}
+						//Not a help request.
+					}
+				}
+			}
+		}
 		/**
 		 int timervalue;
 		 (void) signal(SIGALRM, timer_callback);
