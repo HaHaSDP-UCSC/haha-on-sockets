@@ -34,6 +34,10 @@ ebool init_network(char *listenport) {
 	return TRUE;
 }
 
+ebool processPacket(Packet *p) {
+	return FALSE; //TODO fix
+}
+
 /**
  * Take the packet data and send to network device.
  * Returns if successful or not.
@@ -264,10 +268,10 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.srchomeaddr = true; //Add SRCHOMEADDR to packet.
 			fields.srcphone = true; //Add SRCPHONE
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		} else {
-            fields.srcuid = true; //Add SRCUID to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			fields.srcuid = true; //Add SRCUID to packet.
+			success = formPacketToData(p, data, &offset, fields);
 		}
 		break;
 
@@ -275,11 +279,11 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("HELP RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SRCUID to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 
 		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 
 		}
 		break;
@@ -290,7 +294,7 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		fields.srcuid = true; //Add SRCUID to packet.
 		fields.ttl = true; //Add TTL to packet.
 		fields.srcname = true; //Add SRCNAME to packet.
-        success = formPacketToData(p, data, &offset, fields);
+		success = formPacketToData(p, data, &offset, fields);
 		break;
 
 	case HELP_FROM_ANYONE_RESPONSE:
@@ -299,13 +303,13 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID
 			fields.srcname = true; //Add SRCNAME
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
-			fields.srchomeaddr = true;//Add SRCHOMEADDR to packet.
+			fields.srchomeaddr = true; //Add SRCHOMEADDR to packet.
 			fields.srcphone = true; //Add SRCPHONE to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		}
 		break;
 
@@ -314,7 +318,7 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("FIND HOPS REQUEST OPCODE.\n");
 		fields.originuid = true; //Add ORIGINUID to packet.
 		fields.ttl = true; //Add TTL to packet.
-        success = formPacketToData(p, data, &offset, fields);
+		success = formPacketToData(p, data, &offset, fields);
 		break;
 
 	case FIND_HOPS_RESPONSE:
@@ -322,12 +326,12 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SCRUID to packet.
 			fields.originuid = true; //Add ORIGINUID to packet.
-			fields.ttl = true;//Add TTL to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			fields.ttl = true; //Add TTL to packet.
+			success = formPacketToData(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Addd SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		}
 		break;
 
@@ -336,7 +340,7 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("FIND NEIGHBORS REQUEST OPCODE.\n");
 		fields.originuid = true; //Add ORIGINUID to packet.
 		fields.ttl = true; //Add TTL to packet.
-        success = formPacketToData(p, data, &offset, fields);
+		success = formPacketToData(p, data, &offset, fields);
 		break;
 
 	case FIND_NEIGHBORS_RESPONSE:
@@ -346,11 +350,11 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 			fields.originuid = true; //Add ORIGINUID to packet.
 			fields.ttl = true; //Add TTL to packet.
 			fields.srcname = true; //Add SRCNAME to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		}
 		break;
 
@@ -360,12 +364,12 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
 			fields.srcname = true; //Add SRCNAME to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
 			fields.srcname = true; //Add SRCNAME to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 		}
 		break;
 
@@ -375,12 +379,12 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
 			fields.srcname = true; //Add SRCNAME to packet.
-		    success = formPacketToData(p, data, &offset, fields);
-        } else {
+			success = formPacketToData(p, data, &offset, fields);
+		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
-			fields.destuid = true;//Add DESTUID to packet.
-			fields.srcname = true;//Add SRCNAME to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			fields.destuid = true; //Add DESTUID to packet.
+			fields.srcname = true; //Add SRCNAME to packet.
+			success = formPacketToData(p, data, &offset, fields);
 
 		}
 		break;
@@ -389,12 +393,12 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		printd("UNFRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SRCUID to packet.
-			fields.destuid = true;//Add DESTUID to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			fields.destuid = true; //Add DESTUID to packet.
+			success = formPacketToData(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
-            success = formPacketToData(p, data, &offset, fields);
+			success = formPacketToData(p, data, &offset, fields);
 
 		}
 		break;
@@ -467,47 +471,47 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.srchomeaddr = true; //Add SRCHOMEADDR to packet.
-            fields.srcphone = true; //Add SRCPHONE to packet
-            success = formDataToPacket(p, data, &offset, fields);
+			fields.srcphone = true; //Add SRCPHONE to packet
+			success = formDataToPacket(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Add SRCUID
-            success = formDataToPacket(p, data, &offset, fields);
+			success = formDataToPacket(p, data, &offset, fields);
 		}
 		break;
 
 	case HELP_RESPONSE:
 		printd("HELP RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-		    fields.srcuid = true; //Add SRCUID
-        success = formDataToPacket(p, data, &offset, fields);
+			fields.srcuid = true; //Add SRCUID
+			success = formDataToPacket(p, data, &offset, fields);
 		} else {
-		    fields.srcuid = true; //Add SRCUID
-            success = formDataToPacket(p, data, &offset, fields);
+			fields.srcuid = true; //Add SRCUID
+			success = formDataToPacket(p, data, &offset, fields);
 		}
 		break;
 
 		//TODO:BROADCAST
 	case HELP_FROM_ANYONE_REQUEST:
 		printd("HELP FROM ANYONE REQUEST OPCODE.\n");
-        fields.srcuid = true; //Add SRCUID
+		fields.srcuid = true; //Add SRCUID
 		fields.ttl = true; //Add TTL to packet.
 		fields.srcname = true; //Add SRCNAME to packet.
-        success = formDataToPacket(p, data, &offset, fields);
+		success = formDataToPacket(p, data, &offset, fields);
 		break;
 
 	case HELP_FROM_ANYONE_RESPONSE:
 		printd("HELP FROM ANYONE RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
-	        fields.srcuid = true; //Add SRCUID to packet.
+			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
 			fields.srcname = true; //Add SRCNAME to packet.
-            success = formDataToPacket(p, data, &offset, fields);
+			success = formDataToPacket(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
 			fields.srchomeaddr = true; //Add SRCHOMEADDR to packet
 			fields.srcphone = true; //Add SRCPHONE to packet
-            success = formDataToPacket(p, data, &offset, fields);
+			success = formDataToPacket(p, data, &offset, fields);
 		}
 		break;
 
@@ -517,7 +521,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		fields.originuid = true; //Add ORIGINUID to packet.
 		fields.ttl = true; //Add TTL to packet.
 		success = formDataToPacket(p, data, &offset, fields);
-        break;
+		break;
 
 	case FIND_HOPS_RESPONSE:
 		printd("FIND HOPS RESPONSE OPCODE.\n");
@@ -525,21 +529,21 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.originuid = true; //Add ORIGINUID to packet
 			fields.ttl = true; //Add TTL to packet.
-		    success = formDataToPacket(p, data, &offset, fields);
-        } else {
+			success = formDataToPacket(p, data, &offset, fields);
+		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
-		    success = formDataToPacket(p, data, &offset, fields);
-        }
+			success = formDataToPacket(p, data, &offset, fields);
+		}
 		break;
 
 		//TODO:BROADCAST
 	case FIND_NEIGHBORS_REQUEST:
 		printd("FIND NEIGHBORS REQUEST OPCODE.\n");
-		fields.originuid = true;//Add ORIGINUID to packet.
+		fields.originuid = true; //Add ORIGINUID to packet.
 		fields.ttl = true; //Add TTL to packet.
 		success = formDataToPacket(p, data, &offset, fields);
-        break;
+		break;
 
 	case FIND_NEIGHBORS_RESPONSE:
 		printd("FIND NEIGHBORS RESPONSE OPCODE.\n");
@@ -547,54 +551,54 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.originuid = true; //Add ORIGINUID to packet
 			fields.ttl = true; //Add TTL to packet.
-		    fields.srcname = true; //Add SRCNAME to packet.
-	    	success = formDataToPacket(p, data, &offset, fields);
-        } else {
-		    fields.srcuid = true; //Add SRCUID to packet.
+			fields.srcname = true; //Add SRCNAME to packet.
+			success = formDataToPacket(p, data, &offset, fields);
+		} else {
+			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
-		    success = formDataToPacket(p, data, &offset, fields);
-        }
+			success = formDataToPacket(p, data, &offset, fields);
+		}
 		break;
 
 	case FRIEND_REQUEST:
 		printd("FRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
-		    fields.srcuid = true; //Add SRCUID to packet.
+			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
 			fields.srcname = true; //Add SRCNAME to packet.
-            success = formDataToPacket(p, data, &offset, fields);
-        } else {
-		    fields.srcuid = true; //Add SRCUID to packet.
+			success = formDataToPacket(p, data, &offset, fields);
+		} else {
+			fields.srcuid = true; //Add SRCUID to packet.
 			fields.destuid = true; //Add DESTUID to packet.
 			fields.srcname = true; //Add SRCNAME to packet.
-		    success = formDataToPacket(p, data, &offset, fields);
-        }
+			success = formDataToPacket(p, data, &offset, fields);
+		}
 		break;
 
 	case FRIEND_RESPONSE:
 		printd("FRIEND RESPONSE OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SRCUID to packet.
-			fields.destuid = true;//Add DESTUID to packet.
-		    success = formDataToPacket(p, data, &offset, fields);
-        } else {
+			fields.destuid = true; //Add DESTUID to packet.
+			success = formDataToPacket(p, data, &offset, fields);
+		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
-			fields.destuid = true;//Add DESTUID to packet.
-		    success = formDataToPacket(p, data, &offset, fields);
-        }
+			fields.destuid = true; //Add DESTUID to packet.
+			success = formDataToPacket(p, data, &offset, fields);
+		}
 		break;
 
 	case UNFRIEND_REQUEST:
 		printd("UNFRIEND REQUEST OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SRCUID to packet.
-			fields.destuid = true;//Add DESTUID to packet.
-		    success = formDataToPacket(p, data, &offset, fields);
-        } else {
+			fields.destuid = true; //Add DESTUID to packet.
+			success = formDataToPacket(p, data, &offset, fields);
+		} else {
 			fields.srcuid = true; //Add SRCUID to packet.
-			fields.destuid = true;//Add DESTUID to packet.
-            success = formDataToPacket(p, data, &offset, fields);
-        }
+			fields.destuid = true; //Add DESTUID to packet.
+			success = formDataToPacket(p, data, &offset, fields);
+		}
 		break;
 
 	default:
@@ -612,11 +616,8 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 	return offset;
 }
 
-ebool processPacket(Packet *p) {
-	return FALSE; //TODO fix
-}
-
 //TODO For later
 ebool networkUp() {
 	return FALSE; //TODO fix.
 }
+
