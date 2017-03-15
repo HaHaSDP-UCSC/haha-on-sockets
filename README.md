@@ -1,6 +1,6 @@
 # HaHaOnSockets
 
-A Linux based proof of concept for the Home Assistance Button 	project.
+A Linux based proof of concept for the Home Assistance Button project.
 
 ## Directory Structure
 
