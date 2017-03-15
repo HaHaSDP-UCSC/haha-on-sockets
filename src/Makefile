@@ -16,7 +16,7 @@
 # Uncomment below to enable stricter warnings
 # GCC=gcc -g -O0 -Wall -Wextra # -std=gnu99
 SUPPRES = #-Wno-incompatible-pointer-types
-GCC     = gcc -g -O0 -Wall ${SUPPRESS} #-lrt realtime timer
+GCC     = gcc -g -O0 -lrt -Wall ${SUPPRESS} #-lrt realtime timer
 #GCC     = gcc -g -O0 ${SUPPRESS}
 
 EXECBIN	=server main

@@ -35,43 +35,42 @@ void initMain() {
 	init_network(listenPort);
 	lcdInit();
 }
+/**
+ time_t timerid;
 
-time_t timerid;
+ void timer_start(int timervalue) {
+ struct itimerspec timval;
+ timval.it_value.tv_sec = 1; //Wait before sending signal
+ timval.it_value.tv_nsec = 0;
+ timval.it_interval.tv_sec = timervalue; //Timer interval.
+ timval.it_interval.tv_nsec = 0;
 
-void timer_start(int timervalue) {
-	struct itimerspec timval;
-	timval.it_value.tv_sec = 1; //Wait before sending signal
-	timval.it_value.tv_nsec = 0;
-	timval.it_interval.tv_sec = timervalue; //Timer interval.
-	timval.it_interval.tv_nsec = 0;
+ if (timer_create(CLOCK_REALTIME, NULL, &timerid)) {
+ printe("Error creating timer.\n");
+ }
 
-	if (timer_create(CLOCK_REALTIME, NULL, &timerid)) {
-		printe("Error creating timer.\n");
-	}
+ struct itimerspec oldval; //Old value of timer. TODO remove.
+ if (timer_settime(timerid, 0, &timval, &oldval)) {
+ printe("Error setting timer.\n");
+ }
+ }
 
-	struct itimerspec oldval; //Old value of timer. TODO remove.
-	if (timer_settime(timerid, 0, &timval, &oldval)) {
-		printe("Error setting timer.\n");
-	}
-}
+ void stop_timer(void) {
+ struct itimerspec timval;
+ timval.it_value.tv_sec = 0;
+ timval.it_value.tv_nsec = 0;
+ timval.it_interval.tv_sec = 0;
+ timval.it_interval.tv_nsec = 0;
+ struct itimerspec oldval; //Old value of timer. TODO remove.
+ if (!timer_settime(timerid, 0, &timval, &oldval))
+ printd("Timer stopped.\n");
+ else
+ printe("Timer failed to stop.\n");
+ }
 
-void stop_timer(void) {
-	struct itimerspec timval;
-	timval.it_value.tv_sec = 0;
-	timval.it_value.tv_nsec = 0;
-	timval.it_interval.tv_sec = 0;
-	timval.it_interval.tv_nsec = 0;
-	struct itimerspec oldval; //Old value of timer. TODO remove.
-	if (!timer_settime(timerid, 0, &timval, &oldval))
-		printd("Timer stopped.\n");
-	else
-		printe("Timer failed to stop.\n");
-}
-
-void timer_callback(int timsig) {
-	printd("Timer went off.\n");
-}
-
+ void timer_callback(int timsig) {
+ printd("Timer went off.\n");
+ }*/
 
 /**
  * @brief Main of the program
@@ -124,7 +123,6 @@ int main(int argc, char** argv) {
 	printf("phelp.SRCHOMEADDR:\n%s\n", psend.SRCHOMEADDR);
 	printf("phelp.ttl: %d\n", psend.ttl);
 
-
 	//Create a HELP packet to send.
 	Packet phelp;
 	phelp.opcode = HELP_REQUEST;
@@ -163,63 +161,96 @@ int main(int argc, char** argv) {
 		while (true) {
 			char input = getchar();
 			int move = -1;
-			switch(input) {
-                case 'w':
-                    move = menuMove(menu, MENU_UP);
-                    break;
-                case 'a':
-                    move = menuMove(menu, MENU_LEFT);
-                    break;
-                case 's':
-                    move = menuMove(menu, MENU_DOWN);
-                    break;
-                case 'd':
-                    move = menuMove(menu, MENU_RIGHT);
-                    break;
-                case 'h':
-                    printv("HELP BUTTON PRESSED\n");
-            		sendPacket(&phelp, &dest);
-                    break;
-                case 't':
-                    menuItemPrintTree(menu->root);
-                    break;
-                case 'q':
-                    // YES GOTOs
-                    goto done;
-                    break;
-                case '\n':
-                    break;
-            }
-            if(move != -1) {
-                menuSetLcd(menu);
-                lcdUpdate();
-            }
+			switch (input) {
+			case 'w':
+				move = menuMove(menu, MENU_UP);
+				break;
+			case 'a':
+				move = menuMove(menu, MENU_LEFT);
+				break;
+			case 's':
+				move = menuMove(menu, MENU_DOWN);
+				break;
+			case 'd':
+				move = menuMove(menu, MENU_RIGHT);
+				break;
+			case 'h':
+				printv("HELP BUTTON PRESSED\n");
+				sendPacket(&phelp, &dest);
+				break;
+			case 't':
+				menuItemPrintTree(menu->root);
+				break;
+			case 'q':
+				// YES GOTOs
+				goto done;
+				break;
+			case '\n':
+				break;
+			}
+			if (move != -1) {
+				menuSetLcd(menu);
+				lcdUpdate();
+			}
 		}
 	} else {
 		/**
-		//Packets
-		int count = 0;
-		sendPacket(&psend, &dest);
+		 //Packets
+		 int count = 0;
+		 sendPacket(&psend, &dest);
+		 Packet prec; //Receive Packet.
+		 Base src; //Receive Base Source Packet. //TODO implement
+
+		 for (;;) {
+		 //Call recvPacket to poll the receive buffer.
+		 if (recvPacket(&prec, &src) == TRUE) {
+		 printf("Count: %d\n", count++);
+		 sendPacket(&psend, &dest);
+		 sleep(4);
+		 }
+		 }
+		 */
+		time_t begin, end;
+		begin = time(NULL);
+		int friendsLeft = 0;
+		int numFriends = 4;
+		int timeinterval = 5; //Seconds before calling next person.
+
 		Packet prec; //Receive Packet.
 		Base src; //Receive Base Source Packet. //TODO implement
-
-		for (;;) {
-			//Call recvPacket to poll the receive buffer.
+		while (friendsLeft < numFriends) {
 			if (recvPacket(&prec, &src) == TRUE) {
-				printf("Count: %d\n", count++);
-				sendPacket(&psend, &dest);
-				sleep(4);
+				printf("Received Packet.\n");
+			}
+			end = time(NULL);
+			if (difftime(end, begin) >= timeinterval) {
+				printd("Time: %.1f\n", difftime(end, begin));
+				begin = time(NULL);
+				//Start going down a list of friends.
+				printd("Current Friend %d @ %s didn't answer.\n", friendsLeft, dest.UID);
+				//TODO load in next friend.
+				sendPacket(&phelp, &dest);
+				friendsLeft++;
 			}
 		}
-		*/
-		int timervalue;
-		(void) signal(SIGALRM, timer_callback);
-		timer_start(timervalue);
-		while (1) {
 
+		if (friendsLeft >= numFriends) {
+			//Out of friends
+			printe("No friends left to save you.\n");
 		}
-	}
+		while (1) {
+			//Burn time.
+		}
 
+		/**
+		 int timervalue;
+		 (void) signal(SIGALRM, timer_callback);
+		 timer_start(timervalue);
+		 while (1) {
+
+		 }
+		 */
+	}
 	done: lcdDestroy();
 	menuDestroy(menu);
 
