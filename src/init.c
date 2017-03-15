@@ -65,7 +65,7 @@ void writeBase(Base* base) {
             fprintf(file, "%s: %s\n", "homeAddr", base->homeAddr);
             fprintf(file, "%s: ", "friends");
             int i, friend;
-            for(i = 0;i < 128; i++)
+            for(i = 0; i < 128; i++)
                 if((friend = base->friends[i]) > 0)
                     fprintf(file, "%d ", friend);
             fprintf(file, "\n");
@@ -106,17 +106,29 @@ Menu* initMenus(void) {
     menuItemInit(root, "Activity (XXX)");
     menuItemInit(root, "Network (XXX)");
     menuItemInit(root, "Button (XXX)");
-    MenuItem* eventButton = menuItemInit(root, "__BUTTON__");
+    MenuItem* simulate = menuItemInit(root, "Simulate req");
+    simulate->onClick = jumpToEvent;
+    eventButton = menuItemInit(root, "__BUTTON__");
     eventButton->active = false;
-    menuItemInit(eventButton, "Help request");
-    menuItemInit(eventButton, "INSERT NAME");
+    MenuItem* eventAccept = menuItemInit(eventButton, "__YES__");
+    eventAccept->onView = eventButtonView;
+    eventAccept->onClick = eventButtonAccept;
+    MenuItem* eventDeny = menuItemInit(eventButton, "__NO__");
+    eventDeny->onView = eventButtonView;
+    eventDeny->onClick = eventButtonDeny;
+
     menu->current = menu->root->child;
     return(menu);
 }
 
 void* jumpToRoot(Menu* menu) {
     menu->current = menu->root->child;
-    return NULL;
+    return(NULL);
+}
+
+void* jumpToEvent(Menu* menu) {
+    menu->current = eventButton;
+    return(NULL);
 }
 
 void* listFriends(Menu* menu) {
@@ -131,4 +143,31 @@ void* listFriends(Menu* menu) {
             menuItemInit(this, title);
         }
     menuItemOnClickDefault(menu);
+    return(NULL);
+}
+
+void* eventButtonView(Menu* menu) {
+    char* name = "John Smith"; // TODO put requester's name
+    lcdSetLine(0, "HELP REQUEST");
+    lcdSetLine(1, name);
+    lcdSetLine(2, "Help Them");
+    lcdSetLine(3, "Dismiss");
+    int this = 3, other = 2;
+    if(menu->current->next)
+        this = 2, other = 3;
+    lcdSetChar(this, LCD_COLS - 1, ">");
+    lcdSetChar(other, LCD_COLS - 1, "-");
+    return(NULL);
+}
+
+void* eventButtonAccept(Menu* menu) {
+    // TODO code to accept help request
+    jumpToRoot(menu);
+    return(NULL);
+}
+
+void* eventButtonDeny(Menu* menu) {
+    // TODO code to deny help request
+    jumpToRoot(menu);
+    return(NULL);
 }

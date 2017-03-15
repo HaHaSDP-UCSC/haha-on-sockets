@@ -38,18 +38,25 @@ int main(int argc, char** argv) {
 
     int error = FALSE; //correct this later
     if (argc != 3) {
-        printe("usage: <listenport> <destinationport>\n");
+        printe(
+                "usage: %s PORT FILE\n"
+                "\tPORT\tListening port\n"
+                "\tFILE\tStorage file\n",
+                argv[0]
+                );
         exit(0);
         //printex("usage: <listenport> <destinationport>\n");
     }
 
     // Get command line arguments
     listenPort = argv[1];
-    destinationPort = argv[2];
+    char* inputFile = argv[2];
+    destinationPort = 8000; // DO NOT USE
+    // Destination should be based on Base.friends[]
 
     // Initialize
     initMain();
-    initBase(&self, "test.base");
+    initBase(&self, inputFile);
 
     Base dest;
     dest.addr = "127.0.0.1"; //Network Address.
