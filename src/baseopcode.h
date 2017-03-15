@@ -1,8 +1,12 @@
-/*
- * baseopcode.h
+/**
+ * @file baseopcode.h
+ * @brief Base communication opcodes.
+ * @author Kevin Lee
+ * @version
+ * @date 2017-03-14
  *
- *  Created on: Mar 8, 2017
- *      Author: kevin
+ * These functions will call the functions in network.h
+ * The network.h file is the actual implementation of network comm.
  */
 
 #ifndef SRC_BASEOPCODE_H_

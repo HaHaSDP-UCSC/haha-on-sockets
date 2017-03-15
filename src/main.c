@@ -19,6 +19,10 @@
 #include "storage.h"
 #include "storagedevice.h"
 
+#include <time.h>
+#include <sys/time.h>
+#include <signal.h>
+
 // Global variables
 Menu *menu;
 char *listenPort;
@@ -32,6 +36,43 @@ void initMain() {
 	init_network(listenPort);
 	lcdInit();
 }
+
+time_t timerid;
+
+void timer_start(int timervalue) {
+	struct itimerspec timval;
+	timval.it_value.tv_sec = 1; //Wait before sending signal
+	timval.it_value.tv_nsec = 0;
+	timval.it_interval.tv_sec = timervalue; //Timer interval.
+	timval.it_interval.tv_nsec = 0;
+
+	if (timer_create(CLOCK_REALTIME, NULL, timerid)) {
+		printe("Error creating timer.\n");
+	}
+
+	struct itimerspec oldval; //Old value of timer. TODO remove.
+	if (timer_settime(timerid, 0, &timval, &oldval)) {
+		printe("Error setting timer.\n");
+	}
+}
+
+void stop_timer(void) {
+	struct itimerspec timval;
+	timval.it_value.tv_sec = 0;
+	timval.it_value.tv_nsec = 0;
+	timval.it_interval.tv_sec = 0;
+	timval.it_interval.tv_nsec = 0;
+	struct itimerspec oldval; //Old value of timer. TODO remove.
+	if (!timer_settime(timerid, 0, &timval, &oldval))
+		printd("Timer stopped.\n");
+	else
+		printe("Timer failed to stop.\n");
+}
+
+void timer_callback(int timsig) {
+	printd("Timer went off.\n");
+}
+
 
 /**
  * @brief Main of the program
@@ -67,15 +108,23 @@ int main(int argc, char** argv) {
 	//SET_ACK(psend.flags);
 	psend.SRCUID = (uint16_t) atoi(listenPort); //This machines UID.
 	psend.DESTUID = (uint16_t) atoi(destinationPort); //Destination machines UID.
-	psend.ORIGINUID = 0; //Original Machines UID.
+	psend.ORIGINUID = 65535; //Original Machines UID.
 	strcpy(psend.SRCFIRSTNAME, "HaHa"); //First Name
 	strcpy(psend.SRCLASTNAME, "Button"); //Last Name
+	strcpy(psend.SRCPHONE, "123-456-7890"); //TODO Should actually be unformatted.
+	strcpy(psend.SRCHOMEADDR, "4657 Where the Sidewalk Ends St. Apartment 23\n"
+			"Santa Cruz, CA 12345-9876");
+	psend.ttl = 0;
 
 	printf("psend.SRCUID:       %d\n", psend.SRCUID);
 	printf("psend.DESTUID:      %d\n", psend.DESTUID);
 	printf("psend.ORIGINUID:    %d\n", psend.ORIGINUID);
 	printf("psend.SRCFIRSTNAME: %s\n", psend.SRCFIRSTNAME);
 	printf("psend.SRCLASTNAME:  %s\n", psend.SRCLASTNAME);
+	printf("phelp.SRCPHONE:     %s\n", psend.SRCPHONE);
+	printf("phelp.SRCHOMEADDR:\n%s\n", psend.SRCHOMEADDR);
+	printf("phelp.ttl: %d\n", psend.ttl);
+
 
 	//Create a HELP packet to send.
 	Packet phelp;
@@ -84,7 +133,7 @@ int main(int argc, char** argv) {
 	SET_ACK(phelp.flags);
 	phelp.SRCUID = (uint16_t) atoi(listenPort);
 	phelp.DESTUID = (uint16_t) atoi(destinationPort);
-	phelp.ORIGINUID = 0;
+	phelp.ORIGINUID = 65535;
 	strcpy(phelp.SRCFIRSTNAME, "Foo");
 	strcpy(phelp.SRCLASTNAME, "Bar");
 	strcpy(phelp.SRCPHONE, "123-456-7890"); //TODO Should actually be unformatted.
@@ -148,6 +197,7 @@ int main(int argc, char** argv) {
             }
 		}
 	} else {
+		/**
 		//Packets
 		int count = 0;
 		sendPacket(&psend, &dest);
@@ -158,10 +208,16 @@ int main(int argc, char** argv) {
 			//Call recvPacket to poll the receive buffer.
 			if (recvPacket(&prec, &src) == TRUE) {
 				printf("Count: %d\n", count++);
-				sleep(2);
 				sendPacket(&psend, &dest);
-				sleep(2);
+				sleep(4);
 			}
+		}
+		*/
+		int timervalue = 5;
+		(void) signal(SIGALRM, timer_callback);
+		timer_start(timervalue);
+		while (1) {
+
 		}
 	}
 

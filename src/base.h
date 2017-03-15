@@ -1,8 +1,8 @@
 /**
  * @file base.h
  * @brief Definition of the base
- * @author
- * @version
+ * @author Kevin Lee
+ * @versions
  * @date 2017-03-07
  */
 
