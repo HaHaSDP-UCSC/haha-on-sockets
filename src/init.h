@@ -11,6 +11,10 @@
 
 #include "halib.h"
 #include "menu.h"
+#include "base.h"
+
+void initBase(Base* base, char* fileName);
+void writeBase(Base* base);
 
 Menu* initMenus(void);
 void* jumpToRoot(Menu* menu);
