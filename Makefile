@@ -35,7 +35,8 @@ README.md:
 	@ echo >>$@
 	@ echo "## Directory Structure" >>$@
 	@ echo "" >>$@
-	@ for FilePath in $$(find | sort -snf | grep -v '/\.' | tail -n +2); do \
+	@ for FilePath in \
+		$$(find | sort -snf | grep -v '/\.' | grep -v 'docs/.*/' | tail -n +2); do \
 		File=$$(basename $$FilePath); \
 		FileDir=$$(dirname $$FilePath); \
 		FilePre=$$(echo $$FileDir/ | sed 's#[^/]*/# |#g;s#| #   #g;s# |#- #g') && \
