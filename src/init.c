@@ -11,6 +11,8 @@
 void initBase(Base* base, char* fileName) {
     printv("Reading base data.\n");
     bzero(base, sizeof(base));
+    int i;
+    for(i = 0; i < 128; i++) base->friends[i] = 0;
     if(base) {
         strcpy(base->fileName, fileName);
         FILE* file = fopen(base->fileName, "r");
@@ -26,11 +28,18 @@ void initBase(Base* base, char* fileName) {
                     strcpy(base->phone, value);
                 } else if(streq(key, "homeAddr")) {
                     strcpy(base->homeAddr, value);
+                } else if(streq(key, "friends")) {
+                    char* friend;
+                    int i = 0;
+                    while(friend = strtok(value, " ")) {
+                        base->friends[i++] = atoi(friend);
+                    }
                 } else {
                     printe("Invalid key found in storage file %s: %s\n",
                             base->fileName, key);
                 }
             }
+            fclose(file);
         } else {
             printv("No storage file found: %s\n", base->fileName);
             strcpy(base->firstName, "John");
@@ -52,6 +61,12 @@ void writeBase(Base* base) {
             fprintf(file, "%s: %s\n", "lastName", base->lastName);
             fprintf(file, "%s: %s\n", "phone", base->phone);
             fprintf(file, "%s: %s\n", "homeAddr", base->homeAddr);
+            fprintf(file, "%s: ", "friends");
+            int i, friend;
+            for(i = 0;i < 128; i++)
+                if((friend = base->friends[i]) > 0)
+                    fprintf(file, "%d ", friend);
+            fprintf(file, "\n");
             fclose(file);
         } else {
             printe("Error writing to storage file: %s\n", base->fileName);
@@ -63,7 +78,8 @@ Menu* initMenus(void) {
     Menu* menu = menuInit();
     MenuItem* root = menu->root;
     MenuItem* mm = menuItemInit(root, "Main Menu");
-    menuItemInit(mm, "Contact list");
+    MenuItem* contacts = menuItemInit(mm, "Contact list");
+    contacts->onClick = listFriends;
     MenuItem* user = menuItemInit(mm, "User info");
     menuItemInit(user, "User ID");
     menuItemInit(user, "User name");
@@ -99,4 +115,15 @@ Menu* initMenus(void) {
 void* jumpToRoot(Menu* menu) {
     menu->current = menu->root->child;
     return NULL;
+}
+
+void* listFriends(Menu* menu) {
+    char title[16];
+    MenuItem* this = menu->current;
+    menuItemDestroy(this->child);
+    int i;
+    for(i = 0; self.friends[i] > 0; i++) {
+        sprintf(title, "%d: Port %d", i, self.friends[i]);
+        menuItemInit(this, title);
+    }
 }

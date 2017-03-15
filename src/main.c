@@ -19,12 +19,6 @@
 #include "storage.h"
 #include "storagedevice.h"
 
-// Global variables
-Menu *menu;
-char *listenPort;
-char *destinationPort;
-Base self;
-
 /**
  * @brief Setup
  */
