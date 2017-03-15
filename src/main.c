@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
                 "\tPORT\tListening port\n"
                 "\tFILE\tStorage file\n",
                 argv[0]
-                );
+              );
         exit(0);
         //printex("usage: <listenport> <destinationport>\n");
     }
@@ -51,12 +51,14 @@ int main(int argc, char** argv) {
     // Get command line arguments
     listenPort = argv[1];
     char* inputFile = argv[2];
-    destinationPort = 8000; // DO NOT USE
+    destinationPort = "8000"; // DO NOT USE
     // Destination should be based on Base.friends[]
 
     // Initialize
     initMain();
     initBase(&self, inputFile);
+
+    menuItemPrintTree(menu->root);
 
     Base dest;
     dest.addr = "127.0.0.1"; //Network Address.
@@ -126,7 +128,6 @@ int main(int argc, char** argv) {
                     break;
             }
             if(move != -1) {
-                menuSetLcd(menu);
                 lcdUpdate();
             }
         }

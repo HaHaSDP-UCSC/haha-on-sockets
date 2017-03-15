@@ -126,8 +126,11 @@ void* jumpToRoot(Menu* menu) {
     return(NULL);
 }
 
+// Call this function (or copy the body of it)
+// to trigger the alert screen
 void* jumpToEvent(Menu* menu) {
-    menu->current = eventButton;
+    menu->current = eventButton->child;
+    menu->current->onView(menu);
     return(NULL);
 }
 
@@ -148,6 +151,7 @@ void* listFriends(Menu* menu) {
 
 void* eventButtonView(Menu* menu) {
     char* name = "John Smith"; // TODO put requester's name
+    lcdClear();
     lcdSetLine(0, "HELP REQUEST");
     lcdSetLine(1, name);
     lcdSetLine(2, "Help Them");
@@ -155,19 +159,21 @@ void* eventButtonView(Menu* menu) {
     int this = 3, other = 2;
     if(menu->current->next)
         this = 2, other = 3;
-    lcdSetChar(this, LCD_COLS - 1, ">");
-    lcdSetChar(other, LCD_COLS - 1, "-");
+    lcdSetChar(this, LCD_COLS - 1, '>');
+    lcdSetChar(other, LCD_COLS - 1, '-');
     return(NULL);
 }
 
 void* eventButtonAccept(Menu* menu) {
     // TODO code to accept help request
+    printd("Help request accepted\n");
     jumpToRoot(menu);
     return(NULL);
 }
 
 void* eventButtonDeny(Menu* menu) {
     // TODO code to deny help request
+    printd("Help request denied :(\n");
     jumpToRoot(menu);
     return(NULL);
 }
