@@ -9,35 +9,37 @@
 #include "init.h"
 
 void initBase(Base* base, char* fileName) {
-    printv("Reading base data.\n");
-    bzero(base, sizeof(base));
     int i;
-    for(i = 0; i < 128; i++) base->friends[i] = 0;
     if(base) {
         strcpy(base->fileName, fileName);
+        printv("Reading base data from file: %s\n", base->fileName);
         FILE* file = fopen(base->fileName, "r");
+        char line[128];
         char key[128];
         char value[128];
+        for(i = 0; i < 128; i++) base->friends[i] = 0;
         if(file) {
-            while(fscanf(file, "%s: %s\n", key, value) == 2) {
-                if(streq(key, "firstName")) {
-                    strcpy(base->firstName, value);
-                } else if(streq(key, "lastName")) {
-                    strcpy(base->lastName, value);
-                } else if(streq(key, "phone")) {
-                    strcpy(base->phone, value);
-                } else if(streq(key, "homeAddr")) {
-                    strcpy(base->homeAddr, value);
-                } else if(streq(key, "friends")) {
-                    char* friend;
-                    int i = 0;
-                    while(friend = strtok(value, " ")) {
-                        base->friends[i++] = atoi(friend);
-                    }
-                } else {
-                    printe("Invalid key found in storage file %s: %s\n",
+            while(fgets(line, 128, file)) {
+                printd("line: '%s'\n", line);
+                if(sscanf(line, "%[^:]%*c %[^\n]%*c", key, value) == 2) {
+                    if(streq(key, "firstName")) {
+                        strcpy(base->firstName, value);
+                    } else if(streq(key, "lastName")) {
+                        strcpy(base->lastName, value);
+                    } else if(streq(key, "phone")) {
+                        strcpy(base->phone, value);
+                    } else if(streq(key, "homeAddr")) {
+                        strcpy(base->homeAddr, value);
+                    } else if(streq(key, "friends")) {
+                        char* friend = strtok(value, " ");
+                        int i = 0;
+                        while(friend) {
+                            base->friends[i++] = atoi(friend);
+                            friend = strtok(NULL, " ");
+                        }
+                    } else printe("Invalid key found in storage file %s: %s\n",
                             base->fileName, key);
-                }
+                } else(printe("Bad line found in storage file: %s\n", line));
             }
             fclose(file);
         } else {
@@ -120,10 +122,13 @@ void* jumpToRoot(Menu* menu) {
 void* listFriends(Menu* menu) {
     char title[16];
     MenuItem* this = menu->current;
-    menuItemDestroy(this->child);
-    int i;
-    for(i = 0; self.friends[i] > 0; i++) {
-        sprintf(title, "%d: Port %d", i, self.friends[i]);
-        menuItemInit(this, title);
-    }
+    while(this->child)
+        menuItemDestroy(this->child);
+    int i, j = 0;
+    for(i = 0; i < 128; i++)
+        if(self.friends[i] != 0) {
+            sprintf(title, "%d: Port %d", j++, self.friends[i]);
+            menuItemInit(this, title);
+        }
+    menuItemOnClickDefault(menu);
 }
