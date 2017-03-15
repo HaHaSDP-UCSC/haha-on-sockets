@@ -322,7 +322,7 @@ int convertFromPacketToData(Packet *p, unsigned char *data) {
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SCRUID to packet.
 			fields.originuid = true; //Add ORIGINUID to packet.
-			fields.ttl =  packet;//Add TTL to packet.
+			fields.ttl = true;//Add TTL to packet.
             success = formPacketToData(p, data, &offset, fields);
 		} else {
 			fields.srcuid = true; //Addd SRCUID to packet.
@@ -466,7 +466,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 		printd("HELP REQ OPCODE.\n");
 		if (!IS_ACK(flags)) {
 			fields.srcuid = true; //Add SRCUID to packet.
-			fields.scrhomeaddr = true; //Add SRCHOMEADDR to packet.
+			fields.srchomeaddr = true; //Add SRCHOMEADDR to packet.
             fields.srcphone = true; //Add SRCPHONE to packet
             success = formDataToPacket(p, data, &offset, fields);
 		} else {
@@ -547,7 +547,7 @@ int convertFromDataToPacket(Packet *p, unsigned char *data, int datalen) {
 			fields.srcuid = true; //Add SRCUID to packet.
 			fields.originuid = true; //Add ORIGINUID to packet
 			fields.ttl = true; //Add TTL to packet.
-		    fields.scrname = true; //Add SRCNAME to packet.
+		    fields.srcname = true; //Add SRCNAME to packet.
 	    	success = formDataToPacket(p, data, &offset, fields);
         } else {
 		    fields.srcuid = true; //Add SRCUID to packet.
