@@ -11,8 +11,19 @@
 
 #include "halib.h"
 #include "menu.h"
+#include "base.h"
+
+// Global variables
+Menu *menu;
+char *listenPort;
+char *destinationPort;
+Base self;
+
+void initBase(Base* base, char* fileName);
+void writeBase(Base* base);
 
 Menu* initMenus(void);
 void* jumpToRoot(Menu* menu);
+void* listFriends(Menu* menu);
 
 #endif // _HA_INIT_
