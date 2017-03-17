@@ -126,13 +126,7 @@ void* jumpToRoot(Menu* menu) {
     return(NULL);
 }
 
-// Call this function (or copy the body of it)
-// to trigger the alert screen
-void* jumpToEvent(Menu* menu) {
-    menu->current = eventButton->child;
-    menu->current->onView(menu);
-    return(NULL);
-}
+// User date code
 
 void* listFriends(Menu* menu) {
     char title[16];
@@ -143,11 +137,49 @@ void* listFriends(Menu* menu) {
     for(i = 0; i < 128; i++)
         if(self.friends[i] != 0) {
             sprintf(title, "%d: Port %d", j++, self.friends[i]);
-            menuItemInit(this, title);
+            MenuItem* friend = menuItemInit(this, title);
+            MenuItem* friendDelete = menuItemInit(friend, "Delete");
+            friendDelete->onClick = deleteFriend;
+            MenuItem* friendEdit = menuItemInit(friend, "Edit");
+            friendEdit->onClick = editFriend;
         }
     MenuItem* addFriend = menuItemInit(this, "Add Friend");
     addFriend->onClick = addFriendInput;
     menuItemOnClickDefault(menu);
+    return(NULL);
+}
+
+void* editFriend(Menu* menu) {
+    int idx = -1, friend = -1;
+    if(sscanf(menu->current->parent->value, "%d: ", &idx) != 1) {
+        printe("editFriend could not parse index");
+        return(NULL);
+    }
+    friend = self.friends[idx];
+    printf("Edit friend %d (currently %d): ", idx, friend);
+    if(scanf("%d", &friend) == 1)
+        self.friends[idx] = friend;
+    jumpToRoot(menu);
+}
+
+void* deleteFriend(Menu* menu) {
+    int idx = -1;
+    if(sscanf(menu->current->parent->value, "%d: ", &idx) != 1) {
+        printe("editFriend could not parse index");
+        return(NULL);
+    }
+    for(;idx < 127; idx++)
+        self.friends[idx] = self.friends[idx + 1];
+    jumpToRoot(menu);
+}
+
+// Bluetooth button code
+
+// Call this function (or copy the body of it)
+// to trigger the alert screen
+void* jumpToEvent(Menu* menu) {
+    menu->current = eventButton->child;
+    menu->current->onView(menu);
     return(NULL);
 }
 
