@@ -22,7 +22,7 @@ typedef struct{
 	char phone[16];
 	char homeAddr[75];
     // Friends array, TODO definitely find a different place for this
-    int friends[128];
+    uint16_t friends[128];
     //etc
 } Base;
 

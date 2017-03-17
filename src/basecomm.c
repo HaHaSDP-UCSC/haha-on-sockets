@@ -42,7 +42,7 @@ ebool processPacket(Packet *p) {
  * Take the packet data and send to network device.
  * Returns if successful or not.
  */
-ebool sendPacket(Packet *p, Base *dest) {
+ebool sendPacket(Packet *p, uid dest) {
 	unsigned char data[MAXBUFFER];
 	int datalen = 0;
 	if ((datalen = convertFromPacketToData(p, data)) <= 0) {
@@ -50,7 +50,7 @@ ebool sendPacket(Packet *p, Base *dest) {
 		return FALSE;
 	}
 
-	if (_send_packet((char *) data, datalen, dest->addr, dest->UID) <= 0) {
+	if (_send_packet((char *) data, datalen, "127.0.0.1", dest) <= 0) { //TODO fix hardcoded IP
 		printe("Error sending packet.\n");
 		return FALSE;
 	}

@@ -54,7 +54,7 @@ ebool _init_network(char *listenport) {
 /**
  * Use this method to connect to a device.
  */
-ebool connectTo(char *server, char *port) {
+ebool connectTo(char *server, uid port) {
     //if (connfd) {
     //  return FALSE; //This means already connected to a socket.
     //}
@@ -67,7 +67,7 @@ ebool connectTo(char *server, char *port) {
 
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(atoi(port)); //Port
+    servaddr.sin_port = htons(port); //Port
 
     if (inet_pton(AF_INET, server, &servaddr.sin_addr) <= 0) {
         printe("inet pton error for, %s\n", server);
@@ -96,7 +96,7 @@ ebool acceptFrom() {
  *  Send the data to the address specified
  *  Return <= 0 for failure, otherwise good.
  */
-ebool _send_packet(char *buffer, int size, char *dstaddr, char *dstport) {
+ebool _send_packet(char *buffer, int size, char *dstaddr, uid dstport) {
 	printd("Starting _send_packet.\n");
     if (connectTo(dstaddr, dstport) == FALSE) {
         printe("Connect error. TODO WHY\n"); //TODO may error because non-block or timeout

@@ -28,7 +28,7 @@ ebool init_network(char *listenport); //unknown needed params
 /* sendToBase()
  *  Get the packet ready and send as a char* to the devices send
  */
-ebool sendPacket(Packet *p, Base *dest);
+ebool sendPacket(Packet *p, uid dest);
 ebool recvPacket(Packet *p, Base *src);
 ebool processPacket(Packet *p);
 //Packet* procRecv(char* data); //received from networkdevice.c
