@@ -87,6 +87,7 @@ bool formPacketToData(Packet *p, unsigned char *data, int *oldoffset,
 		data[offset++] = p->SRCUID >> 8; //Add UPPER SRCUID to packet.
 		data[offset++] = p->SRCUID; //Add LOWER SRCUID to packet.
 		printd("Expected SRCUID: 0x%x\n", p->SRCUID);
+		printd("Expected SRCUID: u%u\n", p->SRCUID);
 		printd("SRCUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
 
@@ -94,6 +95,7 @@ bool formPacketToData(Packet *p, unsigned char *data, int *oldoffset,
 		data[offset++] = p->DESTUID >> 8; //Add UPPER DESTUID to packet.
 		data[offset++] = p->DESTUID; //Add LOWER DESTUID to packet.
 		printd("Expected DESTUID: 0x%x\n", p->DESTUID);
+		printd("Expected DESTUID: u%u\n", p->DESTUID);
 		printd("DESTUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
 
@@ -101,6 +103,7 @@ bool formPacketToData(Packet *p, unsigned char *data, int *oldoffset,
 		data[offset++] = p->ORIGINUID >> 8; //Add UPPER ORIGINUID to packet.
 		data[offset++] = p->ORIGINUID; //Add LOWER ORIGINUID to packet.
 		printd("Expected ORIGINUID: 0x%x\n", p->ORIGINUID);
+		printd("Expected ORIGINUID: 0u%u\n", p->ORIGINUID);
 		printd("ORIGINUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
 
@@ -201,7 +204,7 @@ bool formDataToPacket(Packet *p, unsigned char *data, int *oldoffset,
 		if ((n = strlen((char *) &data[offset])) < MAXHOMEADDR - 1) {
 			strcpy(p->SRCHOMEADDR, (char *) &data[offset]); //Add SRCHOMEADDR to packet
 			offset += n + 1; //String length + null terminator.
-			printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
+			printd("SRCHOMEADDR: %s\nstrlen: %d\n", p->SRCHOMEADDR, n);
 		} else {
 			printe("Malformed Home Address String.\n");
 			return false;
@@ -213,7 +216,7 @@ bool formDataToPacket(Packet *p, unsigned char *data, int *oldoffset,
 		if ((n = strlen((char *) &data[offset])) < MAXPHONE - 1) {
 			strcpy(p->SRCPHONE, (char *) &data[offset]); //Add SRCPHONE to packet
 			offset += n + 1; //String length + null terminator.
-			printd("SRCLNAME: %s\nstrlen: %d\n", p->SRCPHONE, n);
+			printd("SRCPHONE: %s\nstrlen: %d\n", p->SRCPHONE, n);
 		} else {
 			printe("Malformed Phone Number String.\n");
 			return false;

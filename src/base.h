@@ -9,11 +9,10 @@
 #ifndef _HA_BASE_
 #define _HA_BASE_
 
-
 typedef struct{
     //Base attributes
     char *addr;
-    char *UID; //TODO Fix this.
+    uint16_t UID; //TODO Fix this.
     // Unix storage file, TODO remove when porting to mC
     char *fileName[128];
     // User data, TODO find a better place for this
@@ -22,7 +21,7 @@ typedef struct{
 	char phone[16];
 	char homeAddr[75];
     // Friends array, TODO definitely find a different place for this
-    uint16_t friends[128];
+    uint16_t friends[128]; //TODO fix all of the variables.
     //etc
 } Base;
 
