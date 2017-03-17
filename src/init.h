@@ -29,6 +29,7 @@ void* jumpToEvent(Menu* menu);
 void* listFriends(Menu* menu);
 void* editFriend(Menu* menu);
 void* deleteFriend(Menu* menu);
+void* editUserInfo(Menu* menu);
 void* viewUserInfo(Menu* menu);
 void* eventButtonView(Menu* menu);
 void* eventButtonAccept(Menu* menu);

@@ -88,10 +88,13 @@ Menu* initMenus(void) {
     temp->onView = viewUserInfo;
     temp = menuItemInit(user, "__USERNAME__");
     temp->onView = viewUserInfo;
+    temp->onClick = editUserInfo;
     temp = menuItemInit(user, "__USERADDR__");
     temp->onView = viewUserInfo;
+    temp->onClick = editUserInfo;
     temp = menuItemInit(user, "__USERCALL__");
     temp->onView = viewUserInfo;
+    temp->onClick = editUserInfo;
     MenuItem* set = menuItemInit(mm, "Device settings");
     menuItemInit(set, "Office mode");
     MenuItem* setAlert = menuItemInit(set, "Alert settings");
@@ -179,12 +182,13 @@ void* deleteFriend(Menu* menu) {
 }
 
 void* viewUserInfo(Menu* menu) {
-    char* field;
     char buffer[LCD_COLS];
-    lcdClear();
+    lcdClear(); 
+    lcdSetLine(3, "v More    Edit >");
     if(streq(menu->current->value, "__USERPORT__")) {
         lcdSetLine(0, "User Port");
         lcdSetLine(1, listenPort);
+        lcdSetLine(3, "v More");
     } else if(streq(menu->current->value, "__USERNAME__")) {
         lcdSetLine(0, "User Name");
         lcdSetLine(1, self.firstName);
@@ -207,13 +211,35 @@ void* viewUserInfo(Menu* menu) {
     } else {
         printe("viewUserInfo called from invalid menu item");
     }
-    lcdSetChar(3, LCD_COLS - 1, "v");
     lcdUpdate();
+}
+
+void* editUserInfo(Menu* menu) {
+    char buffer[1024];
+    bzero(&buffer, 1024);
+    if(streq(menu->current->value, "__USERNAME__")) {
+        printf("Enter in your first name (currently %s): ", self.firstName);
+        scanf("%s", buffer);
+        if(strlen(buffer) != 0) strncpy(self.firstName, buffer, 17);
+        printf("Enter in your last name (currently %s): ", self.lastName);
+        scanf("%s", buffer);
+        if(strlen(buffer) != 0) strncpy(self.lastName, buffer, 17);
+    } else if(streq(menu->current->value, "__USERADDR__")) {
+        printf("Enter in your address (currently %s): ", self.homeAddr);
+        scanf("%s", buffer);
+        if(strlen(buffer) != 0) strncpy(self.homeAddr, buffer, 75);
+    } else if(streq(menu->current->value, "__USERCALL__")) {
+        printf("Enter in your address (currently %s): ", self.phone);
+        scanf("%s", buffer);
+        if(strlen(buffer) != 0) strncpy(self.phone, buffer, 16);
+    } else {
+        printe("viewUserInfo called from invalid menu item");
+    }
 }
 
 // Bluetooth button code
 
-// Call this function (or copy the body of it)
+// @TODO Jamie Call this function (or copy the body of it)
 // to trigger the alert screen
 void* jumpToEvent(Menu* menu) {
     menu->current = eventButton->child;
@@ -222,7 +248,12 @@ void* jumpToEvent(Menu* menu) {
 }
 
 void* eventButtonView(Menu* menu) {
-    char* name = "John Smith"; // TODO put requester's name
+    char* name = "John Smith"; // @TODO Jamie put requester's name
+    // Recommendation: put a char[] in the Menu
+    // struct to hold the name. Before running the
+    // code in jumpToEvent() to display the alert,
+    // strcpy() the name of the requester into that
+    // char[]. Then you can set it here.
     lcdClear();
     lcdSetLine(0, "HELP REQUEST");
     lcdSetLine(1, name);
