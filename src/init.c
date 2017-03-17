@@ -120,10 +120,10 @@ Menu* initMenus(void) {
     eventButton->active = false;
     MenuItem* eventAccept = menuItemInit(eventButton, "__YES__");
     eventAccept->onView = eventButtonView;
-    eventAccept->onClick = eventButtonAccept;
+    eventAccept->onClick = eventButtonAnswer;
     MenuItem* eventDeny = menuItemInit(eventButton, "__NO__");
     eventDeny->onView = eventButtonView;
-    eventDeny->onClick = eventButtonDeny;
+    eventDeny->onClick = eventButtonAnswer;
 
     menu->current = menu->root->child;
     return(menu);
@@ -183,7 +183,7 @@ void* deleteFriend(Menu* menu) {
 
 void* viewUserInfo(Menu* menu) {
     char buffer[LCD_COLS];
-    lcdClear(); 
+    lcdClear();
     lcdSetLine(3, "v More    Edit >");
     if(streq(menu->current->value, "__USERPORT__")) {
         lcdSetLine(0, "User Port");
@@ -268,16 +268,16 @@ void* eventButtonView(Menu* menu) {
     return(NULL);
 }
 
-void* eventButtonAccept(Menu* menu) {
-    // TODO code to accept help request
-    printd("Help request accepted\n");
-    jumpToRoot(menu);
-    return(NULL);
-}
-
-void* eventButtonDeny(Menu* menu) {
-    // TODO code to deny help request
-    printd("Help request denied :(\n");
+void* eventButtonAnswer(Menu* menu) {
+    if(menu->current->next) {
+        // Accept
+        printd("Help request accepted\n");
+        acceptReq = TRUE;
+    } else {
+        // Deny
+        printd("Help request denied :(\n");
+        acceptReq = FALSE;
+    }
     jumpToRoot(menu);
     return(NULL);
 }
