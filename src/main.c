@@ -31,6 +31,7 @@ char *destinationPort;
 Packet psend;
 Packet phelp;
 int inHelpMode = false; //TODO need signal from menu interface.
+// pthread_mutex_t acceptReqMtx;
 ebool acceptReq = ERROR; //TODO user input needs to block.
 int tid = 0;
 
@@ -205,10 +206,6 @@ int main(int argc, char** argv) {
 				break;
 			case '\n':
 				break;
-			}
-			if (move != -1) {
-				menuSetLcd(menu);
-				lcdUpdate();
 			}
 		}
 	} else {

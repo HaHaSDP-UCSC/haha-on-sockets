@@ -77,16 +77,21 @@ void writeBase(Base* base) {
 }
 
 Menu* initMenus(void) {
+    MenuItem* temp;
     Menu* menu = menuInit();
     MenuItem* root = menu->root;
     MenuItem* mm = menuItemInit(root, "Main Menu");
     MenuItem* contacts = menuItemInit(mm, "Contact list");
     contacts->onClick = listFriends;
     MenuItem* user = menuItemInit(mm, "User info");
-    menuItemInit(user, "User ID");
-    menuItemInit(user, "User name");
-    menuItemInit(user, "User address");
-    menuItemInit(user, "User phone");
+    temp = menuItemInit(user, "__USERPORT__");
+    temp->onView = viewUserInfo;
+    temp = menuItemInit(user, "__USERNAME__");
+    temp->onView = viewUserInfo;
+    temp = menuItemInit(user, "__USERADDR__");
+    temp->onView = viewUserInfo;
+    temp = menuItemInit(user, "__USERCALL__");
+    temp->onView = viewUserInfo;
     MenuItem* set = menuItemInit(mm, "Device settings");
     menuItemInit(set, "Office mode");
     MenuItem* setAlert = menuItemInit(set, "Alert settings");
@@ -103,9 +108,9 @@ Menu* initMenus(void) {
     menuItemInit(setNotice, "Update info");
     menuItemInit(set, "Pair button");
     menuItemInit(set, "Disable system");
-    menuItemInit(root, "Activity (XXX)");
-    menuItemInit(root, "Network (XXX)");
-    menuItemInit(root, "Button (XXX)");
+    menuItemInit(root, "Activity (%dh)");
+    menuItemInit(root, "Network (%dh)");
+    menuItemInit(root, "Button (%dh)");
     MenuItem* simulate = menuItemInit(root, "Simulate req");
     simulate->onClick = jumpToEvent;
     eventButton = menuItemInit(root, "__BUTTON__");
@@ -173,6 +178,39 @@ void* deleteFriend(Menu* menu) {
     jumpToRoot(menu);
 }
 
+void* viewUserInfo(Menu* menu) {
+    char* field;
+    char buffer[LCD_COLS];
+    lcdClear();
+    if(streq(menu->current->value, "__USERPORT__")) {
+        lcdSetLine(0, "User Port");
+        lcdSetLine(1, listenPort);
+    } else if(streq(menu->current->value, "__USERNAME__")) {
+        lcdSetLine(0, "User Name");
+        lcdSetLine(1, self.firstName);
+        lcdSetLine(2, self.lastName);
+    } else if(streq(menu->current->value, "__USERADDR__")) {
+        lcdSetLine(0, "User Address");
+        int len = strlen(self.homeAddr);
+        if(len > LCD_COLS) len = LCD_COLS;
+        strncpy(buffer, self.homeAddr, len);
+        lcdSetLine(1, buffer);
+        if((len = strlen(self.homeAddr)) > LCD_COLS) {
+            len -= LCD_COLS;
+            if(len > LCD_COLS) len = LCD_COLS;
+            strncpy(buffer, &self.homeAddr[LCD_COLS], len);
+            lcdSetLine(2, buffer);
+        }
+    } else if(streq(menu->current->value, "__USERCALL__")) {
+        lcdSetLine(0, "User Phone");
+        lcdSetLine(1, self.phone);
+    } else {
+        printe("viewUserInfo called from invalid menu item");
+    }
+    lcdSetChar(3, LCD_COLS - 1, "v");
+    lcdUpdate();
+}
+
 // Bluetooth button code
 
 // Call this function (or copy the body of it)
@@ -195,6 +233,7 @@ void* eventButtonView(Menu* menu) {
         this = 2, other = 3;
     lcdSetChar(this, LCD_COLS - 1, '>');
     lcdSetChar(other, LCD_COLS - 1, '-');
+    lcdUpdate();
     return(NULL);
 }
 

@@ -216,6 +216,7 @@ int menuItemDestroy(MenuItem* this) {
 
 void* menuItemOnViewDefault(Menu* menu) {
     menuSetLcd(menu);
+    lcdUpdate();
     return NULL;
 }
 
