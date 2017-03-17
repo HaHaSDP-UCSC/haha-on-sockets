@@ -141,11 +141,10 @@ int main(int argc, char** argv) {
 	phelp.SRCUID = (uint16_t) atoi(listenPort);
 	phelp.DESTUID = (uint16_t) atoi(destinationPort);
 	phelp.ORIGINUID = 65535;
-	strcpy(phelp.SRCFIRSTNAME, "Foo");
-	strcpy(phelp.SRCLASTNAME, "Bar");
-	strcpy(phelp.SRCPHONE, "123-456-7890"); //TODO Should actually be unformatted.
-	strcpy(phelp.SRCHOMEADDR, "4657 Where the Sidewalk Ends St. Apartment 23\n"
-			"Santa Cruz, CA 12345-9876");
+	strcpy(phelp.SRCFIRSTNAME, self.firstName);
+	strcpy(phelp.SRCLASTNAME, self.lastName);
+	strcpy(phelp.SRCPHONE, self.phone); //TODO Should actually be unformatted.
+	strcpy(phelp.SRCHOMEADDR, self.homeAddr);
 	phelp.ttl = 0;
 
 	printf("\n");

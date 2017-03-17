@@ -54,4 +54,3 @@ A Linux based proof of concept for the Home Assistance Button 	project.
    - **storage.c**
    - **storage.h**
    - **storagedevice.h**
-- **test.base**
