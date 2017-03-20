@@ -260,7 +260,9 @@ void* jumpToEvent(Menu* menu) {
 }
 
 void* eventButtonView(Menu* menu) {
-    char* name = "John Smith"; // @TODO Jamie put requester's name
+    char name[LCD_COLS];
+    bzero(&name, LCD_COLS);
+    sprintf(name, "Port %d", self.dying);
     // Recommendation: put a char[] in the Menu
     // struct to hold the name. Before running the
     // code in jumpToEvent() to display the alert,

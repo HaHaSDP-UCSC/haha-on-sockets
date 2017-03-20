@@ -22,6 +22,7 @@ typedef struct{
 	char homeAddr[75];
     // Friends array, TODO definitely find a different place for this
     uint16_t friends[128]; //TODO fix all of the variables.
+    int dying;
     //etc
 } Base;
 

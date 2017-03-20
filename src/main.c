@@ -313,6 +313,8 @@ void listenthread() {
                         myFriend = self.friends[i];
                         if (prec.SRCUID == myFriend) {
                             printv("My friend is in need @ %d\n", prec.SRCUID);
+                            jumpToEvent(&menu);
+                            self.dying = prec.SRCUID;
                             //Send ACK packet.
                             SET_ACK(prec.flags);
                             prec.SRCUID = self.UID;
