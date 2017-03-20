@@ -167,6 +167,7 @@ void* editFriend(Menu* menu) {
     printf("Edit friend %d (currently %d): ", idx, friend);
     if(scanf("%d", &friend) == 1)
         self.friends[idx] = friend;
+    writeBase(&self);
     jumpToRoot(menu);
 }
 
@@ -178,6 +179,7 @@ void* deleteFriend(Menu* menu) {
     }
     for(;idx < 127; idx++)
         self.friends[idx] = self.friends[idx + 1];
+    writeBase(&self);
     jumpToRoot(menu);
 }
 
