@@ -142,7 +142,7 @@ void menuItemPrintTree(MenuItem* this) {
  * @param level Level of recursion we are in
  */
 void menuItemPrintTreeHelper(MenuItem* this, int level) {
-    if(this && level > 0) {
+    if(this && level >= 0) {
         int i;
         for(i = 0; i < level; i++)
             printd("\t");

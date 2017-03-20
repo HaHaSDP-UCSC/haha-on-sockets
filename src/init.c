@@ -183,6 +183,7 @@ void* deleteFriend(Menu* menu) {
 
 void* viewUserInfo(Menu* menu) {
     char buffer[LCD_COLS];
+    bzero(&buffer, LCD_COLS);
     lcdClear();
     lcdSetLine(3, "v More    Edit >");
     if(streq(menu->current->value, "__USERPORT__")) {
@@ -199,6 +200,7 @@ void* viewUserInfo(Menu* menu) {
         if(len > LCD_COLS) len = LCD_COLS;
         strncpy(buffer, self.homeAddr, len);
         lcdSetLine(1, buffer);
+        bzero(&buffer, LCD_COLS);
         if((len = strlen(self.homeAddr)) > LCD_COLS) {
             len -= LCD_COLS;
             if(len > LCD_COLS) len = LCD_COLS;
@@ -219,18 +221,26 @@ void* editUserInfo(Menu* menu) {
     bzero(&buffer, 1024);
     if(streq(menu->current->value, "__USERNAME__")) {
         printf("Enter in your first name (currently %s): ", self.firstName);
-        scanf("%s", buffer);
+        fgets(buffer, 17, stdin);
+        buffer[strlen(buffer) - 1] = '\0';
+        //scanf("%s", buffer);
         if(strlen(buffer) != 0) strncpy(self.firstName, buffer, 17);
         printf("Enter in your last name (currently %s): ", self.lastName);
-        scanf("%s", buffer);
+        fgets(buffer, 17, stdin);
+        buffer[strlen(buffer) - 1] = '\0';
+        //scanf("%s", buffer);
         if(strlen(buffer) != 0) strncpy(self.lastName, buffer, 17);
     } else if(streq(menu->current->value, "__USERADDR__")) {
         printf("Enter in your address (currently %s): ", self.homeAddr);
-        scanf("%s", buffer);
+        fgets(buffer, 75, stdin);
+        buffer[strlen(buffer) - 1] = '\0';
+        //scanf("%s", buffer);
         if(strlen(buffer) != 0) strncpy(self.homeAddr, buffer, 75);
     } else if(streq(menu->current->value, "__USERCALL__")) {
         printf("Enter in your address (currently %s): ", self.phone);
-        scanf("%s", buffer);
+        fgets(buffer, 16, stdin);
+        buffer[strlen(buffer) - 1] = '\0';
+        //scanf("%s", buffer);
         if(strlen(buffer) != 0) strncpy(self.phone, buffer, 16);
     } else {
         printe("viewUserInfo called from invalid menu item");
