@@ -295,6 +295,8 @@ void listenthread() {
 				printe("Resetting state.\n");
 			}
 		} else {
+			//Normal send mode.
+
 			//Listening mode.
 			if (recvPacket(&prec, &unused1) == TRUE) {
 				printf("Received Packet in Listen mode.\n");

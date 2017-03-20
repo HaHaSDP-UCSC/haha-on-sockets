@@ -107,6 +107,10 @@ bool formPacketToData(Packet *p, unsigned char *data, int *oldoffset,
 		printd("ORIGINUID: 0x%x 0x%x\n", data[offset - 2], data[offset - 1]);
 	}
 
+	if (fields.ttl) {
+		data[offset++] = p->ttl;
+	}
+
 	if (fields.srcname) {
 		if ((n = strlen(p->SRCFIRSTNAME)) < MAXFIRSTNAME - 1) {
 			printd("SRCFNAME: %s\nstrlen: %d\n", p->SRCFIRSTNAME, n);
@@ -148,9 +152,6 @@ bool formPacketToData(Packet *p, unsigned char *data, int *oldoffset,
 		}
 	}
 
-	if (fields.ttl) {
-		data[offset++] = p->ttl;
-	}
 	*oldoffset = offset; //Make the old offset new.
 	return true;
 }
@@ -179,6 +180,10 @@ bool formDataToPacket(Packet *p, unsigned char *data, int *oldoffset,
 		p->ORIGINUID = data[offset++] << 8;
 		p->ORIGINUID += data[offset++]; //Add ORIGINUID to packet.
 		printd("ORIGINUID: %u\n", p->ORIGINUID);
+	}
+
+	if (fields.ttl) {
+		p->ttl = data[offset++];
 	}
 
 	if (fields.srcname) {
@@ -223,9 +228,6 @@ bool formDataToPacket(Packet *p, unsigned char *data, int *oldoffset,
 		}
 	}
 
-	if (fields.ttl) {
-		p->ttl = data[offset++];
-	}
 	*oldoffset = offset; //Make the old offset new.
 	return true;
 }
