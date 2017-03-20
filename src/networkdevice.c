@@ -12,7 +12,7 @@
 #include "networkdevice.h"
 
 int connfd, listenfd = 0;
-//int outboundfd, inboundfd = 0;
+int outboundfd, inboundfd = 0;
 
 /**
  * Initialize the network device.
@@ -55,15 +55,12 @@ ebool _init_network(char *listenport) {
  * Use this method to connect to a device.
  */
 ebool connectTo(char *server, uid port) {
-    //if (connfd) {
-    //  return FALSE; //This means already connected to a socket.
-    //}
     struct sockaddr_in servaddr;
-    if ((connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+    if ((outboundfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printe("Socket error.\n");
         return FALSE;
     }
-    fcntl(connfd, F_SETFL, O_NONBLOCK);  // set to non-blocking
+    fcntl(outboundfd, F_SETFL, O_NONBLOCK);  // set to non-blocking
 
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
@@ -74,7 +71,7 @@ ebool connectTo(char *server, uid port) {
         return FALSE;
     }
 
-    if (connect(connfd, (SA *) &servaddr, sizeof(servaddr)) < 0) {
+    if (connect(outboundfd, (SA *) &servaddr, sizeof(servaddr)) < 0) {
         printe("Connect error.\n"); //TODO may error because non-block or timeout
         return FALSE;
     }
@@ -85,8 +82,8 @@ ebool connectTo(char *server, uid port) {
  * Accept connection on listen port.
  */
 ebool acceptFrom() {
-    connfd = accept(listenfd, (SA *) NULL, NULL); //TODO Nonblocking
-    if (connfd <= 0) {
+	inboundfd = accept(listenfd, (SA *) NULL, NULL); //TODO Nonblocking
+    if (inboundfd <= 0) {
         return FALSE;
     }
     return TRUE;
@@ -101,9 +98,9 @@ ebool _send_packet(char *buffer, int size, char *dstaddr, uid dstport) {
     if (connectTo(dstaddr, dstport) == FALSE) {
         printe("Connect error. TODO WHY\n"); //TODO may error because non-block or timeout
     }
-    int n = write(connfd, buffer, size); //TODO iterate in loop to write full.
+    int n = write(outboundfd, buffer, size); //TODO iterate in loop to write full.
 	printd("Write data. n: %d\n", n);
-    close(connfd);
+    close(outboundfd);
     if (n < 0) {
     	printe("Connection write failed. n: %d\n", n);
         return ERROR;
@@ -129,7 +126,7 @@ int _recv_packet(char *buffer, int buffersize) {
 
     //If receiveLength == 0, client has reached EOF.
     //If receiveLength <= -1, error occurred.
-    while ((receiveLength = read(connfd, buffer + offset, buffersize - offset))
+    while ((receiveLength = read(inboundfd, buffer + offset, buffersize - offset))
             > 0) {
         offset += receiveLength;
     }
@@ -139,7 +136,7 @@ int _recv_packet(char *buffer, int buffersize) {
     }
 
     printv("Device Disconnected.\n");
-    close(connfd);
+    close(inboundfd);
     return offset;
 }
 

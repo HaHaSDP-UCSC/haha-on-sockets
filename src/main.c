@@ -192,6 +192,7 @@ int main(int argc, char** argv) {
 				strcpy(phelp.SRCHOMEADDR, self.homeAddr);
 				strcpy(phelp.SRCPHONE, self.phone); //TODO Should actually be unformatted.
 				sendPacket(&phelp, self.friends[0]);
+				printf("Sending packet to %u\n", self.friends[0]);
 				inHelpMode = true;
 				break;
 			case 't':
@@ -246,6 +247,18 @@ void listenthread() {
 			bool rejected = 0;
 
 			while (self.friends[friendsLeft] > 0) {
+				end = time(NULL);
+				if (difftime(end, begin) >= timeinterval || rejected) {
+					printd("Time: %.1f\n", difftime(end, begin));
+					begin = time(NULL);
+					//Start going down a list of friends.
+					printv("Current Friend %d @ %d not viable.\n",
+							friendsLeft, self.friends[friendsLeft]);
+					//Load in next friend.
+					friendsLeft++;
+					sendPacket(&phelp, self.friends[friendsLeft]);
+					rejected = false;
+				}
 				if (recvPacket(&prec, &unused1) == TRUE) {
 					printv("Received Packet in help mode.\n");
 					if (prec.opcode == HELP_REQUEST && (IS_ACK(prec.flags))) {
@@ -275,18 +288,6 @@ void listenthread() {
 						//Not a help response.
 						//TODO a different type of packet.
 					}
-				}
-				end = time(NULL);
-				if (difftime(end, begin) >= timeinterval || rejected) {
-					printd("Time: %.1f\n", difftime(end, begin));
-					begin = time(NULL);
-					//Start going down a list of friends.
-					printv("Current Friend %d @ %d not viable.\n",
-							friendsLeft, self.friends[friendsLeft]);
-					//Load in next friend.
-					friendsLeft++;
-					sendPacket(&phelp, self.friends[friendsLeft]);
-					rejected = false;
 				}
 			}
 
@@ -356,6 +357,7 @@ void listenthread() {
 						printd("PING REQ.\n");
 					}
 					//Not a help request.
+					printd("A request was sent at the wrong time.\n");
 				}
 			}
 		}
