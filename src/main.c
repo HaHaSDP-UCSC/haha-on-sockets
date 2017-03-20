@@ -122,9 +122,9 @@ int main(int argc, char** argv) {
 	psend.ORIGINUID = 65535; //Original Machines UID.
 	strcpy(psend.SRCFIRSTNAME, "HaHa"); //First Name
 	strcpy(psend.SRCLASTNAME, "Button"); //Last Name
-	strcpy(psend.SRCPHONE, "123-456-7890"); //TODO Should actually be unformatted.
 	strcpy(psend.SRCHOMEADDR, "4657 Where the Sidewalk Ends St. Apartment 23\n"
 			"Santa Cruz, CA 12345-9876");
+	strcpy(psend.SRCPHONE, "123-456-7890"); //TODO Should actually be unformatted.
 	psend.ttl = 0;
 
 	printd("psend.SRCUID:       %d\n", psend.SRCUID);
@@ -132,8 +132,8 @@ int main(int argc, char** argv) {
 	printd("psend.ORIGINUID:    %d\n", psend.ORIGINUID);
 	printd("psend.SRCFIRSTNAME: %s\n", psend.SRCFIRSTNAME);
 	printd("psend.SRCLASTNAME:  %s\n", psend.SRCLASTNAME);
-	printd("phelp.SRCPHONE:     %s\n", psend.SRCPHONE);
 	printd("phelp.SRCHOMEADDR:\n%s\n", psend.SRCHOMEADDR);
+	printd("phelp.SRCPHONE:     %s\n", psend.SRCPHONE);
 	printd("phelp.ttl: %d\n", psend.ttl);
 
 	//Create a HELP packet to send.
@@ -154,8 +154,8 @@ int main(int argc, char** argv) {
 	printd("phelp.ORIGINUID:    %d\n", phelp.ORIGINUID);
 	printd("phelp.SRCFIRSTNAME: %s\n", phelp.SRCFIRSTNAME);
 	printd("phelp.SRCLASTNAME:  %s\n", phelp.SRCLASTNAME);
-	printd("phelp.SRCPHONE:     %s\n", phelp.SRCPHONE);
 	printd("phelp.SRCHOMEADDR:\n%s\n", phelp.SRCHOMEADDR);
+	printd("phelp.SRCPHONE:     %s\n", phelp.SRCPHONE);
 	printd("phelp.ttl: %d\n", phelp.ttl);
 
 	printf("Creating thread\n");
@@ -187,7 +187,11 @@ int main(int argc, char** argv) {
 				break;
 			case 'h':
 				printv("HELP BUTTON PRESSED\n");
-
+				phelp.SRCUID = (uint16_t) atoi(listenPort);
+				strcpy(phelp.SRCFIRSTNAME, self.firstName);
+				strcpy(phelp.SRCLASTNAME, self.lastName);
+				strcpy(phelp.SRCHOMEADDR, self.homeAddr);
+				strcpy(phelp.SRCPHONE, self.phone); //TODO Should actually be unformatted.
 				sendPacket(&phelp, self.friends[0]);
 				inHelpMode = true;
 				break;
@@ -242,7 +246,7 @@ void listenthread() {
 			int timeinterval = 10; //Seconds before calling next person.
 			bool rejected = 0;
 
-			while (friendsLeft < numFriends) {
+			while (self.friends[friendsLeft] > 0) {
 				if (recvPacket(&prec, &unused1) == TRUE) {
 					printv("Received Packet in help mode.\n");
 					if (prec.opcode == HELP_REQUEST && (IS_ACK(prec.flags))) {
@@ -287,7 +291,7 @@ void listenthread() {
 				}
 			}
 
-			if (friendsLeft >= numFriends) {
+			if (inHelpMode == true && self.friends[friendsLeft] <= 0) {
 				//Out of friends
 				printe("No friends left to save you.\n");
 				friendsLeft = 0;
@@ -306,16 +310,14 @@ void listenthread() {
 					int numFriends = 4;
 					int i = 0;
 					while (i < numFriends) {
-						printd("iter");
 						myFriend = self.friends[i];
 						if (prec.SRCUID == myFriend) {
 							printv("My friend is in need @ %d\n", prec.SRCUID);
 							//Send ACK packet.
 							SET_ACK(prec.flags);
 							prec.SRCUID = self.UID;
-							sendPacket(&prec, myFriend); //TODO wrong, this is sending back via improper UID checks.
+							sendPacket(&prec, myFriend);
 
-							// TODO instead of blocking, time out if didn't hear
 							time_t begin, end;
 							begin = time(NULL);
 							end = time(NULL);
