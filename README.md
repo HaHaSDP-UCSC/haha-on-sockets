@@ -10,11 +10,11 @@ A Linux based proof of concept for the Home Assistance Button 	project.
 - **Makefile**: Makefile for top level dir
 - **README.md**
 - **[bin/](bin)**
+   - **base**
    - **main**
    - **server**
 - **[docs/](docs)**
    - **Makefile**
-   - **[latex/](docs/latex)**
 - **[src/](src)**
    - **DEV_xbee.h**: A beginning for Xbee implementation, reference
    - **Makefile**: Makefile for src/ dir
@@ -54,3 +54,4 @@ A Linux based proof of concept for the Home Assistance Button 	project.
    - **storage.c**
    - **storage.h**
    - **storagedevice.h**
+- **test.base**
